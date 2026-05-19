@@ -8,12 +8,12 @@ class DictionaryEnumerator final : public IEnumerator<std::pair<const TKey, TVal
 {
 private:
     bool _started = false;
-    typename std::unordered_map<TKey, TValue, Hash, KeyEqual>::iterator _iter;
-    typename std::unordered_map<TKey, TValue, Hash, KeyEqual>::iterator _end;
+    typename std::unordered_map<TKey, TValue, Hash, KeyEqual>::const_iterator _iter;
+    typename std::unordered_map<TKey, TValue, Hash, KeyEqual>::const_iterator _end;
 
 public:
-    explicit DictionaryEnumerator(std::unordered_map<TKey, TValue, Hash, KeyEqual> &dictionary)
-        : _iter(dictionary.begin()), _end(dictionary.end()), _started(false) {}
+    explicit DictionaryEnumerator(const std::unordered_map<TKey, TValue, Hash, KeyEqual> &dictionary)
+        : _started(false), _iter(dictionary.begin()), _end(dictionary.end()) {}
 
     bool MoveNext() override
     {
@@ -24,15 +24,6 @@ public:
         }
         ++_iter;
         return _iter != _end;
-    }
-
-    std::pair<const TKey, TValue> &Current() override
-    {
-        if (!_started || _iter == _end)
-        {
-            throw std::logic_error("Invalid iterator");
-        }
-        return *_iter;
     }
 
     const std::pair<const TKey, TValue> &Current() const override

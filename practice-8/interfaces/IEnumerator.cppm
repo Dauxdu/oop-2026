@@ -12,8 +12,5 @@ public:
 
     /// @brief Возвращает текущий элемент (не продвигает итератор)
     /// @throw std::runtime_error если итератор не валиден
-    virtual TValue &Current() = 0;
-
-    /// @brief Const-версия Current()
     virtual const TValue &Current() const = 0;
 };
