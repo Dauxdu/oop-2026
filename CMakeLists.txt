@@ -14,3 +14,4 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 endif()
 
 add_subdirectory(practice-1)
+add_subdirectory(practice-2)
