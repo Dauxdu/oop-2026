@@ -1,65 +1,87 @@
 import std;
 
-// 1
-int main1()
+// 1. Дано трёхзначное число. Найти сумму и произведение его цифр.
+void sum_and_product()
 {
-	int number;
-	std::println("Введите трёхначное число:");
-	std::cin >> number;
-	int hund = number / 100;
-	int ten = number % 100 / 10;
-	int one = number % 10;
-	int sum = hund + ten + one;
-	int mul = hund * ten * one;
-	std::println("Сумма: {} \n Произведние: {}", sum, mul);
-	return 0;
+	int num = 0;
+
+	std::print("Введи трёхзначное число: ");
+
+	std::cin >> num;
+
+	int hundreds = num / 100;
+	int tens = (num / 10) % 10;
+	int units = num % 10;
+
+	int sum = hundreds + tens + units;
+	int product = hundreds * tens * units;
+
+	std::println("Число: {}", num);
+	std::println("Сумма: {}", sum);
+	std::println("Произведение: {}", product);
 }
 
-// 2
-int main2()
+// 2. С начала суток прошло n секунд. Найти количество полных минут, прошедших
+// с начала последнего часа.
+void minutes_of_current_hour()
 {
-	int current_time = 0;
-	std::println("Введите текущее время(в секундах)");
-	std::cin >> current_time;
-	int seconds = 0;
-	seconds = current_time % 3600;
-	std::println("С начала последнего часа прошло: {} секунд", seconds);
-	return 0;
-}
-
-// 3
-int main3()
-{
-	std::println("Введите день от 1 до 365: ");
 	int n = 0;
+
+	std::print("Сколько прошло с начала суток: ");
+
 	std::cin >> n;
-	std::println("Введите день недели, с которой начинается год ");
+
+	int seconds = n % 3600;
+	int minutes = seconds / 60;
+
+	std::println("Количество полных минут: {}", minutes);
+}
+
+// 3. Дано целое число n из диапазона 1—365, и целое число k из диапазона 1—7.
+// Определить номер дня недели для n-го дня года, если известно, что в этом году
+// 1 января было днём недели с номером k.
+void day_of_week()
+{
+	int n = 0;
 	int k = 0;
+
+	std::print("Введите день: ");
+	std::cin >> n;
+
+	std::print("Введите день недели первого января): ");
 	std::cin >> k;
 
-	int day = (n - 1) + k - 1;
-	day %= 7;
-	day += 1;
+	int dayOfWeek = (k - 1 + (n - 1)) % 7 + 1;
 
-	std::println("Сегодня день недели: {}", day);
-
-	return 0;
+	std::println("Номер дня недели для n-го дня года {}: ", dayOfWeek);
 }
 
-// 4
-int main4()
+// 4. Дано трехзначное число. Проверить истинность высказывания: “Цифры данного
+// числа образуют возрастающую последовательность”.
+void check_digits_order()
 {
-	std::println("Введите трехзначное число:");
 	int num = 0;
+
+	std::print("Введи трёхзначное число: ");
+
 	std::cin >> num;
-	bool res = 0;
-	res = ((num / 100) < (num % 100 / 10)) && ((num % 100 / 10) < (num % 10));
-	std::println("{}", res);
-	return 0;
+
+	int hundreds = num / 100;
+	int tens = (num / 10) % 10;
+	int units = num % 10;
+
+	if (hundreds < tens && tens < units)
+	{
+		std::println("Цифры данного числа образуют возрастающую последовательность");
+	}
+	else
+	{
+		std::println("Цифры данного числа НЕобразуют возрастающую последовательность");
+	}
 }
 
 // 5
-int main5()
+void rook_move()
 {
 	int x1, x2, y1, y2;
 	std::println("введите клетку, на которой стоит ладья (x1,y1):");
@@ -68,15 +90,15 @@ int main5()
 	std::cin >> x2 >> y2;
 	bool result(x1 == x2 || y1 == y2);
 	std::println("{}", result);
-	return 0;
 }
 
 int main()
 {
-	main1();
-	main2();
-	main3();
-	main4();
-	main5();
+	sum_and_product();
+	minutes_of_current_hour();
+	day_of_week();
+	check_digits_order();
+	rook_move();
+
 	return 0;
 }
