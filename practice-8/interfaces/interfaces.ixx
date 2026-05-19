@@ -1,4 +1,4 @@
-export module interface;
+export module interfaces;
 
 export import :ICollection;
 export import :IEnumerable;

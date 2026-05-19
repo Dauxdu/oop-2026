@@ -1,4 +1,4 @@
-export module interface:IEnumerable;
+export module interfaces:IEnumerable;
 
 import std;
 import :IEnumerator;
@@ -7,6 +7,8 @@ export template <typename T>
 class IEnumerable
 {
 public:
-	virtual std::unique_ptr<IEnumerator<T>> GetEnumerator() const = 0;
-	virtual ~IEnumerable() = default;
+    virtual ~IEnumerable() = default;
+
+    /// @brief Получает итератор для обхода коллекции
+    virtual std::unique_ptr<IEnumerator<T>> GetEnumerator() const = 0;
 };

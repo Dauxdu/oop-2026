@@ -1,10 +1,19 @@
-export module interface:IEnumerator;
+export module interfaces:IEnumerator;
 
-export template <typename T>
+export template <typename TValue>
 class IEnumerator
 {
 public:
-	virtual bool MoveNext() = 0;
-	virtual const T &Current() const = 0;
-	virtual ~IEnumerator() = default;
+    virtual ~IEnumerator() = default;
+
+    /// @brief Перемещает итератор на следующий элемент
+    /// @return true, если итератор указывает на валидный элемент
+    virtual bool MoveNext() = 0;
+
+    /// @brief Возвращает текущий элемент (не продвигает итератор)
+    /// @throw std::runtime_error если итератор не валиден
+    virtual TValue &Current() = 0;
+
+    /// @brief Const-версия Current()
+    virtual const TValue &Current() const = 0;
 };

@@ -1,4 +1,4 @@
-export module collections;
+export module containers;
 
 export import :Dictionary;
 export import :HashSet;
