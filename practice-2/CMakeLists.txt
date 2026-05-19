@@ -1,5 +1,4 @@
-project(practice-2 LANGUAGES CXX)
-
-add_executable(${PROJECT_NAME})
-
-target_sources(${PROJECT_NAME} PRIVATE src/main.cpp)
+add_subdirectory(1-Expressions)
+add_subdirectory(2-Conditional-operator)
+add_subdirectory(3-Multiple-choice-operator)
+add_subdirectory(4-Cycles)
