@@ -3,8 +3,9 @@ import simple_usages;
 
 int main()
 {
-    dict_simple_usages();
+    dictionary_example();
     stack_example();
-    list_simple_usages();
+    list_example();
+
     return 0;
 }

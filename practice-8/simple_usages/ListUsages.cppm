@@ -3,8 +3,11 @@ export module simple_usages:ListUsages;
 import std;
 import containers;
 
-export void list_simple_usages()
+export void list_example()
 {
+    std::println("\n--------------------------------");
+    std::println("List Example");
+
     List<int> numbers;
 
     numbers.Add(-21);
@@ -51,4 +54,5 @@ export void list_simple_usages()
 
     numbers.Clear();
     std::println("Список чисел очищен: {}, Текущий размер списка: {}", numbers.Count(), numbers.Capacity());
+    std::println("--------------------------------\n");
 }
