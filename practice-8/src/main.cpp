@@ -1,9 +1,8 @@
 import std;
-import interfaces;
-import enumerators;
-import containers;
+import simple_usages;
 
 int main()
 {
+    dict_simple_usages();
     return 0;
 }

@@ -11,9 +11,9 @@ private:
     std::unordered_map<TKey, TValue, Hash, KeyEqual> _dictionary;
 
 public:
-    bool Contains(const TKey &key) const
+    bool Contains(const std::pair<const TKey, TValue> &item) const override
     {
-        return _dictionary.contains(key);
+        return _dictionary.contains(item.first);
     }
 
     void Add(const std::pair<const TKey, TValue> &item) override
@@ -25,9 +25,9 @@ public:
         }
     }
 
-    bool Remove(const TKey &key) override
+    bool Remove(const std::pair<const TKey, TValue> &item) override
     {
-        return _dictionary.erase(key) > 0;
+        return _dictionary.erase(item.first) > 0;
     }
 
     void Clear() override
@@ -70,7 +70,7 @@ public:
         return it->second;
     }
 
-    std::unique_ptr<IEnumerator<std::pair<const TKey, TValue>>> GetEnumerator() const
+    std::unique_ptr<IEnumerator<std::pair<const TKey, TValue>>> GetEnumerator() const override
     {
         return std::make_unique<DictionaryEnumerator<TKey, TValue, Hash, KeyEqual>>(_dictionary);
     }
