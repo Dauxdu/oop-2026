@@ -8,7 +8,5 @@ class IEnumerable
 {
 public:
     virtual ~IEnumerable() = default;
-
-    /// @brief Получает итератор для обхода коллекции
     virtual std::unique_ptr<IEnumerator<T>> GetEnumerator() const = 0;
 };
