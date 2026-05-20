@@ -6,6 +6,7 @@ target_sources(enumerators
     enumerators.ixx
     DictionaryEnumerator.cppm
     StackEnumerator.cppm
+    ListEnumerator.cppm
 )
 
 target_link_libraries(enumerators PUBLIC interfaces)
