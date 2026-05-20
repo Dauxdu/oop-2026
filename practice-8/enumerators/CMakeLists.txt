@@ -5,6 +5,7 @@ target_sources(enumerators
     FILES
     enumerators.ixx
     DictionaryEnumerator.cppm
+    ListEnumerator.cppm
 )
 
 target_link_libraries(enumerators PUBLIC interfaces)
