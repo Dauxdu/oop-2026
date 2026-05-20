@@ -3,8 +3,11 @@ export module simple_usages:DictionaryUsages;
 import std;
 import containers;
 
-export void dict_simple_usages()
+export void dictionary_example()
 {
+    std::println("\n--------------------------------");
+    std::println("Dictionary Example");
+
     Dictionary<std::string, unsigned int> journal;
 
     journal.Add({"Маша", 18});
@@ -47,4 +50,5 @@ export void dict_simple_usages()
 
     journal.Clear();
     std::println("Журнал очищен: {}, Текущей размер журнала: {}", journal.Count(), journal.Capacity());
+    std::println("--------------------------------\n");
 }
