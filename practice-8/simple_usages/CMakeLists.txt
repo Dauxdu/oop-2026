@@ -5,6 +5,7 @@ target_sources(simple_usages
     FILES
     simple_usages.ixx
     DictionaryUsages.cppm
+    StackUsages.cppm
 )
 
 target_link_libraries(simple_usages PUBLIC containers)
