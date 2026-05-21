@@ -8,17 +8,16 @@ class QueueEnumerator final : public IEnumerator<TValue>
 {
 private:
     std::queue<TValue> _queue;
-    bool _is_first = true;
+    bool _started = false;
 
 public:
     explicit QueueEnumerator(std::queue<TValue> queue) : _queue(std::move(queue)) {}
 
     bool MoveNext() override
     {
-
-        if (_is_first)
+        if (!_started)
         {
-            _is_first = false;
+            _started = true;
             return !_queue.empty();
         }
 
