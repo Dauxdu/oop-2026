@@ -1,6 +1,6 @@
 import std;
 
-class fraction
+class Fraction
 {
 private:
 	int _numerator = 0;
@@ -13,179 +13,179 @@ private:
 			_denominator = 1;
 		}
 
-		if (_denominator <= 0)
+		// I3
+		if (_denominator < 0)
 		{
 			_denominator = std::abs(_denominator);
 		}
 
+		// I1
 		if (_numerator == 0)
 		{
 			_denominator = 1;
+			return;
 		}
 
+		// I2
 		int gcd = std::gcd(_numerator, _denominator);
 		_numerator /= gcd;
 		_denominator /= gcd;
 	}
 
 public:
-	fraction(int numerator)
+	// C1
+	Fraction(int num) : _numerator(num)
 	{
-		_numerator = numerator;
-
 		normalize();
 	}
 
-	fraction(int numerator, int denominator)
+	// C2
+	Fraction(int num, int den) : _numerator(num), _denominator(den)
 	{
-		_numerator = numerator;
-		_denominator = denominator;
-
 		normalize();
 	}
 
-	int get_numerator() const
+	int get_numerator() const noexcept
 	{
 		return _numerator;
 	}
 
-	int get_denominator() const
+	int get_denominator() const noexcept
 	{
 		return _denominator;
 	}
 
-	fraction &operator+=(const fraction &fr)
+	// 1
+	Fraction &operator+=(const Fraction &frac)
 	{
-		_numerator = get_numerator() * fr.get_denominator() + fr.get_numerator() * get_denominator();
-		_denominator = get_denominator() * fr.get_denominator();
+		_numerator = _numerator * frac._denominator + frac._numerator * _denominator;
+		_denominator = _denominator * frac._denominator;
 
 		normalize();
 
 		return *this;
 	}
 
-	fraction &operator-=(const fraction &fr)
+	// 1
+	Fraction &operator-=(const Fraction &frac)
 	{
-		_numerator = get_numerator() * fr.get_denominator() - fr.get_numerator() * get_denominator();
-		_denominator = get_denominator() * fr.get_denominator();
+		_numerator = _numerator * frac._denominator - frac._numerator * _denominator;
+		_denominator = _denominator * frac._denominator;
 
 		normalize();
 
 		return *this;
 	}
 
-	fraction &operator++()
+	// 1
+	Fraction &operator*=(const Fraction &frac)
 	{
-		_numerator = get_numerator() + get_denominator();
-
-		return *this;
-	}
-
-	fraction operator++(int)
-	{
-		fraction fr(*this);
-		_numerator = get_numerator() + get_denominator();
-
-		return fr;
-	}
-
-	fraction &operator*=(const fraction &fr)
-	{
-		_numerator = get_numerator() * fr.get_numerator();
-		_denominator = get_denominator() * fr.get_denominator();
-
+		_numerator *= frac._numerator;
+		_denominator *= frac._denominator;
 		normalize();
 
 		return *this;
+	}
+
+	// 3
+	Fraction &operator++()
+	{
+		_numerator += _denominator;
+
+		return *this;
+	}
+
+	// 3
+	Fraction operator++(int)
+	{
+		Fraction frac = *this;
+		++(*this);
+
+		return frac;
 	}
 };
 
-fraction operator+(const fraction &fr_1, const fraction &fr_2)
+Fraction operator+(const Fraction &frac_1, const Fraction &frac_2)
 {
-	fraction fr(fr_1);
-	return fr += fr_2;
+	Fraction frac{frac_1};
+
+	return frac += frac_2;
 }
 
-fraction operator-(const fraction &fr_1, const fraction &fr_2)
+Fraction operator-(const Fraction &frac_1, const Fraction &frac_2)
 {
-	fraction fr(fr_1);
-	return fr -= fr_2;
+	Fraction frac{frac_1};
+
+	return frac -= frac_2;
 }
 
-fraction operator*(const fraction &fr_1, const fraction &fr_2)
+Fraction operator*(const Fraction &frac_1, const Fraction &frac_2)
 {
-	fraction fr(fr_1);
-	return fr *= fr_2;
+	Fraction frac{frac_1};
+
+	return frac *= frac_2;
 }
 
-std::ostream &operator<<(std::ostream &out, const fraction &fr)
+std::ostream &operator<<(std::ostream &out, const Fraction &frac)
 {
-	out << fr.get_numerator() << "/" << fr.get_denominator();
-	return out;
+	return out << frac.get_numerator() << "/" << frac.get_denominator();
 }
-std::string to_string(const fraction &fr)
+
+std::string to_string(const Fraction &frac)
 {
 	std::stringstream str;
-	str << fr;
+	str << frac;
 	return str.str();
-}
-bool to_file(const std::string &path, const fraction &fr)
-{
-
-	std::fstream str{path, str.out};
-	if (!str.is_open())
-	{
-		return 1;
-	}
-	else
-	{
-		str << fr;
-	}
-	return 0;
 }
 
 int main()
 {
-	int n = 0;
-	int d = 1;
-	std::println("введите дробь 1: ");
-	std::cin >> n >> d;
-	fraction fr_1(n, d);
-	std::println("введите дробь 2: ");
-	std::cin >> n >> d;
-	fraction fr_2(n, d);
+	std::println("Демонстрация работы с классом Fraction\n");
 
-	std::cout << "Первая дробь: " << fr_1 << std::endl;
-	std::cout << "Вторая дробь: " << fr_2 << std::endl;
+	int n1 = 0;
+	int d1 = 0;
+	int n2 = 0;
+	int d2 = 0;
+	std::print("Введите числитель и знаменатель первой дроби: ");
+	std::cin >> n1 >> d1;
+	Fraction f1{n1, d1};
 
-	std::println("Введите путь:");
-	std::string path;
-	std::cin >> path;
-	to_file(path, fr_1);
+	std::print("Введите числитель и знаменатель второй дроби: ");
+	std::cin >> n2 >> d2;
+	Fraction f2{n2, d2};
 
-	std::println("выберите действие (+, -, ++ или *): ");
-	std::string op;
-	std::cin >> op;
-	if (op == "+")
+	std::println("\nБинарные операторы");
+	std::println("	{} + {} = {}", to_string(f1), to_string(f2), to_string(f1 + f2));
+	std::println("	{} - {} = {}", to_string(f1), to_string(f2), to_string(f1 - f2));
+	std::println("	{} * {} = {}", to_string(f1), to_string(f2), to_string(f1 * f2));
+
+	Fraction f3 = f1;
+	std::println("\nОператоры +=, -=, *=");
+	std::println("	f3 = {}", to_string(f3));
+	f3 += f2;
+	std::println("	f3 += f2 → {}", to_string(f3));
+	f3 -= f2;
+	std::println("	f3 -= f2 → {}", to_string(f3));
+	f3 *= f2;
+	std::println("	f3 *= f2 → {}", to_string(f3));
+
+	std::println("\nПрефиксный и постфиксный ++");
+	Fraction f4 = f1;
+	std::println("	f4 = {}, ++f4 = {}, f4++ = {}", to_string(f4), to_string(++f4), to_string(f4++));
+	std::println("	После операций: f4 = {}", to_string(f4));
+
+	std::println("\nВывод через operator<<");
+	std::stringstream str;
+	str << f1 << " + " << f2 << " = " << (f1 + f2);
+	std::println("	std::stringstream: {}", str.str());
+
+	std::print("	std::cout: ");
+	std::cout << f1 << '\n';
+
+	std::println("	std::fstream: output.txt");
+	if (std::fstream file("output.txt"); file)
 	{
-		fraction res = fr_1 + fr_2;
-		std::println("{}+{}={}", to_string(fr_1), to_string(fr_2), to_string(res));
-	}
-	else if (op == "-")
-	{
-		fraction res = fr_1 - fr_2;
-		std::println("{}-{}={}", to_string(fr_1), to_string(fr_2), to_string(res));
-	}
-	else if (op == "*")
-	{
-		fraction res = fr_1 * fr_2;
-		std::println("{}*{}={}", to_string(fr_1), to_string(fr_2), to_string(res));
-	}
-	else if (op == "++")
-	{
-		fraction res_1 = fr_1;
-		fraction res_2 = fr_2;
-		std::println("{}++={}, ++{}={}", to_string(res_1), to_string(fr_1++), to_string(res_2), to_string(++fr_2));
+		file << "Запись в файл: " << f1 << " * " << f2 << " = " << (f1 * f2) << '\n';
 	}
 
 	return 0;
