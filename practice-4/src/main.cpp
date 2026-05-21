@@ -6,7 +6,6 @@ private:
 	int _numerator = 0;
 	int _denominator = 1;
 
-	// Поддержание инвариантов класса (I1, I2, I3)
 	void normalize()
 	{
 		if (_denominator == 0)
