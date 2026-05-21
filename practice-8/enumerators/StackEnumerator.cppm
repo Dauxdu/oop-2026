@@ -8,16 +8,16 @@ class StackEnumerator : public IEnumerator<T>
 {
 private:
     std::stack<T> _stack;
-    bool _is_first = true;
+    bool _started = false;
 
 public:
     explicit StackEnumerator(const std::stack<T> &stack) : _stack(stack) {}
 
     bool MoveNext() override
     {
-        if (_is_first)
+        if (!_started)
         {
-            _is_first = false;
+            _started = true;
             return !_stack.empty();
         }
 
