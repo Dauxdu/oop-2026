@@ -7,6 +7,7 @@ int main()
     stack_example();
     list_example();
     queue_example();
+    set_example();
 
     return 0;
 }

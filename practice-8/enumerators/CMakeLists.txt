@@ -8,6 +8,7 @@ target_sources(enumerators
     StackEnumerator.cppm
     ListEnumerator.cppm
     QueueEnumerator.cppm
+    HashSetEnumerator.cppm
 )
 
 target_link_libraries(enumerators PUBLIC interfaces)

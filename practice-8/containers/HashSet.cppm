@@ -2,97 +2,52 @@ export module containers:HashSet;
 
 import std;
 import interfaces;
+import enumerators;
 
-/**
- * @brief Хэш-множество, реализующее интерфейс коллекции.
- * @tparam T Тип хранимых элементов.
- * @tparam Hash Функция хэширования (по умолчанию `std::hash<T>`).
- * @tparam KeyEqual Функция сравнения ключей на равенство (по умолчанию `std::equal_to<T>`).
- * @details Обёртка над `std::unordered_set`.
- */
-export template <typename T, typename Hash = std::hash<T>, typename KeyEqual = std::equal_to<T>>
-class HashSet : public ICollection<T>
+export template <typename TValue, typename THash = std::hash<TValue>, typename TValueEqual = std::equal_to<TValue>>
+class HashSet final : public ICollection<TValue>
 {
 private:
-    std::unordered_set<T, Hash, KeyEqual> _collection;
+    std::unordered_set<TValue, THash, TValueEqual> _set;
 
 public:
-    /**
-     * @brief Получает перечислитель для обхода коллекции.
-     * @return Умный указатель на объект, реализующий `IEnumerator<T>`.
-     * @details Каждый вызов создает новый независимый перечислитель,
-     *          указывающий на начало текущей коллекции.
-     */
-    std::unique_ptr<IEnumerator<T>> GetEnumerator() const override
+    void Add(const TValue &item) override
     {
-        return std::make_unique<HashSet>(_collection);
+        _set.insert(item);
     }
 
-    /**
-     * @brief Добавляет элемент в множество.
-     * @param item Элемент для добавления.
-     * @details Если элемент уже присутствует в множестве, операция игнорируется.
-     */
-    void Add(const T &item) override
+    bool Remove(const TValue &item) override
     {
-        _collection.insert(item);
+        return _set.erase(item) > 0;
     }
 
-    /**
-     * @brief Удаляет элемент из множества.
-     * @param item Элемент для удаления.
-     * @return `true`, если элемент был найден и удалён, `false`, если элемент отсутствовал.
-     */
-    bool Remove(const T &item) override
-    {
-        return _collection.erase(item) > 0;
-    }
-
-    /**
-     * @brief Очищает множество, удаляя все элементы.
-     * @details Ёмкость контейнера при этом сохраняется.
-     */
     void Clear() override
     {
-        _collection.clear();
+        _set.clear();
     }
 
-    /**
-     * @brief Возвращает количество элементов в множестве.
-     * @return Количество хранимых элементов.
-     */
-    [[nodiscard]] std::size_t Count() const override
+    std::size_t Count() const override
     {
-        return _collection.size();
+        return _set.size();
     }
 
-    /**
-     * @brief Проверяет наличие элемента в множестве.
-     * @param item Искомый элемент.
-     * @return `true`, если элемент присутствует, иначе `false`.
-     */
-    bool Contains(const T &item) const override
+    bool Contains(const TValue &item) const override
     {
-        return _collection.find(item) != _collection.end();
+        return _set.find(item) != _set.end();
     }
 
-    /**
-     * @brief Возвращает текущую ёмкость хэш-таблицы (количество бакетов).
-     * @return Количество бакетов во внутреннем `std::unordered_set`.
-     */
-    [[nodiscard]] std::size_t Capacity() const
+    std::size_t Capacity() const
     {
-        return _collection.bucket_count();
+        return _set.bucket_count();
     }
 
-    /**
-     * @brief Устанавливает минимальную ёмкость для хэш-таблицы.
-     * @param capacity Желаемое количество бакетов.
-     * @details Вызывает `reserve()` внутреннего контейнера. Если `capacity` меньше
-     *          текущей ёмкости, операция может быть проигнорирована реализацией.
-     */
     void SetCapacity(std::size_t capacity)
     {
-        _collection.reserve(capacity);
+        _set.reserve(capacity);
+    }
+
+    std::unique_ptr<IEnumerator<TValue>> GetEnumerator() const override
+    {
+        return std::make_unique<HashSetEnumerator<TValue, THash, TValueEqual>>(_set);
     }
 };
