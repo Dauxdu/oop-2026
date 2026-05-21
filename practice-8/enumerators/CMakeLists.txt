@@ -5,6 +5,7 @@ target_sources(enumerators
     FILES
     enumerators.ixx
     DictionaryEnumerator.cppm
+    StackEnumerator.cppm
     ListEnumerator.cppm
 )
 
