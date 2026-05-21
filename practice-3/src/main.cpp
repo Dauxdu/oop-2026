@@ -1,33 +1,6 @@
 import std;
 
-int sum_of_dig(int num)
-{
-	int sum = 0;
-	sum += num / 100;
-	sum += num % 100 / 10;
-	sum += num % 10;
-	return sum;
-}
-
-int prod_of_dig(int num)
-{
-	int prod = 1;
-	prod *= num / 100;
-	prod *= num % 100 / 10;
-	prod *= num % 10;
-	return prod;
-}
-
-void minutes_passed()
-{
-	std::println("Введите текущее время в секундах: ");
-	int current_time = 0;
-	std::cin >> current_time;
-	int minutes = 0;
-	minutes = current_time % 3600 / 60;
-	std::println("С начала последнего часа прошло: {} минут", minutes);
-}
-
+// 2. Инвертирование порядка цифр
 int invert_digits(int n)
 {
 	int reversed = 0;
@@ -36,137 +9,167 @@ int invert_digits(int n)
 		reversed = reversed * 10 + n % 10;
 		n /= 10;
 	}
+
 	return reversed;
 }
 
-int all_right_digit(int n, int d)
+void invert_digits_exapmle()
 {
-	n = n * 10 + d;
-	return n;
+	std::println("2. Функция invert_digits: меняет порядок цифр на обратный.");
+	unsigned int n = 0;
+	std::print("Введите положительное целое число: ");
+	if (!(std::cin >> n) || n == 0)
+	{
+		std::println("Ошибка ввода.");
+		return;
+	}
+
+	std::println("Исходное: {}, Обратное: {}", n, invert_digits(n));
 }
+
+// 3. Добавление цифры d справа к числу n
+int append_digit(int n, int d)
+{
+	return n * 10 + (d % 10);
+}
+
+void append_digit_exapmle()
+{
+	std::println("3. Функция append_digit: добавляет цифру d справа к n.");
+	unsigned int n = 0, d = 0;
+	std::print("Введите число n и цифру d (0-9): ");
+	if (!(std::cin >> n >> d))
+	{
+		std::println("Ошибка ввода.");
+		return;
+	}
+
+	std::println("n = {}, d = {}, Результат: {}", n, d, append_digit(n, d));
+}
+
+// 4. Проверка числа на простоту
 bool is_prime(int n)
 {
-	if (n == 1 || n == 2)
-		return true;
-	int del = 3;
-	if (n % 2 == 0)
-		return false;
-	else
+	if (n < 2)
 	{
-		while (del < n / 2)
+		return false;
+	}
+
+	if (n == 2 || n == 3)
+	{
+		return true;
+	}
+
+	if (n % 2 == 0 || n % 3 == 0)
+	{
+		return false;
+	}
+
+	// Перебор делителей вида 6k±1 до √n
+	// https://ru.wikipedia.org/wiki/Перебор_делителей
+	for (int i = 5; i * i <= n; i += 6)
+	{
+		if (n % i == 0 || n % (i + 2) == 0)
 		{
-			if (n % del == 0)
-			{
-				return false;
-			}
-			del += 2;
+			return false;
 		}
 	}
+
 	return true;
 }
 
-int fact(int n)
+void is_prime_exapmle()
 {
-	if (n <= 1)
-		return 1;
-	else
-		return n * fact(n - 1);
+	std::println("4. Функция is_prime: проверка на простоту.");
+	unsigned int n = 0;
+	std::print("Введите натуральное число: ");
+	if (!(std::cin >> n))
+	{
+		std::println("Ошибка ввода.");
+		return;
+	}
+
+	std::println("Число {} {}", n, is_prime(n) ? "является простым." : "НЕ является простым.");
 }
 
-int gcd(int a, int b)
+// 5. Рекурсивный факториал
+[[nodiscard]] constexpr unsigned long long fact(unsigned int n)
 {
-	if (b <= 0)
-		return a;
-	else
-	{
-		return gcd(b, a % b);
-	}
+	return (n <= 1) ? 1ULL : n * fact(n - 1);
 }
+
+void fact_exapmle()
+{
+	std::println("5. Рекурсивная функция fact: вычисление факториала.");
+	unsigned int n = 0;
+	std::print("Введите n (0-20, чтобы избежать переполнения): ");
+	if (!(std::cin >> n) || n > 20)
+	{
+		std::println("Ошибка ввода или n > 20.");
+		return;
+	}
+
+	std::println("{}! = {}", n, fact(n));
+}
+
+// 6. Рекурсивный НОД (алгоритм Евклида)
+[[nodiscard]] constexpr unsigned int gcd(unsigned int a, unsigned int b)
+{
+	return (b == 0) ? a : gcd(b, a % b);
+}
+
+void gcd_exapmle()
+{
+	std::println("6. Рекурсивная функция gcd: НОД по алгоритму Евклида.");
+	unsigned int a = 0, b = 0;
+	std::print("Введите два положительных целых числа a и b: ");
+	if (!(std::cin >> a >> b) || a == 0 || b == 0)
+	{
+		std::println("Ошибка ввода.");
+		return;
+	}
+
+	std::println("НОД({}, {}) = {}", a, b, gcd(a, b));
+}
+
+// 7. Рекурсивная сумма цифр (без циклов)
+[[nodiscard]] constexpr unsigned int digit_sum(unsigned int n)
+{
+	return (n < 10) ? n : (n % 10) + digit_sum(n / 10);
+}
+
+void digit_sum_exapmle()
+{
+	std::println("7. Рекурсивная функция digit_sum: сумма цифр без циклов.");
+	unsigned int n = 0;
+	std::print("Введите целое число: ");
+	if (!(std::cin >> n))
+	{
+		std::println("Ошибка ввода.");
+		return;
+	}
+
+	std::println("Сумма цифр числа {} равна {}", n, digit_sum(n));
+}
+
 int main()
 {
-	int opt = 0;
-	std::println("Выберите пункт меню: ");
-	std::cin >> opt;
-	switch (opt)
-	{
-	case 1:
-	{
-		int num = 0;
-		std::println("Введите трёхначное число:");
-		std::cin >> num;
-		int sum = sum_of_dig(num);
-		int prod = prod_of_dig(num);
-		std::println("Сумма: {} \n Произведние: {}", sum, prod);
-		break;
-	}
-	case 2:
-	{
-		minutes_passed();
-		break;
-	}
-	case 3:
-	{
-		int number = 0;
-		std::println("Введите число: ");
-		std::cin >> number;
-		std::println("Это число в перевернутом виде: {}", invert_digits(number));
-		break;
-	}
-	case 4:
-	{
-		std::println("Введите натуральное число n:");
-		int n = 0;
-		while (n <= 0)
-		{
-			std::cin >> n;
-		}
+	invert_digits_exapmle();
+	std::println();
 
-		std::println("Введите цифру d:");
-		int d = 0;
-		do
-		{
-			std::cin >> d;
-		} while (d < 0 || d > 9);
+	append_digit_exapmle();
+	std::println();
 
-		int result = all_right_digit(n, d);
+	is_prime_exapmle();
+	std::println();
 
-		std::println("Число с циферкой на конце: {}", result);
+	fact_exapmle();
+	std::println();
 
-		break;
-	}
-	case 5:
-	{
-		int number = 0;
-		std::println("Введите число для проверки на простоту: ");
-		std::cin >> number;
-		if (is_prime(number) == true)
-			std::println("Вашe число простое");
-		else
-			std::println("Ваше число не простое");
-		break;
-	}
-	case 6:
-	{
-		int num = 0;
-		std::println("Введите число для подсчёта факториала: ");
-		std::cin >> num;
+	gcd_exapmle();
+	std::println();
 
-		int f = fact(num);
-		std::println("Факториал: {}", f);
-		break;
-	}
-	case 7:
-	{
-		int a = 0, b = 0;
-		std::println("Введите значения a и b: ");
-		std::cin >> a >> b;
-		std::println("НОД: {}", gcd(a, b));
-		break;
-	}
-	default:
-	{
-		break;
-	}
-	}
+	digit_sum_exapmle();
+
 	return 0;
 }

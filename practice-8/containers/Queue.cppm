@@ -2,74 +2,50 @@ export module containers:Queue;
 
 import std;
 import interfaces;
+import enumerators;
 
-/**
- * @brief Шаблонный класс очереди, реализующий интерфейс коллекции.
- *
- * @tparam T Тип хранимых элементов.
- *
- * @note Класс не является потокобезопасным.
- */
 export template <typename T>
 class Queue : public IEnumerable<T>
 {
 private:
-    std::queue<T> _collection;
+    std::queue<T> _queue;
 
 public:
-    /**
-     * @brief Получает перечислитель для обхода коллекции.
-     * @return Умный указатель на IEnumerator<T>.
-     */
     [[nodiscard]] std::unique_ptr<IEnumerator<T>> GetEnumerator() const override
     {
-        return std::make_unique<Queue>(_collection);
+        return std::make_unique<QueueEnumerator<T>>(_queue);
     }
 
-    /**
-     * @brief Количество элементов в очереди.
-     */
-    [[nodiscard]] std::size_t Count() const override
+    [[nodiscard]] std::size_t Count() const
     {
-        return _collection.size();
+        return _queue.size();
     }
 
-    /**
-     * @brief Добавляет элемент в конец очереди.
-     * @param item Элемент для добавления.
-     */
     void Enqueue(T item)
     {
-        _collection.push(item);
+        _queue.push(item);
     }
 
-    /**
-     * @brief Извлекает и удаляет элемент из начала очереди.
-     * @return Извлечённый элемент.
-     * @throw std::out_of_range Если очередь пуста.
-     */
     [[nodiscard]] T Dequeue()
     {
-        if (_collection.empty())
+        if (_queue.empty())
         {
             throw std::out_of_range("Queue::Dequeue: empty queue");
         }
-        T item = std::move(_collection.front());
-        _collection.pop();
+
+        T item = std::move(_queue.front());
+        _queue.pop();
+
         return item;
     }
 
-    /**
-     * @brief Возвращает элемент из начала очереди без его удаления.
-     * @return Константная ссылка на элемент.
-     * @throw std::out_of_range Если очередь пуста.
-     */
     [[nodiscard]] const T &Peek() const
     {
-        if (_collection.empty())
+        if (_queue.empty())
         {
             throw std::out_of_range("Queue::Peek: empty queue");
         }
-        return _collection.front();
+
+        return _queue.front();
     }
 };

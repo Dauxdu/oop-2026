@@ -7,6 +7,7 @@ target_sources(simple_usages
     DictionaryUsages.cppm
     StackUsages.cppm
     ListUsages.cppm
+    QueueUsages.cppm
 )
 
 target_link_libraries(simple_usages PUBLIC containers)

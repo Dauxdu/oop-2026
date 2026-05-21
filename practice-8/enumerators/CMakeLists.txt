@@ -7,6 +7,7 @@ target_sources(enumerators
     DictionaryEnumerator.cppm
     StackEnumerator.cppm
     ListEnumerator.cppm
+    QueueEnumerator.cppm
 )
 
 target_link_libraries(enumerators PUBLIC interfaces)
