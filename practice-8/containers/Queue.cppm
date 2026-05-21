@@ -33,7 +33,7 @@ public:
             throw std::out_of_range("Queue::Dequeue: empty queue");
         }
 
-        T item = _queue.front();
+        T item = std::move(_queue.front());
         _queue.pop();
 
         return item;
