@@ -2,25 +2,21 @@ export module containers:HashSet;
 
 import std;
 import interfaces;
+import enumerators;
 
-export template <typename T, typename Hash = std::hash<T>, typename KeyEqual = std::equal_to<T>>
-class HashSet final : public ICollection<T>
+export template <typename TValue, typename THash = std::hash<TValue>, typename TValueEqual = std::equal_to<TValue>>
+class HashSet final : public ICollection<TValue>
 {
 private:
-    std::unordered_set<T, Hash, KeyEqual> _set;
+    std::unordered_set<TValue, THash, TValueEqual> _set;
 
 public:
-    std::unique_ptr<IEnumerator<T>> GetEnumerator() const override
-    {
-        return std::make_unique<HashSetEnumerator<T>>(_set);
-    }
-
-    void Add(const T &item) override
+    void Add(const TValue &item) override
     {
         _set.insert(item);
     }
 
-    bool Remove(const T &item) override
+    bool Remove(const TValue &item) override
     {
         return _set.erase(item) > 0;
     }
@@ -30,17 +26,17 @@ public:
         _set.clear();
     }
 
-    [[nodiscard]] std::size_t Count() const override
+    std::size_t Count() const override
     {
         return _set.size();
     }
 
-    bool Contains(const T &item) const override
+    bool Contains(const TValue &item) const override
     {
         return _set.find(item) != _set.end();
     }
 
-    [[nodiscard]] std::size_t Capacity() const
+    std::size_t Capacity() const
     {
         return _set.bucket_count();
     }
@@ -48,5 +44,10 @@ public:
     void SetCapacity(std::size_t capacity)
     {
         _set.reserve(capacity);
+    }
+
+    std::unique_ptr<IEnumerator<TValue>> GetEnumerator() const override
+    {
+        return std::make_unique<HashSetEnumerator<TValue, THash, TValueEqual>>(_set);
     }
 };
