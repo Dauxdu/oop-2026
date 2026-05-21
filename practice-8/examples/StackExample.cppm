@@ -1,4 +1,4 @@
-export module simple_usages:StackUsages;
+export module examples:StackExample;
 
 import std;
 import containers;

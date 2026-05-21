@@ -1,13 +1,13 @@
 import std;
-import simple_usages;
+import examples;
 
 int main()
 {
     dictionary_example();
-    stack_example();
+    hashset_example();
     list_example();
     queue_example();
-    set_example();
+    stack_example();
 
     return 0;
 }

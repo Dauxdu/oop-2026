@@ -4,13 +4,18 @@ import std;
 import interfaces;
 import enumerators;
 
-export template <typename TValue, typename THash = std::hash<TValue>, typename TValueEqual = std::equal_to<TValue>>
+export template <typename TValue, typename THash = std::hash<TValue>, typename TEqual = std::equal_to<TValue>>
 class HashSet final : public ICollection<TValue>
 {
 private:
-    std::unordered_set<TValue, THash, TValueEqual> _set;
+    std::unordered_set<TValue, THash, TEqual> _set;
 
 public:
+    std::unique_ptr<IEnumerator<TValue>> GetEnumerator() const override
+    {
+        return std::make_unique<HashSetEnumerator<TValue, THash, TEqual>>(_set);
+    }
+
     void Add(const TValue &item) override
     {
         _set.insert(item);
@@ -44,10 +49,5 @@ public:
     void SetCapacity(std::size_t capacity)
     {
         _set.reserve(capacity);
-    }
-
-    std::unique_ptr<IEnumerator<TValue>> GetEnumerator() const override
-    {
-        return std::make_unique<HashSetEnumerator<TValue, THash, TValueEqual>>(_set);
     }
 };

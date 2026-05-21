@@ -3,15 +3,15 @@ export module enumerators:StackEnumerator;
 import std;
 import interfaces;
 
-export template <typename T>
-class StackEnumerator : public IEnumerator<T>
+export template <typename TValue>
+class StackEnumerator : public IEnumerator<TValue>
 {
 private:
-    std::stack<T> _stack;
+    std::stack<TValue> _stack;
     bool _started = false;
 
 public:
-    explicit StackEnumerator(const std::stack<T> &stack) : _stack(stack) {}
+    explicit StackEnumerator(const std::stack<TValue> &stack) : _stack(stack) {}
 
     bool MoveNext() override
     {
@@ -26,11 +26,11 @@ public:
         return !_stack.empty();
     }
 
-    const T &Current() const override
+    const TValue &Current() const override
     {
         if (_stack.empty())
         {
-            throw std::logic_error("Current() called before MoveNext() or after enumeration ended");
+            throw std::logic_error("StackEnumerator::Current: Invalid iterator");
         }
 
         return _stack.top();

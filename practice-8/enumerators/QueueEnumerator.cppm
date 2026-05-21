@@ -30,7 +30,7 @@ public:
     {
         if (_queue.empty())
         {
-            throw std::logic_error("Queue is empty");
+            throw std::logic_error("QueueEnumerator::Current: Invalid iterator");
         }
 
         return _queue.front();

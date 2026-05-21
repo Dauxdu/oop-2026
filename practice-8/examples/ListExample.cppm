@@ -1,4 +1,4 @@
-export module simple_usages:ListUsages;
+export module examples:ListExample;
 
 import std;
 import containers;

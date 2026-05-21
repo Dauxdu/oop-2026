@@ -1,12 +1,12 @@
-export module simple_usages:SetUsages;
+export module examples:HashSetExample;
 
 import std;
 import containers;
 
-export void set_example()
+export void hashset_example()
 {
     std::println("\n--------------------------------");
-    std::println("Set Example");
+    std::println("HashSet Example");
 
     HashSet<std::string> nicknames;
 

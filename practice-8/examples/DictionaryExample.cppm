@@ -1,4 +1,4 @@
-export module simple_usages:DictionaryUsages;
+export module examples:DictionaryExample;
 
 import std;
 import containers;

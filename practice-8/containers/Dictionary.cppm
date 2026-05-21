@@ -4,16 +4,16 @@ import std;
 import interfaces;
 import enumerators;
 
-export template <typename TKey, typename TValue, typename Hash = std::hash<TKey>, typename KeyEqual = std::equal_to<TKey>>
+export template <typename TKey, typename TValue, typename THash = std::hash<TKey>, typename TEqual = std::equal_to<TKey>>
 class Dictionary final : public ICollection<std::pair<const TKey, TValue>>
 {
 private:
-    std::unordered_map<TKey, TValue, Hash, KeyEqual> _dictionary;
+    std::unordered_map<TKey, TValue, THash, TEqual> _dictionary;
 
 public:
-    bool Contains(const std::pair<const TKey, TValue> &item) const override
+    std::unique_ptr<IEnumerator<std::pair<const TKey, TValue>>> GetEnumerator() const override
     {
-        return _dictionary.contains(item.first);
+        return std::make_unique<DictionaryEnumerator<TKey, TValue, THash, TEqual>>(_dictionary);
     }
 
     void Add(const std::pair<const TKey, TValue> &item) override
@@ -40,6 +40,11 @@ public:
         return _dictionary.size();
     }
 
+    bool Contains(const std::pair<const TKey, TValue> &item) const override
+    {
+        return _dictionary.contains(item.first);
+    }
+
     std::size_t Capacity() const noexcept
     {
         return _dictionary.bucket_count();
@@ -55,8 +60,9 @@ public:
         auto it = _dictionary.find(key);
         if (it == _dictionary.end())
         {
-            throw std::out_of_range("Invalid key");
+            throw std::out_of_range("Dictionary::operator[]: Invalid key");
         }
+
         return it->second;
     }
 
@@ -65,13 +71,9 @@ public:
         auto it = _dictionary.find(key);
         if (it == _dictionary.end())
         {
-            throw std::out_of_range("Invalid key");
+            throw std::out_of_range("Dictionary::operator[]: Invalid key");
         }
-        return it->second;
-    }
 
-    std::unique_ptr<IEnumerator<std::pair<const TKey, TValue>>> GetEnumerator() const override
-    {
-        return std::make_unique<DictionaryEnumerator<TKey, TValue, Hash, KeyEqual>>(_dictionary);
+        return it->second;
     }
 };

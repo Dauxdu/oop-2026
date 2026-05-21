@@ -4,29 +4,24 @@ import std;
 import interfaces;
 import enumerators;
 
-export template <typename T>
-class List final : public ICollection<T>
+export template <typename TValue>
+class List final : public ICollection<TValue>
 {
 private:
-	std::vector<T> _list;
+	std::vector<TValue> _list;
 
 public:
-	std::unique_ptr<IEnumerator<T>> GetEnumerator() const override
+	std::unique_ptr<IEnumerator<TValue>> GetEnumerator() const override
 	{
-		return std::make_unique<ListEnumerator<T>>(_list);
+		return std::make_unique<ListEnumerator<TValue>>(_list);
 	}
 
-	std::size_t Count() const override
-	{
-		return _list.size();
-	}
-
-	void Add(const T &item) override
+	void Add(const TValue &item) override
 	{
 		_list.push_back(item);
 	}
 
-	[[nodiscard]] bool Remove(const T &item) override
+	bool Remove(const TValue &item) override
 	{
 		return std::erase(_list, item) > 0;
 	}
@@ -36,12 +31,17 @@ public:
 		_list.clear();
 	}
 
-	bool Contains(const T &item) const override
+	std::size_t Count() const override
+	{
+		return _list.size();
+	}
+
+	bool Contains(const TValue &item) const override
 	{
 		return std::find(_list.begin(), _list.end(), item) != _list.end();
 	}
 
-	[[nodiscard]] std::size_t Capacity() const
+	std::size_t Capacity() const
 	{
 		return _list.capacity();
 	}
@@ -51,30 +51,13 @@ public:
 		_list.reserve(capacity);
 	}
 
-	[[nodiscard]] T &operator[](std::size_t index)
-	{
-		if (index >= _list.size())
-		{
-			throw std::out_of_range("List::operator[]: index out of range");
-		}
-		return _list[index];
-	}
-
-	[[nodiscard]] const T &operator[](std::size_t index) const
-	{
-		if (index >= _list.size())
-		{
-			throw std::out_of_range("List::operator[]: index out of range");
-		}
-		return _list[index];
-	}
-
-	void Insert(std::size_t index, const T &item)
+	void Insert(std::size_t index, const TValue &item)
 	{
 		if (index > _list.size())
 		{
 			throw std::out_of_range("List::Insert: index out of range");
 		}
+
 		_list.insert(_list.begin() + index, item);
 	}
 
@@ -84,6 +67,27 @@ public:
 		{
 			throw std::out_of_range("List::RemoveAt: index out of range");
 		}
+
 		_list.erase(_list.begin() + index);
+	}
+
+	TValue &operator[](std::size_t index)
+	{
+		if (index >= _list.size())
+		{
+			throw std::out_of_range("List::operator[]: index out of range");
+		}
+
+		return _list[index];
+	}
+
+	const TValue &operator[](std::size_t index) const
+	{
+		if (index >= _list.size())
+		{
+			throw std::out_of_range("List::operator[]: index out of range");
+		}
+
+		return _list[index];
 	}
 };
