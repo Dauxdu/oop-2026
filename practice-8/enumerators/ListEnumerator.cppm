@@ -30,7 +30,7 @@ public:
     {
         if (!_started || _iter == _end)
         {
-            throw std::logic_error("Invalid iterator");
+            throw std::logic_error("ListEnumerator::Current: Invalid iterator");
         }
         return *_iter;
     }

@@ -5,10 +5,10 @@ target_sources(enumerators
     FILES
     enumerators.ixx
     DictionaryEnumerator.cppm
-    StackEnumerator.cppm
+    HashSetEnumerator.cppm
     ListEnumerator.cppm
     QueueEnumerator.cppm
-    HashSetEnumerator.cppm
+    StackEnumerator.cppm
 )
 
 target_link_libraries(enumerators PUBLIC interfaces)

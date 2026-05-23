@@ -1,4 +1,4 @@
-export module simple_usages:QueueUsages;
+export module examples:QueueExample;
 
 import std;
 import containers;
