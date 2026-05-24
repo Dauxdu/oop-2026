@@ -33,4 +33,6 @@ int main(int argc, char *argv[])
         std::println("Ошибка: {}", httplib::to_string(result.error()));
         return 1;
     }
+
+    return 0;
 }
