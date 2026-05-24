@@ -28,6 +28,11 @@
       "hidden": true
     },
     {
+      "name": "clang",
+      "cacheVariables": { "CMAKE_CXX_COMPILER": "clang++" },
+      "hidden": true
+    },
+    {
       "name": "gcc-debug",
       "inherits": ["ninja", "gcc", "debug"],
       "condition": {
@@ -57,6 +62,42 @@
     {
       "name": "gcc-vcpkg-release",
       "inherits": ["ninja", "gcc", "vcpkg", "release"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "clang-debug",
+      "inherits": ["ninja", "clang", "debug"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "clang-release",
+      "inherits": ["ninja", "clang", "release"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "clang-vcpkg-debug",
+      "inherits": ["ninja", "clang", "vcpkg", "debug"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "clang-vcpkg-release",
+      "inherits": ["ninja", "clang", "vcpkg", "release"],
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -170,6 +211,26 @@
       "name": "gcc-vcpkg-release",
       "displayName": "GCC Release (vcpkg)",
       "configurePreset": "gcc-vcpkg-release"
+    },
+    {
+      "name": "clang-debug",
+      "displayName": "Clang Debug",
+      "configurePreset": "clang-debug"
+    },
+    {
+      "name": "clang-release",
+      "displayName": "Clang Release",
+      "configurePreset": "clang-release"
+    },
+    {
+      "name": "clang-vcpkg-debug",
+      "displayName": "Clang Debug (vcpkg)",
+      "configurePreset": "clang-vcpkg-debug"
+    },
+    {
+      "name": "clang-vcpkg-release",
+      "displayName": "Clang Release (vcpkg)",
+      "configurePreset": "clang-vcpkg-release"
     },
     {
       "name": "homebrew-clang-debug",
