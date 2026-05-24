@@ -3,3 +3,6 @@
 *.pdb
 
 build/
+vcpkg_sdks/
+
+CMakeUserPresets.json
