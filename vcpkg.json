@@ -1,0 +1,11 @@
+{
+  "name": "oop-2026",
+  "version": "1.0.0",
+  "dependencies": [
+    {
+      "name": "cpp-httplib",
+      "features": ["openssl"],
+      "version>=": "0.45.0"
+    }
+  ]
+}
