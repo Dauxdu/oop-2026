@@ -1,231 +1,150 @@
-import std;
+﻿import std;
 
-class String
-{
+class String {
 private:
-	char *_s = nullptr;
-	int _size = 0;
+	char* _c = nullptr;
+	size_t _size = 0;
 
-	void str_copy(const char *s)
-	{
-		_size = std::strlen(s);
-		_s = new char[_size + 1];
-		std::strcpy(_s, s);
+	void allocate_memory(const char* c, size_t len) {
+		_c = new char[len + 1];
+		std::memcpy(_c, c, len + 1);
+		_size = len;
 	}
 
-public:
-	String() {}
-
-	String(const char *s)
-	{
-		str_copy(s);
-	}
-
-	~String()
-	{
-		delete[] _s;
-		_s = nullptr;
+	void free_memory() {
+		delete[] _c;
+		_c = nullptr;
 		_size = 0;
 	}
 
-	String(const String &other)
-	{
-		str_copy(other._s);
+public:
+	String() = default;
+
+	String(const char* str) {
+
+		if (!str) {
+			throw std::invalid_argument("Переданная строка ни на что не указывает");
+		}
+
+		size_t len = std::strlen(str);
+		allocate_memory(str, len);
 	}
 
-	String(String &&other)
-	{
-		_s = other._s;
-		_size = other._size;
+	~String() {
+		free_memory();
+	}
 
-		other._s = nullptr;
+	String(const String& other) {
+		if (other._c) {
+			allocate_memory(other._c, other._size);
+		}
+	}
+
+	String(String&& other) noexcept : _c(other._c), _size(other._size) {
+		other._c = nullptr;
 		other._size = 0;
 	}
 
-	String &operator=(const String &other)
-	{
-		if (this != &other)
-		{
-			str_copy(other._s);
+	String& operator=(const String& other) {
+		if (this != &other) {
+			free_memory();
+			if (other._c) {
+				allocate_memory(other._c, other._size);
+			}
 		}
 		return *this;
 	}
 
-	String &operator=(String &&other)
-	{
-		if (this != &other)
-		{
-			_s = other._s;
+	String& operator=(String&& other) noexcept {
+		if (this != &other) {
+			free_memory();
+			_c = other._c;
 			_size = other._size;
-
-			other._s = nullptr;
+			other._c = nullptr;
 			other._size = 0;
 		}
 		return *this;
 	}
 
-	char operator[](int const index)
-	{
-		return _s[index];
+	char operator[](size_t index) const {
+		return _c[index];
 	}
 
-	int size()
-	{
+	char& operator[](size_t index) {
+		return _c[index];
+	}
+
+	size_t Size() {
 		return _size;
 	}
 
-	const char *str()
-	{
-		return _s;
+	const char* get_c() const {
+		return _c;
 	}
 };
 
-namespace std
-{
-	template <>
-	struct formatter<String, char>
-	{
-		constexpr auto parse(format_parse_context &ctx)
-		{
-			auto it = ctx.begin();
-			while (it != ctx.end() && *it != '}')
-			{
-				++it;
-			}
-			return it;
-		}
+template <>
+struct std::formatter<String> : std::formatter<std::string_view> {
+	auto format(const String& s, auto& ctx) const {
+		return std::formatter<std::string_view>::format(s.get_c(), ctx);
+	}
+};
 
-		auto format(String p, format_context &ctx) const
-		{
-			std::ostringstream oss;
-			oss << p.str();
-			const auto s = oss.str();
-			return std::copy(s.begin(), s.end(), ctx.out());
-		}
-	};
-}; // struct formatter
 
-class StringBuilder
-{
+class StringBuilder {
 private:
 	std::string _buffer;
-
 public:
-	StringBuilder() = default;
-
-	void reserve(int bytes)
-	{
-		_buffer.reserve(bytes);
+	void Reserve(size_t new_size) {
+		_buffer.reserve(new_size);
 	}
 
-	StringBuilder &append(const std::string &str)
-	{
+	StringBuilder() = default;
+
+	StringBuilder& append(const std::string& str) {
 		_buffer.append(str);
 		return *this;
 	}
 
-	StringBuilder &append(const int num)
-	{
-		_buffer.append(std::to_string(num));
+	StringBuilder& append(int number) {
+		_buffer.append(std::to_string(number));
 		return *this;
 	}
 
-	StringBuilder &append(const float num)
-	{
-		_buffer.append(std::to_string(num));
+	StringBuilder& append(float number) {
+		_buffer.append(std::to_string(number));
 		return *this;
 	}
 
-	std::string build() const &
-	{
+	std::string build() const& {
 		return _buffer;
 	}
 
-	std::string build() &&
-	{
+	std::string build()&& {
 		return std::move(_buffer);
 	}
 
-	std::size_t size() const
-	{
-		return _buffer.size();
-	}
-
-	std::size_t capacity() const
-	{
-		return _buffer.capacity();
-	}
-
-	std::string str() const
-	{
-		return _buffer;
-	}
 };
+int main() {
+	std::println("=== Тест String ===");
+	String s1("C++");
+	s1[0] = 'A';
+	std::println("1. Замена первого на h: '{}', Размер: {}", s1.get_c(), s1.Size());
 
-int main()
-{
-	char st[] = "привет, мир!";
-	String str(st);
-	std::println("{}", str);
-	String str1(str);
-	std::println(" str1: {}", str1);
+	String s2 = std::move(s1);
+	std::println("2. Перемещенный объект: '{}', Первый объект пуст? {}", s2.get_c(), s1.Size() == 0);
 
-	String str2 = str1;
-	std::println("str2: {}", str2);
+	std::println("\n=== Тест StringBuilder ===");
+	StringBuilder sb;
+	sb.Reserve(64);
+	sb.append("Студент набрал ").append(95).append(" из ").append(100.0f).append(" баллов");
 
-	String str3(std::move(str1));
-	std::println("str3: {}", str3);
-	String str4 = std::move(str2);
-	std::println("str4: {}", str4);
+	std::string res = sb.build();
+	std::println("3. Lvalue build: '{}'", res);
+	std::println("   Размер: {}", sb.build().size());
 
-	std::println("str1 new: {}", str1);
-	std::println("str2 new: {}", str2);
-
-	std::println("---------------------------------------------------");
-	StringBuilder s1;
-	int size;
-	std::println("Введите объем памяти:");
-	std::cin >> size;
-	s1.reserve(size);
-
-	int choice = 0;
-
-	while (choice != 4)
-	{
-		std::println("Выберите дейтсвие:(1)Добавить строку, (2) Добавить int , (3) Добавить float, (4) Выход");
-		std::cin >> choice;
-		if (choice == 1)
-		{
-			std::println("Введите строку:");
-			std::string s_1;
-			std::cin >> s_1;
-			s1.append(s_1);
-		}
-
-		else if (choice == 2)
-		{
-			std::println("Введите целочисленное значение:");
-			int s_1;
-			std::cin >> s_1;
-			s1.append(s_1);
-		}
-		else if (choice == 3)
-		{
-			std::println("Введите float :");
-			float s_1;
-			std::cin >> s_1;
-			s1.append(s_1);
-		}
-	}
-	std::println("Емкость:{} Размер:{} Строка:{}", s1.capacity(), s1.size(), s1.str());
-
-	StringBuilder s2;
-	s2 = s1;
-	std::println("s1: {}, s2: {}", s1.str(), s2.str());
-	std::string string1 = s1.build();
-	std::string string2 = std::move(s2).build();
-	std::println("string1: {}, s1: {} {}", string1, s1.str(), s1.capacity());
-	std::println("string2: {}, s2: {} {}", string2, s2.str(), s2.capacity());
+	std::string temp = StringBuilder().append("Temp ").append(123).build();
+	std::println("4. Rvalue build: '{}'", temp);
 
 	return 0;
 }
