@@ -3,9 +3,9 @@
 class String {
 private:
 	char* _c = nullptr;
-	size_t _size = 0;
+	std::size_t _size = 0;
 
-	void allocate_memory(const char* c, size_t len) {
+	void allocate_memory(const char* c, std::size_t len) {
 		_c = new char[len + 1];
 		std::memcpy(_c, c, len + 1);
 		_size = len;
@@ -26,7 +26,7 @@ public:
 			throw std::invalid_argument("Переданная строка ни на что не указывает");
 		}
 
-		size_t len = std::strlen(str);
+		std::size_t len = std::strlen(str);
 		allocate_memory(str, len);
 	}
 
@@ -66,15 +66,15 @@ public:
 		return *this;
 	}
 
-	char operator[](size_t index) const {
+	char operator[](std::size_t index) const {
 		return _c[index];
 	}
 
-	char& operator[](size_t index) {
+	char& operator[](std::size_t index) {
 		return _c[index];
 	}
 
-	size_t Size() {
+	std::size_t Size() {
 		return _size;
 	}
 
@@ -95,7 +95,7 @@ class StringBuilder {
 private:
 	std::string _buffer;
 public:
-	void Reserve(size_t new_size) {
+	void Reserve(std::size_t new_size) {
 		_buffer.reserve(new_size);
 	}
 
