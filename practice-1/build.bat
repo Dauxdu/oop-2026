@@ -1,0 +1,1 @@
+cl /Fo: ../build/practice-1.obj /Fe: ../build/practice-1.exe /src/main.c && ../build/practice-1.exe

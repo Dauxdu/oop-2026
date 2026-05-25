@@ -1,0 +1,1 @@
+gcc src/main.c -o ../build/practice-1 && ../build/practice-1
