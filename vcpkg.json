@@ -6,6 +6,10 @@
       "name": "cpp-httplib",
       "features": ["openssl"],
       "version>=": "0.45.0"
+    },
+    {
+      "name": "sfml",
+      "version>=": "3.0.2"
     }
   ]
 }
