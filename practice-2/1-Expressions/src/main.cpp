@@ -56,7 +56,7 @@ void day_of_week()
 	std::println("Номер дня недели для n-го дня года {}: ", dayOfWeek);
 }
 
-void check_digits_order()
+bool check_digits_order()
 {
 	std::println("4. Дано трёхзначное число. Проверить, образуют ли его цифры возрастающую последовательность (например, 123, 578).");
 
@@ -70,14 +70,11 @@ void check_digits_order()
 	int tens = (num / 10) % 10;
 	int units = num % 10;
 
-	if (hundreds < tens && tens < units)
-	{
-		std::println("Цифры данного числа образуют возрастающую последовательность");
-	}
-	else
-	{
-		std::println("Цифры данного числа НЕобразуют возрастающую последовательность");
-	}
+	bool result = (hundreds < tens && tens < units);
+
+	std::println("Цифры числа {} образуют возрастающую последовательность? {}", num, result);
+
+	return result;
 }
 
 void rook_move()
