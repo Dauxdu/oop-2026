@@ -2,10 +2,10 @@ module;
 
 #include <SFML/Graphics.hpp>
 
-export module api;
+export module API;
 
 import std;
-export namespace api
+export namespace API
 {
     class IDrawable
     {

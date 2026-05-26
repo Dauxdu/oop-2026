@@ -4,18 +4,21 @@ find_package(SFML COMPONENTS Graphics Audio CONFIG REQUIRED)
 
 add_executable(${PROJECT_NAME})
 
+target_sources(${PROJECT_NAME}
+    PRIVATE
+    src/main.cpp
+    PRIVATE FILE_SET CXX_MODULES FILES
+    lib/API.cppm
+    lib/Assets.cppm
+    lib/GameLogic.cppm
+    lib/Render.cppm
+    lib/TicTacToe.cppm
+)
+
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     SFML::Audio
     SFML::Graphics
-)
-
-target_sources(${PROJECT_NAME}
-    PRIVATE
-    main.cpp
-    PRIVATE FILE_SET CXX_MODULES FILES
-    api.cppm
-    tictactoe.cppm
 )
 
 add_custom_target(${PROJECT_NAME}_assets
