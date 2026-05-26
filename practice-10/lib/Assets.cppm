@@ -5,6 +5,7 @@ module;
 
 export module Assets;
 
+import std;
 import GameLogic;
 
 export namespace assets
@@ -12,64 +13,69 @@ export namespace assets
     class Manager
     {
     private:
-        sf::Texture _board;
-        bool _has_board{};
+        std::optional<sf::Image> _icon;
+        std::optional<sf::Texture> _board;
+        std::optional<sf::Texture> _x;
+        std::optional<sf::Texture> _o;
+        std::optional<sf::Texture> _x_win;
+        std::optional<sf::Texture> _o_win;
+        std::optional<sf::Texture> _draw;
+        std::optional<sf::SoundBuffer> _win_sound;
+        std::optional<sf::SoundBuffer> _click_sound;
 
-        sf::Texture _x;
-        bool _has_x{};
-        sf::Texture _x_win;
-        bool _has_x_win{};
+        template <typename TResource>
+        [[nodiscard]]
+        static std::optional<TResource> load_resource(const std::filesystem::path &path)
+        {
+            TResource resource;
 
-        sf::Texture _o;
-        bool _has_o{};
-        sf::Texture _o_win;
-        bool _has_o_win{};
+            if (!resource.loadFromFile(path))
+            {
+                return std::nullopt;
+            }
 
-        sf::Texture _draw;
-        bool _has_draw{};
-
-        sf::SoundBuffer _win_buffer;
-        bool _has_win_sound{};
-        sf::SoundBuffer _click_buffer;
-        bool _has_click_sound{};
+            return resource;
+        }
 
     public:
-        Manager(const std::filesystem::path &dir)
+        Manager(const std::filesystem::path &directory)
         {
-            _has_board = _board.loadFromFile((dir / "board.png"));
+            _icon = load_resource<sf::Image>(directory / "icon.png");
+            _board = load_resource<sf::Texture>(directory / "board.png");
+            _x = load_resource<sf::Texture>(directory / "x.png");
+            _o = load_resource<sf::Texture>(directory / "o.png");
+            _x_win = load_resource<sf::Texture>(directory / "x_win.png");
+            _o_win = load_resource<sf::Texture>(directory / "o_win.png");
+            _draw = load_resource<sf::Texture>(directory / "draw.png");
+            _win_sound = load_resource<sf::SoundBuffer>(directory / "win.mp3");
+            _click_sound = load_resource<sf::SoundBuffer>(directory / "click.mp3");
+        }
 
-            _has_x = _x.loadFromFile((dir / "x.png"));
-            _has_o = _o.loadFromFile((dir / "o.png"));
-
-            _has_x_win = _x_win.loadFromFile((dir / "x_win.png"));
-            _has_o_win = _o_win.loadFromFile((dir / "o_win.png"));
-            _has_draw = _draw.loadFromFile((dir / "draw.png"));
-
-            _has_win_sound = _win_buffer.loadFromFile((dir / "win.mp3"));
-            _has_click_sound = _click_buffer.loadFromFile((dir / "click.mp3"));
+        [[nodiscard]]
+        const sf::Image *icon() const noexcept
+        {
+            return _icon ? &*_icon : nullptr;
         }
 
         [[nodiscard]]
         const sf::Texture *board() const noexcept
         {
-            return _has_board ? &_board : nullptr;
+            return _board ? &*_board : nullptr;
         }
 
         [[nodiscard]]
-        const sf::Texture *mark_texture(Cell c) const noexcept
+        const sf::Texture *mark_texture(Cell cell) const noexcept
         {
-            switch (c)
+            switch (cell)
             {
             case Cell::X:
             {
-                return _has_x ? &_x : nullptr;
+                return _x ? &*_x : nullptr;
             }
-
             case Cell::O:
             {
-                return _has_o ? &_o : nullptr;
+                return _o ? &*_o : nullptr;
             }
-
             default:
             {
                 return nullptr;
@@ -84,17 +90,17 @@ export namespace assets
             {
             case GameResult::XWins:
             {
-                return _has_x_win ? &_x_win : nullptr;
+                return _x_win ? &*_x_win : nullptr;
             }
 
             case GameResult::OWins:
             {
-                return _has_o_win ? &_o_win : nullptr;
+                return _o_win ? &*_o_win : nullptr;
             }
 
             case GameResult::Draw:
             {
-                return _has_draw ? &_draw : nullptr;
+                return _draw ? &*_draw : nullptr;
             }
 
             default:
@@ -107,13 +113,13 @@ export namespace assets
         [[nodiscard]]
         const sf::SoundBuffer *click_sound() const noexcept
         {
-            return _has_click_sound ? &_click_buffer : nullptr;
+            return _click_sound ? &*_click_sound : nullptr;
         }
 
         [[nodiscard]]
         const sf::SoundBuffer *win_sound() const noexcept
         {
-            return _has_win_sound ? &_win_buffer : nullptr;
+            return _win_sound ? &*_win_sound : nullptr;
         }
     };
 }

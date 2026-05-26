@@ -19,40 +19,52 @@ export namespace game_logic
 {
     class Board
     {
+    public:
+        static constexpr int size = 3;
+
     private:
-        std::array<Cell, 3 * 3> _board{};
+        std::array<Cell, size * size> _board{};
         Cell _current{Cell::X};
         GameResult _result{GameResult::None};
 
+        static constexpr std::array win_lines{
+            std::array{0, 1, 2},
+            std::array{3, 4, 5},
+            std::array{6, 7, 8},
+
+            std::array{0, 3, 6},
+            std::array{1, 4, 7},
+            std::array{2, 5, 8},
+
+            std::array{0, 4, 8},
+            std::array{2, 4, 6},
+        };
+
         [[nodiscard]]
-        bool won(Cell p) const noexcept
+        static bool is_valid_position(int x, int y) noexcept
         {
-            for (int i = 0; i < 3; ++i)
+            return x >= 0 && x < size && y >= 0 && y < size;
+        }
+
+        [[nodiscard]]
+        bool won(Cell player) const noexcept
+        {
+            for (const auto &line : win_lines)
             {
-                if ((_board[i * 3 + 0] == p &&
-                     _board[i * 3 + 1] == p &&
-                     _board[i * 3 + 2] == p) ||
-                    (_board[0 * 3 + i] == p &&
-                     _board[1 * 3 + i] == p &&
-                     _board[2 * 3 + i] == p))
+                if (_board[line[0]] == player && _board[line[1]] == player && _board[line[2]] == player)
                 {
                     return true;
                 }
             }
 
-            return (_board[0] == p &&
-                    _board[4] == p &&
-                    _board[8] == p) ||
-                   (_board[2] == p &&
-                    _board[4] == p &&
-                    _board[6] == p);
+            return false;
         }
 
         [[nodiscard]]
         bool full() const noexcept
         {
-            return std::ranges::none_of(_board, [](Cell c)
-                                        { return c == Cell::Empty; });
+            return std::ranges::none_of(_board, [](Cell cell)
+                                        { return cell == Cell::Empty; });
         }
 
         void update_game_state() noexcept
@@ -78,16 +90,18 @@ export namespace game_logic
         [[nodiscard]]
         bool move(int x, int y) noexcept
         {
-            if (is_over() || x < 0 || x >= 3 || y < 0 || y >= 3)
+            if (is_over() || !is_valid_position(x, y))
             {
                 return false;
             }
 
-            Cell &cell = _board[y * 3 + x];
+            Cell &cell = _board[y * size + x];
+
             if (cell != Cell::Empty)
             {
                 return false;
             }
+
             cell = _current;
 
             update_game_state();
@@ -98,7 +112,7 @@ export namespace game_logic
         [[nodiscard]]
         Cell get(int x, int y) const noexcept
         {
-            return _board[y * 3 + x];
+            return _board[y * size + x];
         }
 
         [[nodiscard]]
@@ -116,6 +130,7 @@ export namespace game_logic
         void reset() noexcept
         {
             _board.fill(Cell::Empty);
+
             _current = Cell::X;
             _result = GameResult::None;
         }
