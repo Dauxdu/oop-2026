@@ -15,61 +15,37 @@ export enum class GameResult : std::uint8_t {
     Draw
 };
 
-export namespace GameLogic
+export namespace game_logic
 {
-    constexpr int BOARD_SIZE = 3;
-
-    class Logic
+    class Board
     {
-        std::array<Cell, BOARD_SIZE * BOARD_SIZE> _board{};
-
+    private:
+        std::array<Cell, 3 * 3> _board{};
         Cell _current{Cell::X};
         GameResult _result{GameResult::None};
-
-        bool _over{false};
-
-        [[nodiscard]]
-        static constexpr Cell next_player(Cell c) noexcept
-        {
-            return c == Cell::X ? Cell::O : Cell::X;
-        }
-
-        [[nodiscard]]
-        static constexpr bool valid(int x, int y) noexcept
-        {
-            return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
-        }
-
-        [[nodiscard]]
-        static constexpr std::size_t index(int x, int y) noexcept
-        {
-            return static_cast<std::size_t>(y * BOARD_SIZE + x);
-        }
-
-        [[nodiscard]]
-        constexpr bool line(Cell a, Cell b, Cell c, Cell p) const noexcept
-        {
-            return a == p && b == p && c == p;
-        }
-
-        [[nodiscard]]
-        Cell at(int x, int y) const noexcept
-        {
-            return _board[index(x, y)];
-        }
 
         [[nodiscard]]
         bool won(Cell p) const noexcept
         {
-            for (int i = 0; i < BOARD_SIZE; ++i)
+            for (int i = 0; i < 3; ++i)
             {
-                if (line(at(0, i), at(1, i), at(2, i), p) || line(at(i, 0), at(i, 1), at(i, 2), p))
+                if ((_board[i * 3 + 0] == p &&
+                     _board[i * 3 + 1] == p &&
+                     _board[i * 3 + 2] == p) ||
+                    (_board[0 * 3 + i] == p &&
+                     _board[1 * 3 + i] == p &&
+                     _board[2 * 3 + i] == p))
                 {
                     return true;
                 }
             }
 
-            return line(at(0, 0), at(1, 1), at(2, 2), p) || line(at(2, 0), at(1, 1), at(0, 2), p);
+            return (_board[0] == p &&
+                    _board[4] == p &&
+                    _board[8] == p) ||
+                   (_board[2] == p &&
+                    _board[4] == p &&
+                    _board[6] == p);
         }
 
         [[nodiscard]]
@@ -79,13 +55,11 @@ export namespace GameLogic
                                         { return c == Cell::Empty; });
         }
 
-        void update_state() noexcept
+        void update_game_state() noexcept
         {
             if (won(_current))
             {
                 _result = _current == Cell::X ? GameResult::XWins : GameResult::OWins;
-
-                _over = true;
 
                 return;
             }
@@ -93,33 +67,30 @@ export namespace GameLogic
             if (full())
             {
                 _result = GameResult::Draw;
-                _over = true;
 
                 return;
             }
 
-            _current = next_player(_current);
+            _current = _current == Cell::X ? Cell::O : Cell::X;
         }
 
     public:
         [[nodiscard]]
         bool move(int x, int y) noexcept
         {
-            if (_over || !valid(x, y))
+            if (is_over() || x < 0 || x >= 3 || y < 0 || y >= 3)
             {
                 return false;
             }
 
-            auto &cell = _board[index(x, y)];
-
+            Cell &cell = _board[y * 3 + x];
             if (cell != Cell::Empty)
             {
                 return false;
             }
-
             cell = _current;
 
-            update_state();
+            update_game_state();
 
             return true;
         }
@@ -127,7 +98,7 @@ export namespace GameLogic
         [[nodiscard]]
         Cell get(int x, int y) const noexcept
         {
-            return at(x, y);
+            return _board[y * 3 + x];
         }
 
         [[nodiscard]]
@@ -139,16 +110,14 @@ export namespace GameLogic
         [[nodiscard]]
         bool is_over() const noexcept
         {
-            return _over;
+            return _result != GameResult::None;
         }
 
         void reset() noexcept
         {
             _board.fill(Cell::Empty);
-
             _current = Cell::X;
             _result = GameResult::None;
-            _over = false;
         }
     };
 }
