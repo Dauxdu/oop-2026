@@ -5,51 +5,20 @@ module;
 export module API;
 
 import std;
-export namespace API
+export namespace api
 {
-    class IDrawable
-    {
-    protected:
-        IDrawable() = default;
-        IDrawable(const IDrawable &) = default;
-        IDrawable &operator=(const IDrawable &) = default;
-
-    public:
-        virtual ~IDrawable() = default;
-        virtual void draw(sf::RenderTarget &target) const = 0;
-    };
-
-    class IUpdatable
-    {
-    protected:
-        IUpdatable() = default;
-        IUpdatable(const IUpdatable &) = default;
-        IUpdatable &operator=(const IUpdatable &) = default;
-
-    public:
-        virtual ~IUpdatable() = default;
-        virtual void update(float dt) = 0;
-    };
-
-    class IEventHandler
-    {
-    protected:
-        IEventHandler() = default;
-        IEventHandler(const IEventHandler &) = default;
-        IEventHandler &operator=(const IEventHandler &) = default;
-
-    public:
-        virtual ~IEventHandler() = default;
-        virtual void handle_event(const sf::Event &event) = 0;
-    };
-
-    class IGame : public IDrawable, public IUpdatable, public IEventHandler
+    class IGame
     {
     protected:
         IGame() = default;
+        IGame(const IGame &) = default;
+        IGame &operator=(const IGame &) = default;
 
     public:
-        ~IGame() override = default;
+        virtual ~IGame() = default;
+        virtual void update(float dt) = 0;
+        virtual void draw(sf::RenderTarget &) const = 0;
+        virtual void handle_event(const sf::Event &) = 0;
     };
 
     using GamePtr = std::unique_ptr<IGame>;
