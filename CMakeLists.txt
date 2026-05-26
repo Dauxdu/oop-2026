@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.2.0)
+﻿cmake_minimum_required(VERSION 4.2.0)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_MODULE_STD ON)

@@ -1,4 +1,4 @@
-project("practice-10" LANGUAGES CXX)
+﻿project("practice-10" LANGUAGES CXX)
 
 find_package(SFML COMPONENTS Graphics Audio CONFIG REQUIRED)
 
