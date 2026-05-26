@@ -8,7 +8,6 @@ target_sources(${PROJECT_NAME}
     PRIVATE
     src/main.cpp
     PRIVATE FILE_SET CXX_MODULES FILES
-    lib/API.cppm
     lib/Assets.cppm
     lib/GameLogic.cppm
     lib/Renderer.cppm
@@ -25,6 +24,6 @@ add_custom_target(${PROJECT_NAME}_assets
     COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
     ${CMAKE_CURRENT_SOURCE_DIR}/assets
     ${CMAKE_CURRENT_BINARY_DIR}/assets
-    COMMENT "Copying assets to build directory..."
 )
+
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_assets)

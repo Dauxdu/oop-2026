@@ -14,39 +14,39 @@ export namespace renderer
     {
     private:
         const assets::Manager &_assets;
-
-        float _width{};
-        float _height{};
+        sf::Vector2f _size;
 
         [[nodiscard]]
         float cell_width() const noexcept
         {
-            return _width / 3.f;
+            return _size.x / game_logic::Board::size;
         }
 
         [[nodiscard]]
         float cell_height() const noexcept
         {
-            return _height / 3.f;
+            return _size.y / game_logic::Board::size;
         }
 
         void draw_mark(sf::RenderTarget &target, const sf::Texture &texture, sf::Vector2f center) const
         {
             sf::Sprite sprite{texture};
 
-            float min_scale = std::min(cell_width(), cell_height()) * 0.8f;
-            float max_scale = std::max(static_cast<float>(texture.getSize().x), static_cast<float>(texture.getSize().y));
-            const float scale = (min_scale / max_scale);
+            const float target_size = std::min(cell_width(), cell_height()) * 0.7f;
+
+            const float texture_size = std::max(static_cast<float>(texture.getSize().x), static_cast<float>(texture.getSize().y));
+
+            const float scale = target_size / texture_size;
 
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
-            sprite.setScale({scale, scale});
             sprite.setPosition(center);
+            sprite.setScale({scale, scale});
 
             target.draw(sprite);
         }
 
     public:
-        Renderer(float width, float height, const assets::Manager &assets) : _width{width}, _height{height}, _assets{assets} {}
+        Renderer(sf::Vector2f size, const assets::Manager &assets) : _assets{assets}, _size{size} {}
 
         void render(sf::RenderTarget &target, const game_logic::Board &board) const
         {
@@ -54,16 +54,17 @@ export namespace renderer
             {
                 sf::Sprite sprite{*texture};
 
-                sprite.setScale({_width / texture->getSize().x, _height / texture->getSize().y});
+                sprite.setScale({_size.x / texture->getSize().x, _size.y / texture->getSize().y});
 
                 target.draw(sprite);
             }
 
             const float cw = cell_width();
             const float ch = cell_height();
-            for (int y = 0; y < 3; ++y)
+
+            for (int y = 0; y < game_logic::Board::size; ++y)
             {
-                for (int x = 0; x < 3; ++x)
+                for (int x = 0; x < game_logic::Board::size; ++x)
                 {
                     const Cell cell = board.get(x, y);
 
@@ -87,7 +88,7 @@ export namespace renderer
             {
                 sf::Sprite sprite{*overlay};
 
-                sprite.setScale({_width / overlay->getSize().x, _height / overlay->getSize().y});
+                sprite.setScale({_size.x / overlay->getSize().x, _size.y / overlay->getSize().y});
 
                 target.draw(sprite);
             }

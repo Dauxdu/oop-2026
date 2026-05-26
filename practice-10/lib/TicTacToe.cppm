@@ -6,20 +6,19 @@ module;
 export module TicTacToe;
 
 import std;
-import API;
 import Assets;
 import GameLogic;
 import Renderer;
 
 export namespace tictactoe
 {
-    class Game final : public api::IDrawable, public api::IUpdatable, public api::IEventHandler
+    class Game final
     {
     private:
-        float _width{};
-        float _height{};
+        sf::Vector2f _size;
 
         assets::Manager _assets;
+
         std::optional<sf::Sound> _click;
         std::optional<sf::Sound> _win;
 
@@ -28,36 +27,80 @@ export namespace tictactoe
 
         bool _muted{false};
 
-    public:
-        Game(float width, float height) : _width{width}, _height{height}, _assets{"assets"}, _renderer{width, height, _assets}
+        void play_sound(std::optional<sf::Sound> &sound)
         {
-            if (const auto *b = _assets.win_sound())
+            if (!_muted && sound)
             {
-                _win.emplace(*b);
-                _win->setVolume(30.f);
-            }
-
-            if (const auto *b = _assets.click_sound())
-            {
-                _click.emplace(*b);
-                _click->setVolume(100.f);
+                sound->play();
             }
         }
 
-        void update(float) override {}
+    public:
+        Game(sf::Vector2f size) : _size{size}, _assets{"assets"}, _renderer{size, _assets}
+        {
+            if (const auto *buffer = _assets.click_sound())
+            {
+                _click.emplace(*buffer);
+                _click->setVolume(100.f);
+            }
+
+            if (const auto *buffer = _assets.win_sound())
+            {
+                _win.emplace(*buffer);
+                _win->setVolume(30.f);
+            }
+        }
+
+        [[nodiscard]]
+        const sf::Image *icon() const noexcept
+        {
+            return _assets.icon();
+        }
+
+        void update(float) {}
+
+        void draw(sf::RenderTarget &target) const
+        {
+            _renderer.render(target, _board);
+        }
 
         void reset() noexcept
         {
             _board.reset();
         }
 
-        void toggle_mute() noexcept
+        void handle_event(const sf::Event &event, sf::RenderWindow &window)
         {
-            _muted = !_muted;
-        }
+            if (const auto *key = event.getIf<sf::Event::KeyPressed>())
+            {
+                switch (key->scancode)
+                {
+                case sf::Keyboard::Scancode::Escape:
+                {
+                    window.close();
 
-        void handle_event(const sf::Event &event) override
-        {
+                    return;
+                }
+
+                case sf::Keyboard::Scancode::R:
+                {
+                    reset();
+
+                    return;
+                }
+                case sf::Keyboard::Scancode::M:
+                {
+                    _muted = !_muted;
+
+                    return;
+                }
+                default:
+                {
+                    break;
+                }
+                }
+            }
+
             const auto *mouse = event.getIf<sf::Event::MouseButtonPressed>();
 
             if (!mouse || mouse->button != sf::Mouse::Button::Left || _board.is_over())
@@ -65,32 +108,19 @@ export namespace tictactoe
                 return;
             }
 
-            const int x = mouse->position.x / (_width / 3.f);
-            const int y = mouse->position.y / (_height / 3.f);
+            const int x = mouse->position.x / (_size.x / game_logic::Board::size);
+
+            const int y = mouse->position.y / (_size.y / game_logic::Board::size);
 
             if (_board.move(x, y))
             {
-                if (_click && !_muted)
-                {
-                    _click->play();
-                }
+                play_sound(_click);
 
-                if (_board.is_over() && _win && !_muted)
+                if (_board.is_over())
                 {
-                    _win->play();
+                    play_sound(_win);
                 }
             }
         }
-
-        void draw(sf::RenderTarget &target) const override
-        {
-            _renderer.render(target, _board);
-        }
     };
-
-    [[nodiscard]]
-    inline std::unique_ptr<Game> make(float width, float height)
-    {
-        return std::make_unique<Game>(width, height);
-    }
 }

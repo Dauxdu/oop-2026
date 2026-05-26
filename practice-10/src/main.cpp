@@ -1,66 +1,52 @@
 #include <SFML/Graphics.hpp>
 
 import std;
-import API;
 import TicTacToe;
 
 int main()
 {
-    std::println("[SYSTEM] Запуск приложения...");
+    constexpr unsigned window_size = 1024;
 
-    sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Tic Tac Toe");
-    std::println("[WINDOW] Окно создано: 1024x1024");
+    std::println("[SYSTEM] Starting application");
 
-    window.setFramerateLimit(10);
+    sf::RenderWindow window(sf::VideoMode({window_size, window_size}), "Tic Tac Toe", sf::Style::Titlebar | sf::Style::Close);
 
-    auto game = tictactoe::make(1024, 1024);
-    std::println("[GAME] Объект игры инициализирован");
+    window.setFramerateLimit(60);
+
+    tictactoe::Game game{{static_cast<float>(window_size), static_cast<float>(window_size)}};
+
+    if (const auto *icon = game.icon())
+    {
+        window.setIcon(*icon);
+    }
+
+    std::println("[WINDOW] Created window");
 
     sf::Clock clock;
-    std::println("[LOOP] Игровой цикл запущен (FPS limit: 10)");
 
     while (window.isOpen())
     {
-        while (auto event = window.pollEvent())
+        while (const auto event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
             {
-                std::println("[SYSTEM] Получен сигнал закрытия окна");
                 window.close();
+                continue;
             }
 
-            if (const auto *key = event->getIf<sf::Event::KeyPressed>())
-            {
-                if (key->scancode == sf::Keyboard::Scancode::Escape)
-                {
-                    std::println("[INPUT] Нажата клавиша [ESC] -> Закрытие приложения");
-                    window.close();
-                }
-
-                if (key->scancode == sf::Keyboard::Scancode::R)
-                {
-                    std::println("[INPUT] Нажата клавиша [R] -> Сброс игры");
-                    game->reset();
-                }
-
-                if (key->scancode == sf::Keyboard::Scancode::M)
-                {
-                    std::println("[INPUT] Нажата клавиша [M] -> Переключение звука");
-                    game->toggle_mute();
-                }
-            }
-
-            game->handle_event(*event);
+            game.handle_event(*event, window);
         }
 
-        const float dt = clock.restart().asSeconds();
-        game->update(dt);
+        game.update(clock.restart().asSeconds());
 
         window.clear();
-        game->draw(window);
+
+        game.draw(window);
+
         window.display();
     }
 
-    std::println("[SYSTEM] Приложение завершено успешно");
+    std::println("[SYSTEM] Shutdown complete");
+
     return 0;
 }
