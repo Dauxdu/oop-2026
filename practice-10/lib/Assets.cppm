@@ -8,10 +8,11 @@ export module Assets;
 import std;
 import GameLogic;
 
-export namespace Assets
+export namespace assets
 {
     class Manager
     {
+    private:
         sf::Texture _board;
         sf::Texture _x;
         sf::Texture _o;
@@ -30,22 +31,17 @@ export namespace Assets
         bool _has_draw{};
         bool _has_sound{};
 
-        static bool load(sf::Texture &texture, const std::filesystem::path &path)
-        {
-            return texture.loadFromFile(path.string());
-        }
-
     public:
         Manager(const std::filesystem::path &dir)
         {
-            _has_board = load(_board, dir / "board.png");
+            _has_board = _board.loadFromFile((dir / "board.png"));
 
-            _has_x = load(_x, dir / "x.png");
-            _has_o = load(_o, dir / "o.png");
+            _has_x = _x.loadFromFile((dir / "x.png"));
+            _has_o = _o.loadFromFile((dir / "o.png"));
 
-            _has_x_win = load(_x_win, dir / "x_win.png");
-            _has_o_win = load(_o_win, dir / "o_win.png");
-            _has_draw = load(_draw, dir / "draw.png");
+            _has_x_win = _x_win.loadFromFile((dir / "x_win.png"));
+            _has_o_win = _o_win.loadFromFile((dir / "o_win.png"));
+            _has_draw = _draw.loadFromFile((dir / "draw.png"));
 
             _has_sound = _win_buffer.loadFromFile((dir / "win.mp3"));
         }
@@ -57,7 +53,7 @@ export namespace Assets
         }
 
         [[nodiscard]]
-        const sf::Texture *mark(Cell c) const noexcept
+        const sf::Texture *mark_texture(Cell c) const noexcept
         {
             switch (c)
             {
@@ -79,7 +75,7 @@ export namespace Assets
         }
 
         [[nodiscard]]
-        const sf::Texture *overlay(GameResult result) const noexcept
+        const sf::Texture *overlay_texture(GameResult result) const noexcept
         {
             switch (result)
             {
