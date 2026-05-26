@@ -40,15 +40,15 @@ export namespace assets
     public:
         Manager(const std::filesystem::path &directory)
         {
-            _icon = load_resource<sf::Image>(directory / "icon.png");
-            _board = load_resource<sf::Texture>(directory / "board.png");
-            _x = load_resource<sf::Texture>(directory / "x.png");
-            _o = load_resource<sf::Texture>(directory / "o.png");
-            _x_win = load_resource<sf::Texture>(directory / "x_win.png");
-            _o_win = load_resource<sf::Texture>(directory / "o_win.png");
-            _draw = load_resource<sf::Texture>(directory / "draw.png");
-            _win_sound = load_resource<sf::SoundBuffer>(directory / "win.mp3");
-            _click_sound = load_resource<sf::SoundBuffer>(directory / "click.mp3");
+            _icon = load_resource<sf::Image>(directory / "images/icon.png");
+            _board = load_resource<sf::Texture>(directory / "images/board.png");
+            _x = load_resource<sf::Texture>(directory / "images/x.png");
+            _o = load_resource<sf::Texture>(directory / "images/o.png");
+            _x_win = load_resource<sf::Texture>(directory / "images/x_win.png");
+            _o_win = load_resource<sf::Texture>(directory / "images/o_win.png");
+            _draw = load_resource<sf::Texture>(directory / "images/draw.png");
+            _win_sound = load_resource<sf::SoundBuffer>(directory / "audio/win.mp3");
+            _click_sound = load_resource<sf::SoundBuffer>(directory / "audio/click.mp3");
         }
 
         [[nodiscard]]
