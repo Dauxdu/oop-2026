@@ -15,6 +15,7 @@ export namespace tictactoe
 {
     class Game final : public api::IDrawable, public api::IUpdatable, public api::IEventHandler
     {
+    private:
         float _width{};
         float _height{};
 
@@ -24,6 +25,8 @@ export namespace tictactoe
 
         game_logic::Board _board;
         renderer::Renderer _renderer;
+
+        bool _muted{false};
 
     public:
         Game(float width, float height) : _width{width}, _height{height}, _assets{"assets"}, _renderer{width, height, _assets}
@@ -43,6 +46,16 @@ export namespace tictactoe
 
         void update(float) override {}
 
+        void reset() noexcept
+        {
+            _board.reset();
+        }
+
+        void toggle_mute() noexcept
+        {
+            _muted = !_muted;
+        }
+
         void handle_event(const sf::Event &event) override
         {
             const auto *mouse = event.getIf<sf::Event::MouseButtonPressed>();
@@ -57,12 +70,12 @@ export namespace tictactoe
 
             if (_board.move(x, y))
             {
-                if (_click)
+                if (_click && !_muted)
                 {
                     _click->play();
                 }
 
-                if (_board.is_over() && _win)
+                if (_board.is_over() && _win && !_muted)
                 {
                     _win->play();
                 }

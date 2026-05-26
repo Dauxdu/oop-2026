@@ -13,23 +13,24 @@ export namespace assets
     {
     private:
         sf::Texture _board;
-        sf::Texture _x;
-        sf::Texture _o;
+        bool _has_board{};
 
+        sf::Texture _x;
+        bool _has_x{};
         sf::Texture _x_win;
+        bool _has_x_win{};
+
+        sf::Texture _o;
+        bool _has_o{};
         sf::Texture _o_win;
+        bool _has_o_win{};
+
         sf::Texture _draw;
+        bool _has_draw{};
 
         sf::SoundBuffer _win_buffer;
-        sf::SoundBuffer _click_buffer;
-
-        bool _has_board{};
-        bool _has_x{};
-        bool _has_o{};
-        bool _has_x_win{};
-        bool _has_o_win{};
-        bool _has_draw{};
         bool _has_win_sound{};
+        sf::SoundBuffer _click_buffer;
         bool _has_click_sound{};
 
     public:
