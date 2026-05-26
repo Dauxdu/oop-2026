@@ -5,6 +5,7 @@ module;
 
 export module TicTacToe;
 
+import std;
 import API;
 import Assets;
 import GameLogic;
@@ -12,7 +13,7 @@ import Renderer;
 
 export namespace tictactoe
 {
-    class Game final : public api::IGame
+    class Game final : public api::IDrawable, public api::IUpdatable, public api::IEventHandler
     {
         float _width{};
         float _height{};
@@ -75,7 +76,7 @@ export namespace tictactoe
     };
 
     [[nodiscard]]
-    inline api::GamePtr make(float width, float height)
+    inline std::unique_ptr<Game> make(float width, float height)
     {
         return std::make_unique<Game>(width, height);
     }

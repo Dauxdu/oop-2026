@@ -5,7 +5,6 @@ module;
 
 export module Assets;
 
-import std;
 import GameLogic;
 
 export namespace assets
