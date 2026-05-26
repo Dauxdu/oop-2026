@@ -11,7 +11,7 @@ target_sources(${PROJECT_NAME}
     lib/API.cppm
     lib/Assets.cppm
     lib/GameLogic.cppm
-    lib/Render.cppm
+    lib/Renderer.cppm
     lib/TicTacToe.cppm
 )
 

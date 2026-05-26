@@ -9,7 +9,7 @@ int main()
 
     window.setFramerateLimit(10);
 
-    auto game = TicTacToe::make(1024, 1024);
+    auto game = tictactoe::make(1024, 1024);
 
     sf::Clock clock;
 
@@ -20,7 +20,6 @@ int main()
             if (event->is<sf::Event::Closed>())
             {
                 window.close();
-                continue;
             }
 
             if (const auto *key = event->getIf<sf::Event::KeyPressed>())
@@ -28,7 +27,6 @@ int main()
                 if (key->scancode == sf::Keyboard::Scancode::Escape)
                 {
                     window.close();
-                    continue;
                 }
             }
 
