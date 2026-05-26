@@ -22,6 +22,7 @@ export namespace assets
         sf::Texture _draw;
 
         sf::SoundBuffer _win_buffer;
+        sf::SoundBuffer _click_buffer;
 
         bool _has_board{};
         bool _has_x{};
@@ -29,7 +30,8 @@ export namespace assets
         bool _has_x_win{};
         bool _has_o_win{};
         bool _has_draw{};
-        bool _has_sound{};
+        bool _has_win_sound{};
+        bool _has_click_sound{};
 
     public:
         Manager(const std::filesystem::path &dir)
@@ -43,7 +45,8 @@ export namespace assets
             _has_o_win = _o_win.loadFromFile((dir / "o_win.png"));
             _has_draw = _draw.loadFromFile((dir / "draw.png"));
 
-            _has_sound = _win_buffer.loadFromFile((dir / "win.mp3"));
+            _has_win_sound = _win_buffer.loadFromFile((dir / "win.mp3"));
+            _has_click_sound = _click_buffer.loadFromFile((dir / "click.mp3"));
         }
 
         [[nodiscard]]
@@ -102,9 +105,15 @@ export namespace assets
         }
 
         [[nodiscard]]
+        const sf::SoundBuffer *click_sound() const noexcept
+        {
+            return _has_click_sound ? &_click_buffer : nullptr;
+        }
+
+        [[nodiscard]]
         const sf::SoundBuffer *win_sound() const noexcept
         {
-            return _has_sound ? &_win_buffer : nullptr;
+            return _has_win_sound ? &_win_buffer : nullptr;
         }
     };
 }

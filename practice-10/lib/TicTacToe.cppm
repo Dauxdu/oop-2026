@@ -18,17 +18,25 @@ export namespace tictactoe
         float _height{};
 
         assets::Manager _assets;
+        std::optional<sf::Sound> _click;
+        std::optional<sf::Sound> _win;
+
         game_logic::Board _board;
         renderer::Renderer _renderer;
-        std::optional<sf::Sound> _win_sound;
 
     public:
         Game(float width, float height) : _width{width}, _height{height}, _assets{"assets"}, _renderer{width, height, _assets}
         {
-            if (const auto *buffer = _assets.win_sound())
+            if (const auto *b = _assets.win_sound())
             {
-                _win_sound.emplace(*buffer);
-                _win_sound->setVolume(0.f);
+                _win.emplace(*b);
+                _win->setVolume(30.f);
+            }
+
+            if (const auto *b = _assets.click_sound())
+            {
+                _click.emplace(*b);
+                _click->setVolume(100.f);
             }
         }
 
@@ -44,12 +52,19 @@ export namespace tictactoe
             }
 
             const int x = mouse->position.x / (_width / 3.f);
-
             const int y = mouse->position.y / (_height / 3.f);
 
-            if (_board.move(x, y) && _board.is_over())
+            if (_board.move(x, y))
             {
-                _win_sound->play();
+                if (_click)
+                {
+                    _click->play();
+                }
+
+                if (_board.is_over() && _win)
+                {
+                    _win->play();
+                }
             }
         }
 
