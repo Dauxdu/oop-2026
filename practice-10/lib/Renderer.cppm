@@ -34,7 +34,7 @@ export namespace renderer
         {
             sf::Sprite sprite{texture};
 
-            float min_scale = std::min(cell_width(), cell_height()) * 0.8f;
+            float min_scale = std::min(cell_width(), cell_height()) * 0.7f;
             float max_scale = std::max(static_cast<float>(texture.getSize().x), static_cast<float>(texture.getSize().y));
             const float scale = (min_scale / max_scale);
 

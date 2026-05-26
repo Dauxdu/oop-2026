@@ -7,8 +7,7 @@ import TicTacToe;
 int main()
 {
     std::println("[SYSTEM] Запуск приложения...");
-
-    sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Tic Tac Toe");
+    sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Tic Tac Toe", sf::Style::Titlebar | sf::Style::Close);
     std::println("[WINDOW] Окно создано: 1024x1024");
 
     window.setFramerateLimit(10);
@@ -53,8 +52,7 @@ int main()
             game->handle_event(*event);
         }
 
-        const float dt = clock.restart().asSeconds();
-        game->update(dt);
+        game->update(clock.restart().asSeconds());
 
         window.clear();
         game->draw(window);
