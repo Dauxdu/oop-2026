@@ -28,22 +28,20 @@ void describe_number()
 		return;
 	}
 
-	std::string parity = (num % 2 == 0) ? "четное" : "нечетное";
-	int digits = (num >= 100) ? 3 : (num >= 10) ? 2
-												: 1;
-	std::string digit_str;
+	std::string parity = (num % 2 == 0) ? "Чётное" : "Нечётное";
 
-	switch (digits)
+	std::string digit_str;
+	if (num >= 100)
 	{
-	case 1:
-		digit_str = "однозначное";
-		break;
-	case 2:
-		digit_str = "двузначное";
-		break;
-	case 3:
 		digit_str = "трехзначное";
-		break;
+	}
+	else if (num >= 10)
+	{
+		digit_str = "двузначное";
+	}
+	else
+	{
+		digit_str = "однозначное";
 	}
 
 	std::println("{} {} число", parity, digit_str);
