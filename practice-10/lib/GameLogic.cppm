@@ -43,7 +43,7 @@ export namespace game_logic
         [[nodiscard]]
         static bool is_valid_move(int x, int y) noexcept
         {
-            return x >= 0 && x < size && y >= 0 && y < size;
+            return x >= 0 && x < _board_size && y >= 0 && y < _board_size;
         }
 
         [[nodiscard]]
@@ -88,7 +88,7 @@ export namespace game_logic
         [[nodiscard]]
         Cell get_cell(int x, int y) const noexcept
         {
-            return _board[y * size + x];
+            return _board[y * _board_size + x];
         }
 
         [[nodiscard]]
@@ -110,7 +110,7 @@ export namespace game_logic
                 return false;
             }
 
-            Cell &cell = _board[y * size + x];
+            Cell &cell = _board[y * _board_size + x];
             if (cell != Cell::Empty)
             {
                 return false;
