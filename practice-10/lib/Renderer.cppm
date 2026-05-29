@@ -50,7 +50,7 @@ export namespace renderer
 
         void render(sf::RenderTarget &target, const game_logic::Board &board) const
         {
-            if (const auto *texture = _assets.board())
+            if (const auto *texture = _assets.get_board())
             {
                 sf::Sprite sprite{*texture};
 
@@ -73,7 +73,7 @@ export namespace renderer
                         continue;
                     }
 
-                    const auto *texture = _assets.mark_texture(cell);
+                    const auto *texture = _assets.get_mark_texture(cell);
 
                     if (!texture)
                     {
@@ -84,7 +84,7 @@ export namespace renderer
                 }
             }
 
-            if (const auto *overlay = _assets.overlay_texture(board.result()))
+            if (const auto *overlay = _assets.get_overlay_texture(board.result()))
             {
                 sf::Sprite sprite{*overlay};
 

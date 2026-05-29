@@ -5,21 +5,14 @@ import TicTacToe;
 
 int main()
 {
+    std::println("[SYSTEM] Starting application");
     constexpr unsigned window_size = 1024;
 
-    std::println("[SYSTEM] Starting application");
-
     sf::RenderWindow window(sf::VideoMode({window_size, window_size}), "Tic Tac Toe", sf::Style::Titlebar | sf::Style::Close);
-
-    window.setFramerateLimit(60);
-
     tictactoe::Game game{{static_cast<float>(window_size), static_cast<float>(window_size)}};
 
-    if (const auto *icon = game.icon())
-    {
-        window.setIcon(*icon);
-    }
-
+    window.setIcon(*game.icon());
+    window.setFramerateLimit(60);
     std::println("[WINDOW] Created window");
 
     sf::Clock clock;
@@ -31,7 +24,6 @@ int main()
             if (event->is<sf::Event::Closed>())
             {
                 window.close();
-                continue;
             }
 
             game.handle_event(*event, window);
@@ -47,6 +39,5 @@ int main()
     }
 
     std::println("[SYSTEM] Shutdown complete");
-
     return 0;
 }

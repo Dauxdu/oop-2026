@@ -3,7 +3,7 @@ export module GameLogic;
 import std;
 
 export enum class Cell : std::uint8_t {
-    Empty = 0,
+    Empty,
     X,
     O
 };
@@ -23,9 +23,9 @@ export namespace game_logic
         static constexpr int size = 3;
 
     private:
-        std::array<Cell, size * size> _board{};
         Cell _current{Cell::X};
         GameResult _result{GameResult::None};
+        std::array<Cell, size * size> _board{Cell::Empty};
 
         static constexpr std::array win_lines{
             std::array{0, 1, 2},
@@ -96,7 +96,6 @@ export namespace game_logic
             }
 
             Cell &cell = _board[y * size + x];
-
             if (cell != Cell::Empty)
             {
                 return false;

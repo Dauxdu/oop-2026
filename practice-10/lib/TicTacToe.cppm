@@ -38,13 +38,13 @@ export namespace tictactoe
     public:
         Game(sf::Vector2f size) : _size{size}, _assets{"assets"}, _renderer{size, _assets}
         {
-            if (const auto *buffer = _assets.click_sound())
+            if (const auto *buffer = _assets.get_click_sound())
             {
                 _click.emplace(*buffer);
                 _click->setVolume(100.f);
             }
 
-            if (const auto *buffer = _assets.win_sound())
+            if (const auto *buffer = _assets.get_win_sound())
             {
                 _win.emplace(*buffer);
                 _win->setVolume(30.f);
@@ -54,7 +54,7 @@ export namespace tictactoe
         [[nodiscard]]
         const sf::Image *icon() const noexcept
         {
-            return _assets.icon();
+            return _assets.get_icon();
         }
 
         void update(float) {}
@@ -102,14 +102,12 @@ export namespace tictactoe
             }
 
             const auto *mouse = event.getIf<sf::Event::MouseButtonPressed>();
-
             if (!mouse || mouse->button != sf::Mouse::Button::Left || _board.is_over())
             {
                 return;
             }
 
             const int x = mouse->position.x / (_size.x / game_logic::Board::size);
-
             const int y = mouse->position.y / (_size.y / game_logic::Board::size);
 
             if (_board.move(x, y))

@@ -52,72 +52,62 @@ export namespace assets
         }
 
         [[nodiscard]]
-        const sf::Image *icon() const noexcept
+        const sf::Image *get_icon() const noexcept
         {
             return _icon ? &*_icon : nullptr;
         }
 
         [[nodiscard]]
-        const sf::Texture *board() const noexcept
+        const sf::Texture *get_board() const noexcept
         {
             return _board ? &*_board : nullptr;
         }
 
         [[nodiscard]]
-        const sf::Texture *mark_texture(Cell cell) const noexcept
+        const sf::Texture *get_mark_texture(Cell cell) const noexcept
         {
-            switch (cell)
-            {
-            case Cell::X:
+            if (cell == Cell::X)
             {
                 return _x ? &*_x : nullptr;
             }
-            case Cell::O:
+
+            if (cell == Cell::O)
             {
                 return _o ? &*_o : nullptr;
             }
-            default:
-            {
-                return nullptr;
-            }
-            }
+
+            return nullptr;
         }
 
         [[nodiscard]]
-        const sf::Texture *overlay_texture(GameResult result) const noexcept
+        const sf::Texture *get_overlay_texture(GameResult result) const noexcept
         {
-            switch (result)
-            {
-            case GameResult::XWins:
-            {
-                return _x_win ? &*_x_win : nullptr;
-            }
-
-            case GameResult::OWins:
-            {
-                return _o_win ? &*_o_win : nullptr;
-            }
-
-            case GameResult::Draw:
+            if (result == GameResult::Draw)
             {
                 return _draw ? &*_draw : nullptr;
             }
 
-            default:
+            if (result == GameResult::XWins)
             {
-                return nullptr;
+                return _x_win ? &*_x_win : nullptr;
             }
+
+            if (result == GameResult::OWins)
+            {
+                return _o_win ? &*_o_win : nullptr;
             }
+
+            return nullptr;
         }
 
         [[nodiscard]]
-        const sf::SoundBuffer *click_sound() const noexcept
+        const sf::SoundBuffer *get_click_sound() const noexcept
         {
             return _click_sound ? &*_click_sound : nullptr;
         }
 
         [[nodiscard]]
-        const sf::SoundBuffer *win_sound() const noexcept
+        const sf::SoundBuffer *get_win_sound() const noexcept
         {
             return _win_sound ? &*_win_sound : nullptr;
         }
