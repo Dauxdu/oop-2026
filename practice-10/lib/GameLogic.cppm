@@ -20,12 +20,12 @@ export namespace game_logic
     class Board
     {
     public:
-        static constexpr int size = 3;
+        static constexpr int _board_size = 3;
 
     private:
         Cell _current_player{Cell::X};
         GameResult _game_result{GameResult::None};
-        std::array<Cell, size * size> _board{Cell::Empty};
+        std::array<Cell, _board_size * _board_size> _board{Cell::Empty};
 
         static constexpr std::array win_lines{
             std::array{0, 1, 2},
@@ -72,14 +72,12 @@ export namespace game_logic
             if (is_player_win(_current_player))
             {
                 _game_result = _current_player == Cell::X ? GameResult::XWins : GameResult::OWins;
-
                 return;
             }
 
             if (is_board_full())
             {
                 _game_result = GameResult::Draw;
-
                 return;
             }
 
