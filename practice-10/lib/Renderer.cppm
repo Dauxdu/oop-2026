@@ -66,7 +66,7 @@ export namespace renderer
             {
                 for (int x = 0; x < game_logic::Board::size; ++x)
                 {
-                    const Cell cell = board.get(x, y);
+                    const Cell cell = board.get_cell(x, y);
 
                     if (cell == Cell::Empty)
                     {
@@ -84,7 +84,7 @@ export namespace renderer
                 }
             }
 
-            if (const auto *overlay = _assets.get_overlay_texture(board.result()))
+            if (const auto *overlay = _assets.get_overlay_texture(board.get_game_result()))
             {
                 sf::Sprite sprite{*overlay};
 

@@ -23,8 +23,8 @@ export namespace game_logic
         static constexpr int size = 3;
 
     private:
-        Cell _current{Cell::X};
-        GameResult _result{GameResult::None};
+        Cell _current_player{Cell::X};
+        GameResult _game_result{GameResult::None};
         std::array<Cell, size * size> _board{Cell::Empty};
 
         static constexpr std::array win_lines{
@@ -41,17 +41,24 @@ export namespace game_logic
         };
 
         [[nodiscard]]
-        static bool is_valid_position(int x, int y) noexcept
+        static bool is_valid_move(int x, int y) noexcept
         {
             return x >= 0 && x < size && y >= 0 && y < size;
         }
 
         [[nodiscard]]
-        bool won(Cell player) const noexcept
+        bool is_board_full() const noexcept
         {
-            for (const auto &line : win_lines)
+            return std::ranges::none_of(_board, [](Cell cell)
+                                        { return cell == Cell::Empty; });
+        }
+
+        [[nodiscard]]
+        bool is_player_win(Cell player) const noexcept
+        {
+            for (const auto &line_index : win_lines)
             {
-                if (_board[line[0]] == player && _board[line[1]] == player && _board[line[2]] == player)
+                if (_board[line_index[0]] == player && _board[line_index[1]] == player && _board[line_index[2]] == player)
                 {
                     return true;
                 }
@@ -60,37 +67,47 @@ export namespace game_logic
             return false;
         }
 
-        [[nodiscard]]
-        bool full() const noexcept
-        {
-            return std::ranges::none_of(_board, [](Cell cell)
-                                        { return cell == Cell::Empty; });
-        }
-
         void update_game_state() noexcept
         {
-            if (won(_current))
+            if (is_player_win(_current_player))
             {
-                _result = _current == Cell::X ? GameResult::XWins : GameResult::OWins;
+                _game_result = _current_player == Cell::X ? GameResult::XWins : GameResult::OWins;
 
                 return;
             }
 
-            if (full())
+            if (is_board_full())
             {
-                _result = GameResult::Draw;
+                _game_result = GameResult::Draw;
 
                 return;
             }
 
-            _current = _current == Cell::X ? Cell::O : Cell::X;
+            _current_player = _current_player == Cell::X ? Cell::O : Cell::X;
         }
 
     public:
         [[nodiscard]]
-        bool move(int x, int y) noexcept
+        Cell get_cell(int x, int y) const noexcept
         {
-            if (is_over() || !is_valid_position(x, y))
+            return _board[y * size + x];
+        }
+
+        [[nodiscard]]
+        GameResult get_game_result() const noexcept
+        {
+            return _game_result;
+        }
+
+        bool is_game_over() const noexcept
+        {
+            return _game_result != GameResult::None;
+        }
+
+        [[nodiscard]]
+        bool move_cell(int x, int y) noexcept
+        {
+            if (is_game_over() || !is_valid_move(x, y))
             {
                 return false;
             }
@@ -101,37 +118,19 @@ export namespace game_logic
                 return false;
             }
 
-            cell = _current;
+            cell = _current_player;
 
             update_game_state();
 
             return true;
         }
 
-        [[nodiscard]]
-        Cell get(int x, int y) const noexcept
-        {
-            return _board[y * size + x];
-        }
-
-        [[nodiscard]]
-        GameResult result() const noexcept
-        {
-            return _result;
-        }
-
-        [[nodiscard]]
-        bool is_over() const noexcept
-        {
-            return _result != GameResult::None;
-        }
-
         void reset() noexcept
         {
             _board.fill(Cell::Empty);
 
-            _current = Cell::X;
-            _result = GameResult::None;
+            _current_player = Cell::X;
+            _game_result = GameResult::None;
         }
     };
 }

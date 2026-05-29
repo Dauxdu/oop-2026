@@ -102,7 +102,7 @@ export namespace tictactoe
             }
 
             const auto *mouse = event.getIf<sf::Event::MouseButtonPressed>();
-            if (!mouse || mouse->button != sf::Mouse::Button::Left || _board.is_over())
+            if (!mouse || mouse->button != sf::Mouse::Button::Left || _board.is_game_over())
             {
                 return;
             }
@@ -110,11 +110,11 @@ export namespace tictactoe
             const int x = mouse->position.x / (_size.x / game_logic::Board::size);
             const int y = mouse->position.y / (_size.y / game_logic::Board::size);
 
-            if (_board.move(x, y))
+            if (_board.move_cell(x, y))
             {
                 play_sound(_click);
 
-                if (_board.is_over())
+                if (_board.is_game_over())
                 {
                     play_sound(_win);
                 }
