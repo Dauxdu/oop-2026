@@ -46,6 +46,11 @@ export namespace renderer
         }
 
     public:
+        Renderer(const Renderer &) = delete;
+        Renderer &operator=(const Renderer &) = delete;
+        Renderer(Renderer &&) = delete;
+        Renderer &operator=(Renderer &&) = delete;
+
         Renderer(sf::Vector2f size, const assets::Manager &assets) : _assets{assets}, _size{size} {}
 
         void render(sf::RenderTarget &target, const game_logic::Board &board) const

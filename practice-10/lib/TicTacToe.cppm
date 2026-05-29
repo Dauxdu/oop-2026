@@ -36,6 +36,11 @@ export namespace tictactoe
         }
 
     public:
+        Game(const Game &) = delete;
+        Game &operator=(const Game &) = delete;
+        Game(Game &&) = delete;
+        Game &operator=(Game &&) = delete;
+
         Game(sf::Vector2f size) : _size{size}, _assets{"assets"}, _renderer{size, _assets}
         {
             if (const auto *buffer = _assets.get_click_sound())
@@ -56,8 +61,6 @@ export namespace tictactoe
         {
             return _assets.get_icon();
         }
-
-        void update(float) {}
 
         void draw(sf::RenderTarget &target) const
         {

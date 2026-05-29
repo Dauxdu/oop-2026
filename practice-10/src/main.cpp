@@ -11,11 +11,13 @@ int main()
     sf::RenderWindow window(sf::VideoMode({window_size, window_size}), "Tic Tac Toe", sf::Style::Titlebar | sf::Style::Close);
     tictactoe::Game game{{static_cast<float>(window_size), static_cast<float>(window_size)}};
 
-    window.setIcon(*game.icon());
+    if (const auto *icon = game.icon())
+    {
+        window.setIcon(*icon);
+    }
+
     window.setFramerateLimit(60);
     std::println("[WINDOW] Created window");
-
-    sf::Clock clock;
 
     while (window.isOpen())
     {
@@ -28,8 +30,6 @@ int main()
 
             game.handle_event(*event, window);
         }
-
-        game.update(clock.restart().asSeconds());
 
         window.clear();
 
