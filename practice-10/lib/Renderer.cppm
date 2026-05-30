@@ -14,34 +14,33 @@ export namespace renderer
     {
     private:
         const assets::Manager &_assets;
-        sf::Vector2f _size;
 
         [[nodiscard]]
-        float cell_width() const noexcept
+        static sf::FloatRect get_viewport(sf::Vector2u window_size) noexcept
         {
-            return _size.x / game_logic::Board::size;
+            const float window_aspect = static_cast<float>(window_size.x) / static_cast<float>(window_size.y);
+            if (window_aspect >= 1.0f)
+            {
+                const float w = 1.0f / window_aspect;
+                return {{(1.0f - w) / 2.0f, 0.0f}, {w, 1.0f}};
+            }
+            else
+            {
+                return {{0.0f, (1.0f - window_aspect) / 2.0f}, {1.0f, window_aspect}};
+            }
         }
 
-        [[nodiscard]]
-        float cell_height() const noexcept
-        {
-            return _size.y / game_logic::Board::size;
-        }
-
-        void draw_mark(sf::RenderTarget &target, const sf::Texture &texture, sf::Vector2f center) const
+        void draw_target(sf::RenderTarget &target, const sf::Texture &texture, sf::Vector2f position, sf::Vector2f max_size) const noexcept
         {
             sf::Sprite sprite{texture};
+            const float texture_width = static_cast<float>(texture.getSize().x);
+            const float texture_height = static_cast<float>(texture.getSize().y);
+            const float scale = std::min(max_size.x / texture_width, max_size.y / texture_height);
 
-            const float target_size = std::min(cell_width(), cell_height()) * 0.7f;
-
-            const float texture_size = std::max(static_cast<float>(texture.getSize().x), static_cast<float>(texture.getSize().y));
-
-            const float scale = target_size / texture_size;
-
-            sprite.setOrigin(sprite.getLocalBounds().getCenter());
-            sprite.setPosition(center);
             sprite.setScale({scale, scale});
-
+            const auto bounds = sprite.getLocalBounds();
+            sprite.setOrigin(bounds.position + bounds.size / 2.f);
+            sprite.setPosition(position);
             target.draw(sprite);
         }
 
@@ -51,52 +50,71 @@ export namespace renderer
         Renderer(Renderer &&) = delete;
         Renderer &operator=(Renderer &&) = delete;
 
-        Renderer(sf::Vector2f size, const assets::Manager &assets) : _assets{assets}, _size{size} {}
+        explicit Renderer(const assets::Manager &assets) : _assets{assets} {}
 
         void render(sf::RenderTarget &target, const game_logic::Board &board) const
         {
-            if (const auto *texture = _assets.get_board())
+            sf::View viewport{{1.5f, 1.5f}, {3.f, 3.f}};
+            viewport.setViewport(get_viewport(target.getSize()));
+            target.setView(viewport);
+
+            draw_target(target, _assets.get_texture(assets::TextureID::Board), {1.5f, 1.5f}, {3.0f, 3.0f});
+
+            const int board_size = board.get_board_size();
+            for (int y = 0; y < board_size; ++y)
             {
-                sf::Sprite sprite{*texture};
-
-                sprite.setScale({_size.x / texture->getSize().x, _size.y / texture->getSize().y});
-
-                target.draw(sprite);
-            }
-
-            const float cw = cell_width();
-            const float ch = cell_height();
-
-            for (int y = 0; y < game_logic::Board::size; ++y)
-            {
-                for (int x = 0; x < game_logic::Board::size; ++x)
+                for (int x = 0; x < board_size; ++x)
                 {
-                    const Cell cell = board.get_cell(x, y);
-
-                    if (cell == Cell::Empty)
+                    const auto cell = board.get_cell(x, y);
+                    if (cell == game_logic::Cell::Empty)
                     {
                         continue;
                     }
 
-                    const auto *texture = _assets.get_mark_texture(cell);
-
-                    if (!texture)
+                    assets::TextureID texture_id;
+                    if (cell == game_logic::Cell::X)
                     {
-                        continue;
+                        texture_id = assets::TextureID::X;
+                    }
+                    else
+                    {
+                        texture_id = assets::TextureID::O;
                     }
 
-                    draw_mark(target, *texture, {x * cw + cw / 2.f, y * ch + ch / 2.f});
+                    draw_target(target, _assets.get_texture(texture_id), {static_cast<float>(x) + 0.5f, static_cast<float>(y) + 0.5f}, {0.7f, 0.7f});
                 }
             }
 
-            if (const auto *overlay = _assets.get_overlay_texture(board.get_game_result()))
+            const auto result = board.get_game_result();
+            if (result != game_logic::GameResult::None)
             {
-                sf::Sprite sprite{*overlay};
+                assets::TextureID texture_id;
+                if (result == game_logic::GameResult::XWins)
+                {
+                    texture_id = assets::TextureID::XWin;
+                }
+                else if (result == game_logic::GameResult::OWins)
+                {
+                    texture_id = assets::TextureID::OWin;
+                }
+                else
+                {
+                    texture_id = assets::TextureID::Draw;
+                }
 
-                sprite.setScale({_size.x / overlay->getSize().x, _size.y / overlay->getSize().y});
-
-                target.draw(sprite);
+                draw_target(target, _assets.get_texture(texture_id), {1.5f, 1.5f}, {3.0f, 3.0f});
             }
+        }
+
+        [[nodiscard]]
+        sf::Vector2i to_board_coords(sf::Vector2i mouse_pixel, const sf::RenderTarget &target) const noexcept
+        {
+            sf::View viewport{{1.5f, 1.5f}, {3.f, 3.f}};
+            viewport.setViewport(get_viewport(target.getSize()));
+
+            const auto logical = target.mapPixelToCoords(mouse_pixel, viewport);
+
+            return {static_cast<int>(std::floor(logical.x)), static_cast<int>(std::floor(logical.y))};
         }
     };
 }
