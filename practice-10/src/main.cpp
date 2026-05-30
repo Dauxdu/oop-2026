@@ -6,36 +6,22 @@ import TicTacToe;
 int main()
 {
     std::println("[SYSTEM] Starting application");
-    constexpr unsigned window_size = 1024;
+    tictactoe::Game game{"assets"};
+    sf::RenderWindow window{sf::VideoMode{{800, 800}}, "Tic Tac Toe"};
 
-    sf::RenderWindow window(sf::VideoMode({window_size, window_size}), "Tic Tac Toe", sf::Style::Titlebar | sf::Style::Close);
-    tictactoe::Game game{{static_cast<float>(window_size), static_cast<float>(window_size)}};
+    window.setIcon(game.get_icon());
+    window.setVerticalSyncEnabled(true);
 
-    if (const auto *icon = game.icon())
-    {
-        window.setIcon(*icon);
-    }
-
-    window.setFramerateLimit(60);
-    std::println("[WINDOW] Created window");
+    std::println("[WINDOW] Created window with size {}x{}", window.getSize().x, window.getSize().y);
 
     while (window.isOpen())
     {
-        while (const auto event = window.pollEvent())
+        while (const std::optional event = window.pollEvent())
         {
-            if (event->is<sf::Event::Closed>())
-            {
-                window.close();
-            }
-
             game.handle_event(*event, window);
         }
 
-        window.clear();
-
         game.draw(window);
-
-        window.display();
     }
 
     std::println("[SYSTEM] Shutdown complete");
