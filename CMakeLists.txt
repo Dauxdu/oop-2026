@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.2.0)
+﻿cmake_minimum_required(VERSION 4.2.0)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_MODULE_STD ON)
@@ -27,4 +27,4 @@ add_subdirectory(practice-6)
 add_subdirectory(practice-7)
 add_subdirectory(practice-8)
 add_subdirectory(practice-9)
-#add_subdirectory(practice-10)
+add_subdirectory(practice-10)
