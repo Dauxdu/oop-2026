@@ -2,31 +2,31 @@ export module GameLogic;
 
 import std;
 
-export enum class Cell : std::uint8_t {
-    Empty,
-    X,
-    O
-};
-
-export enum class GameResult : std::uint8_t {
-    None,
-    XWins,
-    OWins,
-    Draw
-};
-
 export namespace game_logic
 {
+    enum class Cell : std::uint8_t
+    {
+        Empty,
+        X,
+        O
+    };
+
+    enum class GameResult : std::uint8_t
+    {
+        None,
+        XWins,
+        OWins,
+        Draw
+    };
+
     class Board
     {
-    public:
+    private:
         static constexpr int _board_size = 3;
 
-    private:
         Cell _current_player{Cell::X};
         GameResult _game_result{GameResult::None};
         std::array<Cell, _board_size * _board_size> _board{Cell::Empty};
-
         static constexpr std::array win_lines{
             std::array{0, 1, 2},
             std::array{3, 4, 5},
@@ -41,20 +41,13 @@ export namespace game_logic
         };
 
         [[nodiscard]]
-        static bool is_valid_move(int x, int y) noexcept
+        static constexpr bool is_valid_move(int x, int y) noexcept
         {
             return x >= 0 && x < _board_size && y >= 0 && y < _board_size;
         }
 
         [[nodiscard]]
-        bool is_board_full() const noexcept
-        {
-            return std::ranges::none_of(_board, [](Cell cell)
-                                        { return cell == Cell::Empty; });
-        }
-
-        [[nodiscard]]
-        bool is_player_win(Cell player) const noexcept
+        constexpr bool is_player_win(Cell player) const noexcept
         {
             for (const auto &line_index : win_lines)
             {
@@ -67,11 +60,18 @@ export namespace game_logic
             return false;
         }
 
+        [[nodiscard]]
+        constexpr bool is_board_full() const noexcept
+        {
+            return std::ranges::none_of(_board, [](Cell cell)
+                                        { return cell == Cell::Empty; });
+        }
+
         void update_game_state() noexcept
         {
             if (is_player_win(_current_player))
             {
-                _game_result = _current_player == Cell::X ? GameResult::XWins : GameResult::OWins;
+                _game_result = (_current_player == Cell::X) ? GameResult::XWins : GameResult::OWins;
                 return;
             }
 
@@ -81,10 +81,16 @@ export namespace game_logic
                 return;
             }
 
-            _current_player = _current_player == Cell::X ? Cell::O : Cell::X;
+            _current_player = (_current_player == Cell::X) ? Cell::O : Cell::X;
         }
 
     public:
+        [[nodiscard]]
+        constexpr int get_board_size() const noexcept
+        {
+            return _board_size;
+        }
+
         [[nodiscard]]
         Cell get_cell(int x, int y) const noexcept
         {
@@ -97,13 +103,14 @@ export namespace game_logic
             return _game_result;
         }
 
+        [[nodiscard]]
         bool is_game_over() const noexcept
         {
             return _game_result != GameResult::None;
         }
 
         [[nodiscard]]
-        bool move_cell(int x, int y) noexcept
+        bool is_move_cell(int x, int y) noexcept
         {
             if (is_game_over() || !is_valid_move(x, y))
             {
@@ -115,9 +122,7 @@ export namespace game_logic
             {
                 return false;
             }
-
             cell = _current_player;
-
             update_game_state();
 
             return true;
@@ -126,7 +131,6 @@ export namespace game_logic
         void reset() noexcept
         {
             _board.fill(Cell::Empty);
-
             _current_player = Cell::X;
             _game_result = GameResult::None;
         }
