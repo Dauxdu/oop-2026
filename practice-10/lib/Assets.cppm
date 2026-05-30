@@ -6,32 +6,64 @@ module;
 export module Assets;
 
 import std;
-import GameLogic;
 
 export namespace assets
 {
+    enum class ImageID
+    {
+        Icon
+    };
+
+    enum class TextureID
+    {
+        Board,
+        X,
+        O,
+        XWin,
+        OWin,
+        Draw
+    };
+
+    enum class SoundID
+    {
+        Win,
+        Click
+    };
+
     class Manager
     {
     private:
-        std::optional<sf::Image> _icon_image;
-        std::optional<sf::Texture> _board_texture;
-        std::optional<sf::Texture> _x_texture;
-        std::optional<sf::Texture> _o_texture;
-        std::optional<sf::Texture> _x_win_texture;
-        std::optional<sf::Texture> _o_win_texture;
-        std::optional<sf::Texture> _draw_texture;
-        std::optional<sf::SoundBuffer> _win_sound;
-        std::optional<sf::SoundBuffer> _click_sound;
+        std::unordered_map<ImageID, sf::Image> _images;
+        std::unordered_map<TextureID, sf::Texture> _textures;
+        std::unordered_map<SoundID, sf::SoundBuffer> _sounds;
 
         template <typename TResource>
-        [[nodiscard]]
-        static std::optional<TResource> load_resource(const std::filesystem::path &path)
+        TResource load_resource(const std::filesystem::path &directory, const std::string &filename) const
         {
             TResource resource;
+            const auto filepath = directory / filename;
 
-            if (!resource.loadFromFile(path))
+            if constexpr (std::is_same_v<TResource, sf::Image>)
             {
-                return std::nullopt;
+                if (!resource.loadFromFile(filepath))
+                {
+                    throw std::runtime_error("Failed to load image: " + filepath.string());
+                }
+            }
+            else if constexpr (std::is_same_v<TResource, sf::Texture>)
+            {
+                if (!resource.loadFromFile(filepath))
+
+                {
+                    throw std::runtime_error("Failed to load texture: " + filepath.string());
+                }
+            }
+            else if constexpr (std::is_same_v<TResource, sf::SoundBuffer>)
+            {
+                if (!resource.loadFromFile(filepath))
+                {
+                    throw std::runtime_error("Failed to load sound: " + filepath.string());
+                }
             }
 
             return resource;
@@ -43,78 +75,53 @@ export namespace assets
         Manager(Manager &&) = delete;
         Manager &operator=(Manager &&) = delete;
 
-        Manager(const std::filesystem::path &directory)
+        explicit Manager(const std::filesystem::path &directory)
         {
-            _icon_image = load_resource<sf::Image>(directory / "images/icon.png");
-            _board_texture = load_resource<sf::Texture>(directory / "images/board.png");
-            _x_texture = load_resource<sf::Texture>(directory / "images/x.png");
-            _o_texture = load_resource<sf::Texture>(directory / "images/o.png");
-            _x_win_texture = load_resource<sf::Texture>(directory / "images/x_win.png");
-            _o_win_texture = load_resource<sf::Texture>(directory / "images/o_win.png");
-            _draw_texture = load_resource<sf::Texture>(directory / "images/draw.png");
-            _win_sound = load_resource<sf::SoundBuffer>(directory / "audio/win.mp3");
-            _click_sound = load_resource<sf::SoundBuffer>(directory / "audio/click.mp3");
+            _images[ImageID::Icon] = load_resource<sf::Image>(directory, "image/icon.png");
+            _textures[TextureID::Board] = load_resource<sf::Texture>(directory, "texture/board.png");
+            _textures[TextureID::X] = load_resource<sf::Texture>(directory, "texture/x.png");
+            _textures[TextureID::XWin] = load_resource<sf::Texture>(directory, "texture/x_win.png");
+            _textures[TextureID::O] = load_resource<sf::Texture>(directory, "texture/o.png");
+            _textures[TextureID::OWin] = load_resource<sf::Texture>(directory, "texture/o_win.png");
+            _textures[TextureID::Draw] = load_resource<sf::Texture>(directory, "texture/draw.png");
+            _sounds[SoundID::Win] = load_resource<sf::SoundBuffer>(directory, "sound/win.mp3");
+            _sounds[SoundID::Click] = load_resource<sf::SoundBuffer>(directory, "sound/click.mp3");
         }
 
         [[nodiscard]]
-        const sf::Image *get_icon() const noexcept
+        const sf::Image &get_image(ImageID id) const
         {
-            return _icon_image ? &*_icon_image : nullptr;
-        }
-
-        [[nodiscard]]
-        const sf::Texture *get_board() const noexcept
-        {
-            return _board_texture ? &*_board_texture : nullptr;
-        }
-
-        [[nodiscard]]
-        const sf::Texture *get_mark_texture(Cell cell) const noexcept
-        {
-            if (cell == Cell::X)
+            auto it = _images.find(id);
+            if (it == _images.end())
             {
-                return _x_texture ? &*_x_texture : nullptr;
+                throw std::runtime_error(std::format("Asset not found: ImageID {}", std::to_underlying(id)));
             }
 
-            if (cell == Cell::O)
-            {
-                return _o_texture ? &*_o_texture : nullptr;
-            }
-
-            return nullptr;
+            return it->second;
         }
 
         [[nodiscard]]
-        const sf::Texture *get_overlay_texture(GameResult result) const noexcept
+        const sf::Texture &get_texture(TextureID id) const
         {
-            if (result == GameResult::Draw)
+            auto it = _textures.find(id);
+            if (it == _textures.end())
             {
-                return _draw_texture ? &*_draw_texture : nullptr;
+                throw std::runtime_error(std::format("Asset not found: TextureID {}", std::to_underlying(id)));
             }
 
-            if (result == GameResult::XWins)
-            {
-                return _x_win_texture ? &*_x_win_texture : nullptr;
-            }
-
-            if (result == GameResult::OWins)
-            {
-                return _o_win_texture ? &*_o_win_texture : nullptr;
-            }
-
-            return nullptr;
+            return it->second;
         }
 
         [[nodiscard]]
-        const sf::SoundBuffer *get_click_sound() const noexcept
+        const sf::SoundBuffer &get_sound(SoundID id) const
         {
-            return _click_sound ? &*_click_sound : nullptr;
-        }
-
-        [[nodiscard]]
-        const sf::SoundBuffer *get_win_sound() const noexcept
-        {
-            return _win_sound ? &*_win_sound : nullptr;
+            auto it = _sounds.find(id);
+            if (it == _sounds.end())
+            {
+                throw std::runtime_error(std::format("Asset not found: SoundID {}", std::to_underlying(id)));
+            }
+            
+            return it->second;
         }
     };
 }
