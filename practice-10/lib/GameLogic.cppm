@@ -41,6 +41,13 @@ export namespace game_logic
         };
 
         [[nodiscard]]
+        constexpr bool is_board_full() const noexcept
+        {
+            return std::ranges::none_of(_board, [](Cell cell)
+                                        { return cell == Cell::Empty; });
+        }
+
+        [[nodiscard]]
         constexpr bool is_valid_move(int x, int y) const noexcept
         {
             return x >= 0 && x < _board_size && y >= 0 && y < _board_size;
@@ -64,13 +71,6 @@ export namespace game_logic
             }
 
             return false;
-        }
-
-        [[nodiscard]]
-        constexpr bool is_board_full() const noexcept
-        {
-            return std::ranges::none_of(_board, [](Cell cell)
-                                        { return cell == Cell::Empty; });
         }
 
         void update_game_state() noexcept
@@ -98,15 +98,20 @@ export namespace game_logic
         }
 
         [[nodiscard]]
-        Cell get_cell(int x, int y) const noexcept
-        {
-            return _board[y * _board_size + x];
-        }
-
-        [[nodiscard]]
         GameResult get_game_result() const noexcept
         {
             return _game_result;
+        }
+
+        [[nodiscard]]
+        Cell get_cell(int x, int y) const
+        {
+            if (!is_valid_move(x, y))
+            {
+                throw std::out_of_range(std::format("Invalid board coordinates ({}, {})", x, y));
+            }
+
+            return _board[y * _board_size + x];
         }
 
         [[nodiscard]]
