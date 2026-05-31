@@ -115,7 +115,7 @@ export namespace tictactoe
 
                 const auto coords = _renderer.to_board_coords({mouse->position.x, mouse->position.y}, window);
 
-                if (_board.is_move_cell(coords.x, coords.y))
+                if (_board.is_make_move(coords.x, coords.y))
                 {
                     play_sound(_click_sound);
 

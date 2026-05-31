@@ -41,9 +41,15 @@ export namespace game_logic
         };
 
         [[nodiscard]]
-        static constexpr bool is_valid_move(int x, int y) noexcept
+        constexpr bool is_valid_move(int x, int y) const noexcept
         {
             return x >= 0 && x < _board_size && y >= 0 && y < _board_size;
+        }
+
+        [[nodiscard]]
+        constexpr bool is_can_move(int x, int y) const noexcept
+        {
+            return !is_game_over() && is_valid_move(x, y) && _board[y * _board_size + x] == Cell::Empty;
         }
 
         [[nodiscard]]
@@ -110,18 +116,14 @@ export namespace game_logic
         }
 
         [[nodiscard]]
-        bool is_move_cell(int x, int y) noexcept
+        bool is_make_move(int x, int y) noexcept
         {
-            if (is_game_over() || !is_valid_move(x, y))
+            if (!is_can_move(x, y))
             {
                 return false;
             }
 
             Cell &cell = _board[y * _board_size + x];
-            if (cell != Cell::Empty)
-            {
-                return false;
-            }
             cell = _current_player;
             update_game_state();
 
