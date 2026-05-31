@@ -7,6 +7,7 @@ export module TicTacToe;
 
 import std;
 import Assets;
+import Config;
 import GameLogic;
 import Renderer;
 
@@ -33,12 +34,12 @@ export namespace tictactoe
         }
 
     public:
-        explicit Game(const std::filesystem::path &asset_dir) : _assets{asset_dir}, _renderer{_assets}
+        explicit Game(const std::filesystem::path &asset_dir, const config::Manager &cfg) : _assets{asset_dir}, _renderer{_assets}
         {
             try
             {
                 _click_sound.emplace(_assets.get_sound(assets::SoundID::Click));
-                _click_sound->setVolume(100.f);
+                _click_sound->setVolume(cfg.audio().sfx_volume);
             }
             catch (const std::exception &)
             {
@@ -48,7 +49,7 @@ export namespace tictactoe
             try
             {
                 _win_sound.emplace(_assets.get_sound(assets::SoundID::Win));
-                _win_sound->setVolume(30.f);
+                _win_sound->setVolume(cfg.audio().sfx_volume);
             }
             catch (const std::exception &)
             {
@@ -68,9 +69,50 @@ export namespace tictactoe
             return _background_color;
         }
 
+        void set_muted(bool muted) noexcept
+        {
+            _muted = muted;
+        }
+
+        void set_sfx_volume(float volume) noexcept
+        {
+            const float clamped = std::clamp(volume, 0.f, 100.f);
+            if (_click_sound)
+            {
+                _click_sound->setVolume(clamped);
+            }
+
+            if (_win_sound)
+            {
+                _win_sound->setVolume(clamped);
+            }
+        }
+
+        void set_audio_levels(float master, float sfx) noexcept
+        {
+            const float master_clamped = std::clamp(master, 0.f, 100.f);
+            const float sfx_clamped = std::clamp(sfx, 0.f, 100.f);
+            const float final_sfx = (master_clamped * sfx_clamped) / 100.f;
+
+            if (_click_sound)
+            {
+                _click_sound->setVolume(final_sfx);
+            }
+
+            if (_win_sound)
+            {
+                _win_sound->setVolume(final_sfx);
+            }
+        }
+
         void set_background_color(sf::Color color) noexcept
         {
             _background_color = color;
+        }
+
+        void toggle_mute() noexcept
+        {
+            _muted = !_muted;
         }
 
         void draw(sf::RenderWindow &window) const noexcept
@@ -99,7 +141,7 @@ export namespace tictactoe
                     _board.reset();
                     return;
                 case sf::Keyboard::Scancode::M:
-                    _muted = !_muted;
+                    toggle_mute();
                     return;
                 default:
                     break;

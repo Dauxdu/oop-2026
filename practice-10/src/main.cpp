@@ -6,25 +6,27 @@ import TicTacToe;
 
 int main()
 {
-    config::Manager cfg{};
-
     std::println("[SYSTEM] Starting application");
-
-    tictactoe::Game game{"assets"};
+    config::Manager cfg;
+    tictactoe::Game game{"assets", cfg};
     sf::RenderWindow window{sf::VideoMode{{cfg.window().width, cfg.window().height}}, "Tic Tac Toe"};
 
     window.setIcon(game.get_icon());
 
     if (cfg.window().vsync)
     {
-        window.setVerticalSyncEnabled(cfg.window().vsync);
+        window.setVerticalSyncEnabled(true);
     }
     else
     {
         window.setFramerateLimit(cfg.window().fps);
     }
-
     std::println("[WINDOW] Created window with size {}x{}", window.getSize().x, window.getSize().y);
+
+    game.set_muted(cfg.audio().mute);
+    game.set_audio_levels(cfg.audio().master_volume, cfg.audio().sfx_volume);
+
+    std::println("[APP] Audio: mute={}, master={}, sfx={}", cfg.audio().mute ? "on" : "off", cfg.audio().master_volume, cfg.audio().sfx_volume);
 
     while (window.isOpen())
     {

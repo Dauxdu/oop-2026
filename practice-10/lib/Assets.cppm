@@ -84,8 +84,8 @@ export namespace assets
             _textures[TextureID::O] = load_resource<sf::Texture>(directory, "texture/o.png");
             _textures[TextureID::OWin] = load_resource<sf::Texture>(directory, "texture/o_win.png");
             _textures[TextureID::Draw] = load_resource<sf::Texture>(directory, "texture/draw.png");
-            _sounds[SoundID::Win] = load_resource<sf::SoundBuffer>(directory, "sound/win.mp3");
-            _sounds[SoundID::Click] = load_resource<sf::SoundBuffer>(directory, "sound/click.mp3");
+            _sounds[SoundID::Win] = load_resource<sf::SoundBuffer>(directory, "sfx/win.ogg");
+            _sounds[SoundID::Click] = load_resource<sf::SoundBuffer>(directory, "sfx/click.ogg");
         }
 
         [[nodiscard]]
@@ -120,7 +120,7 @@ export namespace assets
             {
                 throw std::runtime_error(std::format("Asset not found: SoundID {}", std::to_underlying(id)));
             }
-            
+
             return it->second;
         }
     };

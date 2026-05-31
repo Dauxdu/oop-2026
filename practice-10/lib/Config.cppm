@@ -10,7 +10,6 @@ export namespace config
 {
     struct Window
     {
-        bool fullscreen{false};
         unsigned int width{800};
         unsigned int height{800};
         unsigned int fps{60};
@@ -51,7 +50,6 @@ export namespace config
                 if (json.contains("window"))
                 {
                     const auto &w = json["window"];
-                    _window.fullscreen = w.value("fullscreen", _window.fullscreen);
                     _window.width = w.value("width", _window.width);
                     _window.height = w.value("height", _window.height);
                     _window.fps = w.value("fps", _window.fps);
