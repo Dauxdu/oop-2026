@@ -92,17 +92,8 @@ export namespace tictactoe
         {
             const float master_clamped = std::clamp(master, 0.f, 100.f);
             const float sfx_clamped = std::clamp(sfx, 0.f, 100.f);
-            const float final_sfx = (master_clamped * sfx_clamped) / 100.f;
 
-            if (_click_sound)
-            {
-                _click_sound->setVolume(final_sfx);
-            }
-
-            if (_win_sound)
-            {
-                _win_sound->setVolume(final_sfx);
-            }
+            set_sfx_volume((master_clamped * sfx_clamped) / 100.f);
         }
 
         void set_background_color(sf::Color color) noexcept
