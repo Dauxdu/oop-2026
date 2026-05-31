@@ -4,12 +4,19 @@
   "dependencies": [
     {
       "name": "cpp-httplib",
-      "features": ["openssl"],
+      "features": [
+        "openssl"
+      ],
       "version>=": "0.45.0"
     },
     {
       "name": "sfml",
       "version>=": "3.0.2"
+    },
+    {
+      "name": "nlohmann-json",
+      "version>=": "3.12.0"
     }
+    
   ]
 }

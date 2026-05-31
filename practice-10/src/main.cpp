@@ -1,16 +1,28 @@
 #include <SFML/Graphics.hpp>
 
 import std;
+import Config;
 import TicTacToe;
 
 int main()
 {
+    config::Manager cfg{};
+
     std::println("[SYSTEM] Starting application");
+
     tictactoe::Game game{"assets"};
-    sf::RenderWindow window{sf::VideoMode{{800, 800}}, "Tic Tac Toe"};
+    sf::RenderWindow window{sf::VideoMode{{cfg.window().width, cfg.window().height}}, "Tic Tac Toe"};
 
     window.setIcon(game.get_icon());
-    window.setVerticalSyncEnabled(true);
+
+    if (cfg.window().vsync)
+    {
+        window.setVerticalSyncEnabled(cfg.window().vsync);
+    }
+    else
+    {
+        window.setFramerateLimit(cfg.window().fps);
+    }
 
     std::println("[WINDOW] Created window with size {}x{}", window.getSize().x, window.getSize().y);
 
