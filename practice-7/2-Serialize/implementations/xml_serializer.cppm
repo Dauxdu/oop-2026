@@ -69,7 +69,10 @@ private:
             {
                 result += "true";
             }
-            result += "false";
+            else
+            {
+                result += "false";
+            }
         }
         else if (auto *a = std::get_if<ArrayValue>(&value.v))
         {
