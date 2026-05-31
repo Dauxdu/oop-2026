@@ -30,6 +30,15 @@ export namespace renderer
             }
         }
 
+        [[nodiscard]]
+        static constexpr sf::View create_game_view(sf::Vector2u window_size) noexcept
+        {
+            sf::View view{{1.5f, 1.5f}, {3.f, 3.f}};
+            view.setViewport(get_viewport(window_size));
+
+            return view;
+        }
+
         void draw_target(sf::RenderTarget &target, const sf::Texture &texture, sf::Vector2f position, sf::Vector2f max_size) const noexcept
         {
             sf::Sprite sprite{texture};
@@ -54,9 +63,7 @@ export namespace renderer
 
         void render(sf::RenderTarget &target, const game_logic::Board &board) const
         {
-            sf::View viewport{{1.5f, 1.5f}, {3.f, 3.f}};
-            viewport.setViewport(get_viewport(target.getSize()));
-            target.setView(viewport);
+            target.setView(create_game_view(target.getSize()));
 
             draw_target(target, _assets.get_texture(assets::TextureID::Board), {1.5f, 1.5f}, {3.0f, 3.0f});
 
@@ -109,10 +116,7 @@ export namespace renderer
         [[nodiscard]]
         sf::Vector2i to_board_coords(sf::Vector2i mouse_pixel, const sf::RenderTarget &target) const noexcept
         {
-            sf::View viewport{{1.5f, 1.5f}, {3.f, 3.f}};
-            viewport.setViewport(get_viewport(target.getSize()));
-
-            const auto logical = target.mapPixelToCoords(mouse_pixel, viewport);
+            const auto logical = target.mapPixelToCoords(mouse_pixel, create_game_view(target.getSize()));
 
             return {static_cast<int>(std::floor(logical.x)), static_cast<int>(std::floor(logical.y))};
         }
