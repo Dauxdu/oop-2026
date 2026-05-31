@@ -42,30 +42,8 @@ export namespace assets
         {
             TResource resource;
             const auto filepath = directory / filename;
-
-            if constexpr (std::is_same_v<TResource, sf::Image>)
-            {
-                if (!resource.loadFromFile(filepath))
-                {
-                    throw std::runtime_error("Failed to load image: " + filepath.string());
-                }
-            }
-            else if constexpr (std::is_same_v<TResource, sf::Texture>)
-            {
-                if (!resource.loadFromFile(filepath))
-
-                {
-                    throw std::runtime_error("Failed to load texture: " + filepath.string());
-                }
-            }
-            else if constexpr (std::is_same_v<TResource, sf::SoundBuffer>)
-            {
-                if (!resource.loadFromFile(filepath))
-                {
-                    throw std::runtime_error("Failed to load sound: " + filepath.string());
-                }
-            }
-
+            if (!resource.loadFromFile(filepath))
+                throw std::runtime_error("Failed to load resource: " + filepath.string());
             return resource;
         }
 
@@ -94,7 +72,7 @@ export namespace assets
             auto it = _images.find(id);
             if (it == _images.end())
             {
-                throw std::runtime_error(std::format("Asset not found: ImageID {}", std::to_underlying(id)));
+                throw std::runtime_error(std::format("Image not found: {}", std::to_underlying(id)));
             }
 
             return it->second;
@@ -106,7 +84,7 @@ export namespace assets
             auto it = _textures.find(id);
             if (it == _textures.end())
             {
-                throw std::runtime_error(std::format("Asset not found: TextureID {}", std::to_underlying(id)));
+                throw std::runtime_error(std::format("Texture not found: {}", std::to_underlying(id)));
             }
 
             return it->second;
@@ -118,7 +96,7 @@ export namespace assets
             auto it = _sounds.find(id);
             if (it == _sounds.end())
             {
-                throw std::runtime_error(std::format("Asset not found: SoundID {}", std::to_underlying(id)));
+                throw std::runtime_error(std::format("Sound not found: {}", std::to_underlying(id)));
             }
 
             return it->second;
