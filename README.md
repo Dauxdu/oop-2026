@@ -126,12 +126,6 @@ vcpkg new --application
 vcpkg add port sfml boost
 ```
 
-Зависимости автоматически появятся в `vcpkg.json`. Для указания конкретной версии используйте синтаксис:
-
-```bash
-vcpkg add port sfml@2.6.1
-```
-
 ### Интеграция с системами сборки
 
 **CMake**
