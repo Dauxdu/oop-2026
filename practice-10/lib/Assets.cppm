@@ -57,15 +57,15 @@ export namespace assets
 
         explicit Manager(const std::filesystem::path &directory)
         {
-            _images[ImageID::Icon] = load_resource<sf::Image>(directory, "image/icon.png");
-            _textures[TextureID::Board] = load_resource<sf::Texture>(directory, "texture/board.png");
-            _textures[TextureID::X] = load_resource<sf::Texture>(directory, "texture/x.png");
-            _textures[TextureID::XWin] = load_resource<sf::Texture>(directory, "texture/x_win.png");
-            _textures[TextureID::O] = load_resource<sf::Texture>(directory, "texture/o.png");
-            _textures[TextureID::OWin] = load_resource<sf::Texture>(directory, "texture/o_win.png");
-            _textures[TextureID::Draw] = load_resource<sf::Texture>(directory, "texture/draw.png");
-            _sounds[SoundID::Win] = load_resource<sf::SoundBuffer>(directory, "sfx/win.ogg");
-            _sounds[SoundID::Click] = load_resource<sf::SoundBuffer>(directory, "sfx/click.ogg");
+            _images.emplace(ImageID::Icon, load_resource<sf::Image>(directory, "image/icon.png"));
+            _textures.emplace(TextureID::Board, load_resource<sf::Texture>(directory, "texture/board.png"));
+            _textures.emplace(TextureID::X, load_resource<sf::Texture>(directory, "texture/x.png"));
+            _textures.emplace(TextureID::XWin, load_resource<sf::Texture>(directory, "texture/x_win.png"));
+            _textures.emplace(TextureID::O, load_resource<sf::Texture>(directory, "texture/o.png"));
+            _textures.emplace(TextureID::OWin, load_resource<sf::Texture>(directory, "texture/o_win.png"));
+            _textures.emplace(TextureID::Draw, load_resource<sf::Texture>(directory, "texture/draw.png"));
+            _sounds.emplace(SoundID::Win, load_resource<sf::SoundBuffer>(directory, "sfx/win.ogg"));
+            _sounds.emplace(SoundID::Click, load_resource<sf::SoundBuffer>(directory, "sfx/click.ogg"));
         }
 
         [[nodiscard]]
