@@ -19,7 +19,7 @@ export namespace game_logic
         Draw
     };
 
-    class Board
+    class Board final
     {
     private:
         static constexpr int _board_size = 3;

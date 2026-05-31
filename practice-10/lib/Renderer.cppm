@@ -10,7 +10,7 @@ import GameLogic;
 
 export namespace renderer
 {
-    class Renderer
+    class Renderer final
     {
     private:
         const assets::Manager &_assets;

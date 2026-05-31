@@ -21,6 +21,7 @@ int main()
     {
         window.setFramerateLimit(cfg.window().fps);
     }
+
     std::println("[WINDOW] Created window with size {}x{}", window.getSize().x, window.getSize().y);
 
     game.set_muted(cfg.audio().mute);

@@ -30,7 +30,7 @@ export namespace assets
         Click
     };
 
-    class Manager
+    class Manager final
     {
     private:
         std::unordered_map<ImageID, sf::Image> _images;
@@ -43,7 +43,9 @@ export namespace assets
             TResource resource;
             const auto filepath = directory / filename;
             if (!resource.loadFromFile(filepath))
+            {
                 throw std::runtime_error("Failed to load resource: " + filepath.string());
+            }
             return resource;
         }
 

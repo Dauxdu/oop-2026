@@ -24,8 +24,9 @@ export namespace config
         bool mute{false};
     };
 
-    class Manager
+    class Manager final
     {
+    private:
         Window _window;
         Audio _audio;
 
@@ -65,9 +66,9 @@ export namespace config
                     _audio.mute = a.value("mute", _audio.mute);
                 }
             }
-            catch (const std::exception &)
+            catch (const std::exception &e)
             {
-                std::println("Failed to load config");
+                std::println("Failed to load config: {}", e.what());
             }
         }
 
