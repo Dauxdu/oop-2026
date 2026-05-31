@@ -25,7 +25,7 @@ export namespace tictactoe
         std::optional<sf::Sound> _click_sound;
         sf::Color _background_color{30, 30, 46};
 
-        void play_sound(std::optional<sf::Sound> &sound) const noexcept
+        void play_sound(std::optional<sf::Sound> &sound) noexcept
         {
             if (!_muted && sound.has_value())
             {
