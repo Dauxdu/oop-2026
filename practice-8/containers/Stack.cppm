@@ -11,7 +11,7 @@ private:
     bool _started = false;
 
 public:
-    explicit StackEnumerator(const std::stack<TValue> &stack) : _stack(stack) {}
+    StackEnumerator(const std::stack<TValue> &stack) : _stack(stack) {}
 
     bool MoveNext() override
     {

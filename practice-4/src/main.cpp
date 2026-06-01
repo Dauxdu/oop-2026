@@ -45,12 +45,12 @@ public:
 		normalize();
 	}
 
-	int get_numerator() const noexcept
+	int get_numerator() const
 	{
 		return _numerator;
 	}
 
-	int get_denominator() const noexcept
+	int get_denominator() const
 	{
 		return _denominator;
 	}

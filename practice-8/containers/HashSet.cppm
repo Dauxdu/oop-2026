@@ -12,7 +12,7 @@ private:
     typename std::unordered_set<TValue, THash, TEqual>::const_iterator _end;
 
 public:
-    explicit HashSetEnumerator(const std::unordered_set<TValue, THash, TEqual> &set) : _started(false), _iter(set.begin()), _end(set.end()) {}
+    HashSetEnumerator(const std::unordered_set<TValue, THash, TEqual> &set) : _started(false), _iter(set.begin()), _end(set.end()) {}
 
     bool MoveNext() override
     {

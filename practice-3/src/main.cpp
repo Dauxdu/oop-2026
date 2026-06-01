@@ -93,7 +93,7 @@ void is_prime_exapmle()
 }
 
 // 5. Рекурсивный факториал
-[[nodiscard]] constexpr unsigned long long fact(unsigned int n)
+constexpr unsigned long long fact(unsigned int n)
 {
 	return (n <= 1) ? 1ULL : n * fact(n - 1);
 }
@@ -113,7 +113,7 @@ void fact_exapmle()
 }
 
 // 6. Рекурсивный НОД (алгоритм Евклида)
-[[nodiscard]] constexpr unsigned int gcd(unsigned int a, unsigned int b)
+constexpr unsigned int gcd(unsigned int a, unsigned int b)
 {
 	return (b == 0) ? a : gcd(b, a % b);
 }
@@ -133,7 +133,7 @@ void gcd_exapmle()
 }
 
 // 7. Рекурсивная сумма цифр (без циклов)
-[[nodiscard]] constexpr unsigned int digit_sum(unsigned int n)
+constexpr unsigned int digit_sum(unsigned int n)
 {
 	return (n < 10) ? n : (n % 10) + digit_sum(n / 10);
 }

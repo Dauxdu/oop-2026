@@ -12,7 +12,7 @@ private:
     typename std::unordered_map<TKey, TValue, THash, TEqual>::const_iterator _end;
 
 public:
-    explicit DictionaryEnumerator(const std::unordered_map<TKey, TValue, THash, TEqual> &dictionary) : _started(false), _iter(dictionary.begin()), _end(dictionary.end()) {}
+    DictionaryEnumerator(const std::unordered_map<TKey, TValue, THash, TEqual> &dictionary) : _started(false), _iter(dictionary.begin()), _end(dictionary.end()) {}
 
     bool MoveNext() override
     {
@@ -78,7 +78,7 @@ public:
         return _dictionary.contains(item.first);
     }
 
-    std::size_t Capacity() const noexcept
+    std::size_t Capacity() const
     {
         return _dictionary.bucket_count();
     }

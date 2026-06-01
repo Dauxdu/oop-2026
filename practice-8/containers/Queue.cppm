@@ -11,7 +11,7 @@ private:
     bool _started = false;
 
 public:
-    explicit QueueEnumerator(std::queue<TValue> queue) : _queue(std::move(queue)) {}
+    QueueEnumerator(std::queue<TValue> queue) : _queue(std::move(queue)) {}
 
     bool MoveNext() override
     {
