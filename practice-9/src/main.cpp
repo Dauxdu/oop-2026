@@ -1,4 +1,5 @@
 #include <httplib.h>
+
 import std;
 
 int main(int argc, char *argv[])
@@ -26,6 +27,7 @@ int main(int argc, char *argv[])
         for (const auto &[key, value] : result->headers)
         {
             std::println("{}: {}", key, value);
+            return 0;
         }
     }
     else
@@ -33,6 +35,4 @@ int main(int argc, char *argv[])
         std::println("Ошибка: {}", httplib::to_string(result.error()));
         return 1;
     }
-
-    return 0;
 }
