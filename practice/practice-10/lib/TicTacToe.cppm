@@ -57,22 +57,11 @@ export namespace tictactoe
             }
         }
 
-        [[nodiscard]]
-        const sf::Image &get_icon() const noexcept
-        {
-            return _assets.get_image(assets::ImageID::Icon);
-        }
+        [[nodiscard]] const sf::Image &get_icon() const noexcept { return _assets.get_image(assets::ImageID::Icon); }
 
-        [[nodiscard]]
-        sf::Color get_background_color() const noexcept
-        {
-            return _background_color;
-        }
+        [[nodiscard]] sf::Color get_background_color() const noexcept { return _background_color; }
 
-        void set_muted(bool muted) noexcept
-        {
-            _muted = muted;
-        }
+        void set_muted(bool muted) noexcept { _muted = muted; }
 
         void set_sfx_volume(float volume) noexcept
         {
@@ -96,15 +85,9 @@ export namespace tictactoe
             set_sfx_volume((master_clamped * sfx_clamped) / 100.f);
         }
 
-        void set_background_color(sf::Color color) noexcept
-        {
-            _background_color = color;
-        }
+        void set_background_color(sf::Color color) noexcept { _background_color = color; }
 
-        void toggle_mute() noexcept
-        {
-            _muted = !_muted;
-        }
+        void toggle_mute() noexcept { _muted = !_muted; }
 
         void draw(sf::RenderWindow &window) const noexcept
         {

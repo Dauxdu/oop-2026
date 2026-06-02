@@ -91,17 +91,9 @@ export namespace game_logic
         }
 
     public:
-        [[nodiscard]]
-        constexpr int get_board_size() const noexcept
-        {
-            return _board_size;
-        }
+        [[nodiscard]] constexpr int get_board_size() const noexcept { return _board_size; }
 
-        [[nodiscard]]
-        GameResult get_game_result() const noexcept
-        {
-            return _game_result;
-        }
+        [[nodiscard]] GameResult get_game_result() const noexcept { return _game_result; }
 
         [[nodiscard]]
         Cell get_cell(int x, int y) const
@@ -114,11 +106,7 @@ export namespace game_logic
             return _board[y * _board_size + x];
         }
 
-        [[nodiscard]]
-        bool is_game_over() const noexcept
-        {
-            return _game_result != GameResult::None;
-        }
+        [[nodiscard]] bool is_game_over() const noexcept { return _game_result != GameResult::None; }
 
         [[nodiscard]]
         bool is_make_move(int x, int y) noexcept

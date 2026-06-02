@@ -72,14 +72,8 @@ export namespace config
             }
         }
 
-        [[nodiscard]] constexpr const Window &window() const noexcept
-        {
-            return _window;
-        }
+        [[nodiscard]] constexpr const Window &window() const noexcept { return _window; }
 
-        [[nodiscard]] constexpr const Audio &audio() const noexcept
-        {
-            return _audio;
-        }
+        [[nodiscard]] constexpr const Audio &audio() const noexcept { return _audio; }
     };
 }
