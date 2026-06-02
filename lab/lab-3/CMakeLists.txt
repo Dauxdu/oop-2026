@@ -1,7 +1,7 @@
 project(lab-3 LANGUAGES CXX)
 
-add_library(BankAccount STATIC)
-target_sources(BankAccount
+add_library(${PROJECT_NAME}_lib STATIC)
+target_sources(${PROJECT_NAME}_lib
     PUBLIC
     FILE_SET CXX_MODULES
     FILES
@@ -15,7 +15,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     inx
     console
-    BankAccount
+    ${PROJECT_NAME}_lib
 )
 
 if(GTEST_FOUND)
@@ -27,7 +27,7 @@ if(GTEST_FOUND)
         PRIVATE
         GTest::gtest
         GTest::gtest_main
-        BankAccount
+        ${PROJECT_NAME}_lib
     )
 
     include(GoogleTest)

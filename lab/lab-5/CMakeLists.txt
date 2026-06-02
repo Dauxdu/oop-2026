@@ -1,16 +1,11 @@
-project(lab-4 LANGUAGES CXX)
+project(lab-5 LANGUAGES CXX)
 
 add_library(${PROJECT_NAME}_lib STATIC)
 target_sources(${PROJECT_NAME}_lib
     PUBLIC
     FILE_SET CXX_MODULES
     FILES
-    lib/BankAccounts.ixx
-    lib/BankAccount.cppm
-    lib/BankAccountAlgorithms.cppm
-    lib/CheckingAccount.cppm
-    lib/CreditAccount.cppm
-    lib/DepositAccount.cppm
+    lib/TextAnalyzer.cppm
 )
 
 add_executable(${PROJECT_NAME} src/main.cpp)
