@@ -10,12 +10,12 @@ import bank;
 /// @brief Выводит меню доступных операций.
 void print_menu()
 {
-    std::println("[1] Вставить новый счёт");
+    std::println("[1] Добавить счёт");
     std::println("[2] Удалить счёт");
     std::println("[3] Начислить проценты");
     std::println("[4] Найти максимальный баланс");
     std::println("[5] Выход");
-    std::print("Выберите пункт: ");
+    std::print("\nВыберите пункт: ");
 }
 
 /**
@@ -28,9 +28,9 @@ void print_accounts(const std::vector<BankAccount> &accounts)
 
     if (!accounts.empty())
     {
-        for (const auto &x : accounts)
+        for (const auto &[index, account] : std::views::enumerate(accounts))
         {
-            std::println("{}: {}, баланс {:.2f}, ставка {:.2f}%", &x - accounts.data(), x.get_owner(), x.get_balance(), x.get_interest_rate());
+            std::println("{}: {}, баланс {:.2f}, ставка {:.2f}%", index, account.get_owner(), account.get_balance(), account.get_interest_rate());
         }
 
         return;
@@ -47,7 +47,7 @@ void print_accounts(const std::vector<BankAccount> &accounts)
 void insert_account(std::vector<BankAccount> &accounts)
 {
     const int index = accounts.empty() ? 0 : inx::input_numeric<int>(std::format("Введите индекс вставки (0-{}): ", accounts.size()), 0, accounts.size());
-    const std::string owner = inx::input_string("Введите ФИО владельца: ", R"([A-Za-z]|[^\x00-\x7F])+\s+([A-Za-z]|[^\x00-\x7F])+\s+([A-Za-z]|[^\x00-\x7F])+)");
+    const std::string owner = inx::input_string("Введите ФИО владельца: ", R"(([A-Za-z]|[^\x00-\x7F])+\s+([A-Za-z]|[^\x00-\x7F])+\s+([A-Za-z]|[^\x00-\x7F])+)");
     const double balance = inx::input_numeric<double>("Введите баланс: ");
     const double rate = inx::input_numeric<double>("Введите ставку (%): ", 0.0);
 
