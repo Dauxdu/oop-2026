@@ -1,0 +1,12 @@
+﻿project(oop-2026-practice LANGUAGES CXX)
+
+add_subdirectory(practice-1)
+add_subdirectory(practice-2)
+add_subdirectory(practice-3)
+add_subdirectory(practice-4)
+add_subdirectory(practice-5)
+add_subdirectory(practice-6)
+add_subdirectory(practice-7)
+add_subdirectory(practice-8)
+add_subdirectory(practice-9)
+add_subdirectory(practice-10)
