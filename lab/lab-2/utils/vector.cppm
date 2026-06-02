@@ -1,7 +1,6 @@
 /**
  * @file vector.cppm
  * @brief Модуль с алгоритмами для заполнения и агрегации векторов.
- *
  * @details Содержит функции для генерации случайных данных и математических
  *          операций над контейнерами std::vector.
  */
@@ -11,11 +10,9 @@ import std;
 
 /**
  * @brief Заполняет вектор случайными числами в диапазоне [min_value, max_value].
- *
  * @param[in, out] vec        Вектор для заполнения.
  * @param[in]      min_value  Минимальное значение (включительно).
  * @param[in]      max_value  Максимальное значение (включительно).
- *
  * @throws std::logic_error Если min_value > max_value.
  */
 export void fill_random(std::vector<int> &vec, int min_value, int max_value)
@@ -37,7 +34,6 @@ export void fill_random(std::vector<int> &vec, int min_value, int max_value)
 
 /**
  * @brief Вычисляет арифметическую сумму элементов вектора.
- *
  * @param[in] vec Вектор для суммирования.
  * @return Сумма элементов.
  */
