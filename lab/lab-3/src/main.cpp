@@ -47,7 +47,7 @@ void print_accounts(const std::vector<BankAccount> &accounts)
 void insert_account(std::vector<BankAccount> &accounts)
 {
     const int index = accounts.empty() ? 0 : inx::input_numeric<int>(std::format("Введите индекс вставки (0-{}): ", accounts.size()), 0, accounts.size());
-    const std::string owner = inx::input_string("Введите ФИО владельца: ", R"(([A-Za-z]|[^\x00-\x7F])+\s+([A-Za-z]|[^\x00-\x7F])+\s+([A-Za-z]|[^\x00-\x7F])+)");
+    std::string owner = inx::input_string("Введите ФИО владельца: ", R"(([A-Za-z]|[^\x00-\x7F])+\s+([A-Za-z]|[^\x00-\x7F])+\s+([A-Za-z]|[^\x00-\x7F])+)");
     const double balance = inx::input_numeric<double>("Введите баланс: ");
     const double rate = inx::input_numeric<double>("Введите ставку (%): ", 0.0);
 
@@ -89,7 +89,7 @@ void apply_interest_to_all(std::vector<BankAccount> &accounts)
  */
 void print_max_balance(const std::vector<BankAccount> &accounts)
 {
-    const int index = max_balance_index(accounts);
+    const std::size_t index = max_balance_index(accounts);
     const auto &account = accounts[index];
 
     std::println("-----------------------------------");

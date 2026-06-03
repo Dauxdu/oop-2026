@@ -22,7 +22,7 @@ export void apply_interest(std::vector<BankAccount> &accounts)
  * @throws std::invalid_argument Если коллекция пуста.
  * @return Индекс элемента с наибольшим балансом.
  */
-export int max_balance_index(const std::vector<BankAccount> &accounts)
+export std::size_t max_balance_index(const std::vector<BankAccount> &accounts)
 {
     if (accounts.empty())
     {
@@ -30,5 +30,5 @@ export int max_balance_index(const std::vector<BankAccount> &accounts)
     }
 
     auto it = std::ranges::max_element(accounts, {}, &BankAccount::get_balance);
-    return it - accounts.begin();
+    return static_cast<std::size_t>(std::distance(accounts.begin(), it));
 }

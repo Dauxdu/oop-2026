@@ -32,6 +32,8 @@ public:
         }
     }
 
+    BankAccount() = delete;
+
     /// @brief Возвращает ФИО владельца.
     [[nodiscard]] const std::string &get_owner() const { return _owner; }
 
@@ -51,7 +53,7 @@ public:
         if (_interest_rate > 0.0)
         {
             const double monthly_rate = (_interest_rate / 100.0) / 12.0;
-            _balance += _balance * monthly_rate;
+            _balance *= (1.0 + monthly_rate);
         }
     }
 };
