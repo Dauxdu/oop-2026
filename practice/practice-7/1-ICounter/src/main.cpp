@@ -20,20 +20,11 @@ private:
 public:
 	BoundedCounter(int limit) : _limit(limit) {}
 
-	int get_value() const override
-	{
-		return _counter;
-	}
+	int get_value() const override { return _counter; }
 
-	std::string get_type() const override
-	{
-		return "BoundedCounter: " + std::to_string(_limit);
-	}
+	std::string get_type() const override { return std::format("BoundedCounter: {}", _limit); }
 
-	bool is_limit_reached() const override
-	{
-		return _limit == _counter;
-	}
+	bool is_limit_reached() const override { return _counter >= _limit; }
 
 	void increment() override
 	{
@@ -58,25 +49,11 @@ private:
 public:
 	CyclicCounter(int limit) : _limit(limit) {}
 
-	int get_value() const override
-	{
-		return _counter;
-	}
+	int get_value() const override { return _counter; }
 
-	std::string get_type() const override
-	{
-		return "CyclicCounter: " + std::to_string(_limit);
-	}
+	std::string get_type() const override { return std::format("CyclicCounter: {}", _limit); }
 
-	bool is_limit_reached() const override
-	{
-		return _counter >= _limit;
-	}
-
-	void reset() override
-	{
-		_counter = 0;
-	}
+	bool is_limit_reached() const override { return _counter == _limit - 1; }
 
 	void increment() override
 	{
@@ -89,6 +66,8 @@ public:
 			reset();
 		}
 	}
+
+	void reset() override { _counter = 0; }
 };
 
 class StepCounter final : public ICounter
@@ -101,33 +80,21 @@ private:
 public:
 	StepCounter(int limit, int step) : _limit(limit), _step(step) {}
 
-	int get_value() const override
-	{
-		return _counter;
-	}
+	int get_value() const override { return _counter; }
 
-	std::string get_type() const override
-	{
-		return "StepCounter: " + std::to_string(_limit);
-	}
+	std::string get_type() const override { return std::format("StepCounter: {} (step {})", _limit, _step); }
 
-	bool is_limit_reached() const override
-	{
-		return _counter == _limit;
-	}
-
-	void reset() override
-	{
-		_counter = 0;
-	}
+	bool is_limit_reached() const override { return (_counter + _step) > _limit; }
 
 	void increment() override
 	{
-		if ((_counter + _step) <= _limit)
+		if (!is_limit_reached())
 		{
 			_counter += _step;
 		}
 	}
+
+	void reset() override { _counter = 0; }
 };
 
 void bounded_counter_example()
