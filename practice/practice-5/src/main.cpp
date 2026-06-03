@@ -34,7 +34,7 @@ private:
 
 public:
 	// C1
-	Fraction(int num) : _numerator(num)
+	Fraction(int num) : _numerator(num), _denominator(1)
 	{
 		normalize();
 	}
@@ -45,15 +45,9 @@ public:
 		normalize();
 	}
 
-	int get_numerator() const
-	{
-		return _numerator;
-	}
+	int get_numerator() const { return _numerator; }
 
-	int get_denominator() const
-	{
-		return _denominator;
-	}
+	int get_denominator() const { return _denominator; }
 
 	// 1
 	Fraction &operator+=(const Fraction &frac)
