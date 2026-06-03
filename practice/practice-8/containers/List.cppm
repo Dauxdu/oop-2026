@@ -12,16 +12,16 @@ private:
 	typename std::vector<TValue>::const_iterator _end;
 
 public:
-	ListEnumerator(const std::vector<TValue> &vector) : _started(false), _iter(vector.begin()), _end(vector.end()) {}
+	ListEnumerator(const std::vector<TValue> &vector) : _iter(vector.begin()), _end(vector.end()) {}
 
 	bool MoveNext() override
 	{
-		if (!_started)
+		if (_started && _iter != _end)
 		{
-			_started = true;
-			return _iter != _end;
+			++_iter;
 		}
-		++_iter;
+		_started = true;
+
 		return _iter != _end;
 	}
 
@@ -31,6 +31,7 @@ public:
 		{
 			throw std::logic_error("ListEnumerator::Current: Invalid iterator");
 		}
+
 		return *_iter;
 	}
 };
@@ -42,40 +43,25 @@ private:
 	std::vector<TValue> _list;
 
 public:
-	std::unique_ptr<IEnumerator<TValue>> GetEnumerator() const override
-	{
-		return std::make_unique<ListEnumerator<TValue>>(_list);
-	}
+	std::unique_ptr<IEnumerator<TValue>> GetEnumerator() const override { return std::make_unique<ListEnumerator<TValue>>(_list); }
 
 	void Add(const TValue &item) override
 	{
-		_list.push_back(item);
+		_list.push_back(std::move(item));
 	}
 
-	bool Remove(const TValue &item) override
-	{
-		return std::erase(_list, item) > 0;
-	}
+	bool Remove(const TValue &item) override { return std::erase(_list, item) > 0; }
 
 	void Clear() override
 	{
 		_list.clear();
 	}
 
-	std::size_t Count() const override
-	{
-		return _list.size();
-	}
+	std::size_t Count() const override { return _list.size(); }
 
-	bool Contains(const TValue &item) const override
-	{
-		return std::find(_list.begin(), _list.end(), item) != _list.end();
-	}
+	bool Contains(const TValue &item) const override { return std::ranges::contains(_list, item); }
 
-	std::size_t Capacity() const
-	{
-		return _list.capacity();
-	}
+	std::size_t Capacity() const { return _list.capacity(); }
 
 	void SetCapacity(std::size_t capacity)
 	{
@@ -89,7 +75,7 @@ public:
 			throw std::out_of_range("List::Insert: index out of range");
 		}
 
-		_list.insert(_list.begin() + index, item);
+		_list.insert(_list.begin() + index, std::move(item));
 	}
 
 	void RemoveAt(std::size_t index)
