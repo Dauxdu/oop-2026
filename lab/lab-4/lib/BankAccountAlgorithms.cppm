@@ -13,8 +13,10 @@ import :BankAccount;
  */
 export void apply_interest(std::vector<AccountPtr> &accounts)
 {
-    std::ranges::for_each(accounts, [](const AccountPtr &account)
-                          { account->apply_monthly_interest(); });
+    for (const auto &account : accounts)
+    {
+        account->apply_monthly_interest();
+    }
 }
 
 /**
@@ -22,7 +24,7 @@ export void apply_interest(std::vector<AccountPtr> &accounts)
  * @param[in] accounts Вектор указателей на счета.
  * @return Индекс счёта с максимальным балансом или std::nullopt, если вектор пуст.
  */
-export std::optional<int> max_balance_index(const std::vector<AccountPtr> &accounts)
+export std::optional<std::size_t> max_balance_index(const std::vector<AccountPtr> &accounts)
 {
     if (accounts.empty())
     {
@@ -31,7 +33,7 @@ export std::optional<int> max_balance_index(const std::vector<AccountPtr> &accou
 
     auto it = std::ranges::max_element(accounts, {}, &BankAccount::get_balance);
 
-    return std::distance(accounts.begin(), it);
+    return static_cast<std::size_t>(std::distance(accounts.begin(), it));
 }
 
 /**
@@ -39,7 +41,7 @@ export std::optional<int> max_balance_index(const std::vector<AccountPtr> &accou
  * @param[in] accounts Вектор указателей на счета.
  * @return Индекс счёта с минимальным балансом или std::nullopt, если вектор пуст.
  */
-export std::optional<int> min_balance_index(const std::vector<AccountPtr> &accounts)
+export std::optional<std::size_t> min_balance_index(const std::vector<AccountPtr> &accounts)
 {
     if (accounts.empty())
     {
@@ -48,5 +50,5 @@ export std::optional<int> min_balance_index(const std::vector<AccountPtr> &accou
 
     auto it = std::ranges::min_element(accounts, {}, &BankAccount::get_balance);
 
-    return std::distance(accounts.begin(), it);
+    return static_cast<std::size_t>(std::distance(accounts.begin(), it));
 }

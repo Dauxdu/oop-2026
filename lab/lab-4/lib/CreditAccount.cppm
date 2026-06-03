@@ -18,13 +18,6 @@ export class CreditAccount final : public BankAccount
 private:
     double _interest_rate{};
 
-    /**
-     * @brief Нормализует процентную ставку, гарантируя, что она неотрицательна.
-     * @param[in] interest_rate Исходная процентная ставка.
-     * @return Неотрицательное значение ставки (минимум 0.0).
-     */
-    double normalize_rate(double interest_rate) { return std::max(0.0, interest_rate); }
-
 public:
     /**
      * @brief Конструктор кредитного счёта.
@@ -32,7 +25,7 @@ public:
      * @param[in] balance Начальный баланс.
      * @param[in] interest_rate Годовая процентная ставка. Отрицательные значения заменяются на 0.0.
      */
-    CreditAccount(std::string owner, double balance, double interest_rate) : BankAccount(std::move(owner), balance), _interest_rate(normalize_rate(interest_rate)) {}
+    CreditAccount(std::string owner, double balance, double interest_rate) : BankAccount(std::move(owner), balance), _interest_rate(std::max(0.0, interest_rate)) {}
 
     /**
      * @brief Возвращает годовую процентную ставку.
@@ -57,9 +50,10 @@ public:
             return;
         }
 
-        const double monthly_rate = (_interest_rate / 100.0) / 12.0;
-        const double interest_amount = std::abs(get_balance()) * monthly_rate;
+        constexpr double PERCENT_TO_DECIMAL = 100.0;
+        constexpr double MONTHS_PER_YEAR = 12.0;
+        const double monthly_rate = (_interest_rate / PERCENT_TO_DECIMAL) / MONTHS_PER_YEAR;
 
-        set_balance(get_balance() - interest_amount);
+        set_balance(get_balance() * (1.0 + monthly_rate));
     }
 };

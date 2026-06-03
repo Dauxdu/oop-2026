@@ -28,6 +28,7 @@ protected:
 
 public:
     virtual ~BankAccount() = default;
+    BankAccount() = delete;
     BankAccount(const BankAccount &) = delete;
     BankAccount &operator=(const BankAccount &) = delete;
 
