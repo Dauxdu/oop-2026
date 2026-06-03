@@ -7,33 +7,33 @@ export template <typename TValue>
 class QueueEnumerator final : public IEnumerator<TValue>
 {
 private:
-    std::queue<TValue> _queue;
     bool _started = false;
+    typename std::deque<TValue>::const_iterator _iter;
+    typename std::deque<TValue>::const_iterator _end;
 
 public:
-    QueueEnumerator(std::queue<TValue> queue) : _queue(std::move(queue)) {}
+    QueueEnumerator(const std::deque<TValue> &queue) : _iter(queue.begin()), _end(queue.end()) {}
 
     bool MoveNext() override
     {
-        if (!_started)
+        if (_started && _iter != _end)
         {
-            _started = true;
-            return !_queue.empty();
+            ++_iter;
         }
 
-        _queue.pop();
+        _started = true;
 
-        return !_queue.empty();
+        return _iter != _end;
     }
 
     const TValue &Current() const override
     {
-        if (_queue.empty())
+        if (!_started || _iter == _end)
         {
             throw std::logic_error("QueueEnumerator::Current: Invalid iterator");
         }
 
-        return _queue.front();
+        return *_iter;
     }
 };
 
@@ -41,7 +41,7 @@ export template <typename TValue>
 class Queue : public IEnumerable<TValue>
 {
 private:
-    std::queue<TValue> _queue;
+    std::deque<TValue> _queue;
 
 public:
     std::unique_ptr<IEnumerator<TValue>> GetEnumerator() const override
@@ -51,7 +51,7 @@ public:
 
     void Enqueue(TValue item)
     {
-        _queue.push(item);
+        _queue.push_back(std::move(item));
     }
 
     TValue Dequeue()
@@ -62,23 +62,12 @@ public:
         }
 
         TValue item = std::move(_queue.front());
-        _queue.pop();
+        _queue.pop_front();
 
         return item;
     }
 
-    const TValue &Peek() const
-    {
-        if (_queue.empty())
-        {
-            throw std::out_of_range("Queue::Peek: empty queue");
-        }
+    const TValue &Peek() const { return _queue.front(); }
 
-        return _queue.front();
-    }
-
-    std::size_t Count() const
-    {
-        return _queue.size();
-    }
+    std::size_t Count() const { return _queue.size(); }
 };
