@@ -30,10 +30,10 @@ void print_vec(const std::vector<int> &vec)
 {
   std::print("[");
 
-  for (const int &x : vec)
+  for (const int &i : vec)
   {
-    std::print("{}", x);
-    if (&x != &vec.back())
+    std::print("{}", i);
+    if (&i != &vec.back())
     {
       std::print(", ");
     }

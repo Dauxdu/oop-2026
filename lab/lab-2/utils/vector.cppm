@@ -26,9 +26,9 @@ export void fill_random(std::vector<int> &vec, int min_value, int max_value)
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> dist(min_value, max_value);
 
-    for (int &x : vec)
+    for (int &i : vec)
     {
-        x = dist(gen);
+        i = dist(gen);
     }
 }
 
@@ -40,9 +40,9 @@ export void fill_random(std::vector<int> &vec, int min_value, int max_value)
 export int calculate_sum(const std::vector<int> &vec)
 {
     int sum{};
-    for (const int &x : vec)
+    for (const int &i : vec)
     {
-        sum += x;
+        sum += i;
     }
 
     return sum;
