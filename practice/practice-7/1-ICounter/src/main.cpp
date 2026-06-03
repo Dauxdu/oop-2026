@@ -67,7 +67,10 @@ public:
 		}
 	}
 
-	void reset() override { _counter = 0; }
+	void reset() override
+	{
+		_counter = 0;
+	}
 };
 
 class StepCounter final : public ICounter
@@ -94,7 +97,10 @@ public:
 		}
 	}
 
-	void reset() override { _counter = 0; }
+	void reset() override
+	{
+		_counter = 0;
+	}
 };
 
 void bounded_counter_example()
