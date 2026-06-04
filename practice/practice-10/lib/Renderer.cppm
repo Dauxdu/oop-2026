@@ -15,10 +15,6 @@ export namespace renderer
     private:
         const assets::Manager &_assets;
 
-        mutable sf::Sprite _board_sprite;
-        mutable sf::Sprite _cell_sprite;
-        mutable sf::Sprite _result_sprite;
-
         std::array<assets::TextureID, 3> _cell_textures{
             assets::TextureID::Board,
             assets::TextureID::X,
@@ -50,13 +46,12 @@ export namespace renderer
         {
             sf::View view{{1.5f, 1.5f}, {3.f, 3.f}};
             view.setViewport(get_viewport(window_size));
-
             return view;
         }
 
-        void setup_sprite(sf::Sprite &sprite, const sf::Texture &texture, sf::Vector2f position, sf::Vector2f max_size) const noexcept
+        void draw_sprite(sf::RenderTarget &target, const sf::Texture &texture, sf::Vector2f position, sf::Vector2f max_size) const noexcept
         {
-            sprite.setTexture(texture, true);
+            sf::Sprite sprite{texture};
             const float texture_width = static_cast<float>(texture.getSize().x);
             const float texture_height = static_cast<float>(texture.getSize().y);
             const float scale = std::min(max_size.x / texture_width, max_size.y / texture_height);
@@ -65,6 +60,7 @@ export namespace renderer
             const auto bounds = sprite.getLocalBounds();
             sprite.setOrigin(bounds.position + bounds.size / 2.f);
             sprite.setPosition(position);
+            target.draw(sprite);
         }
 
     public:
@@ -73,17 +69,13 @@ export namespace renderer
         Renderer(Renderer &&) = delete;
         Renderer &operator=(Renderer &&) = delete;
 
-        explicit Renderer(const assets::Manager &assets) : _assets{assets},
-                                                           _board_sprite{assets.get_texture(assets::TextureID::Board)},
-                                                           _cell_sprite{assets.get_texture(assets::TextureID::X)},
-                                                           _result_sprite{assets.get_texture(assets::TextureID::XWin)} {}
+        explicit Renderer(const assets::Manager &assets) : _assets{assets} {}
 
         void render(sf::RenderTarget &target, const game_logic::Board &board) const
         {
             target.setView(create_game_view(target.getSize()));
 
-            setup_sprite(_board_sprite, _assets.get_texture(assets::TextureID::Board), {1.5f, 1.5f}, {3.0f, 3.0f});
-            target.draw(_board_sprite);
+            draw_sprite(target, _assets.get_texture(assets::TextureID::Board), {1.5f, 1.5f}, {3.0f, 3.0f});
 
             const int board_size = board.get_board_size();
             for (int y = 0; y < board_size; ++y)
@@ -97,8 +89,7 @@ export namespace renderer
                     }
 
                     const auto texture_id = _cell_textures[static_cast<size_t>(cell)];
-                    setup_sprite(_cell_sprite, _assets.get_texture(texture_id), {static_cast<float>(x) + 0.5f, static_cast<float>(y) + 0.5f}, {0.7f, 0.7f});
-                    target.draw(_cell_sprite);
+                    draw_sprite(target, _assets.get_texture(texture_id), {static_cast<float>(x) + 0.5f, static_cast<float>(y) + 0.5f}, {0.7f, 0.7f});
                 }
             }
 
@@ -106,8 +97,7 @@ export namespace renderer
             if (result != game_logic::GameResult::None)
             {
                 const auto texture_id = _result_textures[static_cast<size_t>(result)];
-                setup_sprite(_result_sprite, _assets.get_texture(texture_id), {1.5f, 1.5f}, {3.0f, 3.0f});
-                target.draw(_result_sprite);
+                draw_sprite(target, _assets.get_texture(texture_id), {1.5f, 1.5f}, {3.0f, 3.0f});
             }
         }
 
