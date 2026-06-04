@@ -47,7 +47,7 @@ public:
 
 	void Add(const TValue &item) override
 	{
-		_list.push_back(std::move(item));
+		_list.push_back(item);
 	}
 
 	bool Remove(const TValue &item) override { return std::erase(_list, item) > 0; }
@@ -90,21 +90,11 @@ public:
 
 	TValue &operator[](std::size_t index)
 	{
-		if (index >= _list.size())
-		{
-			throw std::out_of_range("List::operator[]: index out of range");
-		}
-
 		return _list[index];
 	}
 
 	const TValue &operator[](std::size_t index) const
 	{
-		if (index >= _list.size())
-		{
-			throw std::out_of_range("List::operator[]: index out of range");
-		}
-
 		return _list[index];
 	}
 };

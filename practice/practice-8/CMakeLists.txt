@@ -25,19 +25,5 @@ target_sources(containers
 )
 target_link_libraries(containers PUBLIC interfaces)
 
-add_library(examples STATIC)
-target_sources(examples
-    PUBLIC
-    FILE_SET CXX_MODULES
-    FILES
-    examples/examples.ixx
-    examples/DictionaryExample.cppm
-    examples/HashSetExample.cppm
-    examples/ListExample.cppm
-    examples/QueueExample.cppm
-    examples/StackExample.cppm
-)
-target_link_libraries(examples PUBLIC containers)
-
 add_executable(${PROJECT_NAME} src/main.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE examples)
+target_link_libraries(${PROJECT_NAME} PRIVATE containers)

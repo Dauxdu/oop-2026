@@ -12,16 +12,15 @@ private:
     typename std::unordered_set<TValue, THash, TEqual>::const_iterator _end;
 
 public:
-    HashSetEnumerator(const std::unordered_set<TValue, THash, TEqual> &set) : _started(false), _iter(set.begin()), _end(set.end()) {}
+    HashSetEnumerator(const std::unordered_set<TValue, THash, TEqual> &set) : _iter(set.begin()), _end(set.end()) {}
 
     bool MoveNext() override
     {
-        if (!_started)
+        if (_started && _iter != _end)
         {
-            _started = true;
-            return _iter != _end;
+            ++_iter;
         }
-        ++_iter;
+        _started = true;
 
         return _iter != _end;
     }
@@ -54,30 +53,18 @@ public:
         _set.insert(item);
     }
 
-    bool Remove(const TValue &item) override
-    {
-        return _set.erase(item) > 0;
-    }
+    bool Remove(const TValue &item) override { return _set.erase(item) > 0; }
 
     void Clear() override
     {
         _set.clear();
     }
 
-    std::size_t Count() const override
-    {
-        return _set.size();
-    }
+    std::size_t Count() const override { return _set.size(); }
 
-    bool Contains(const TValue &item) const override
-    {
-        return _set.find(item) != _set.end();
-    }
+    bool Contains(const TValue &item) const override { return _set.contains(item); }
 
-    std::size_t Capacity() const
-    {
-        return _set.bucket_count();
-    }
+    std::size_t Capacity() const { return _set.bucket_count(); }
 
     void SetCapacity(std::size_t capacity)
     {

@@ -67,7 +67,14 @@ public:
         return item;
     }
 
-    const TValue &Peek() const { return _queue.front(); }
+    const TValue &Peek() const
+    {
+        if (_queue.empty())
+        {
+            throw std::out_of_range("Queue::Peek: empty queue");
+        }
+        return _queue.front();
+    }
 
     std::size_t Count() const { return _queue.size(); }
 };

@@ -12,16 +12,15 @@ private:
     typename std::unordered_map<TKey, TValue, THash, TEqual>::const_iterator _end;
 
 public:
-    DictionaryEnumerator(const std::unordered_map<TKey, TValue, THash, TEqual> &dictionary) : _started(false), _iter(dictionary.begin()), _end(dictionary.end()) {}
+    DictionaryEnumerator(const std::unordered_map<TKey, TValue, THash, TEqual> &dictionary) : _iter(dictionary.begin()), _end(dictionary.end()) {}
 
     bool MoveNext() override
     {
-        if (!_started)
+        if (_started && _iter != _end)
         {
-            _started = true;
-            return _iter != _end;
+            ++_iter;
         }
-        ++_iter;
+        _started = true;
 
         return _iter != _end;
     }
@@ -51,62 +50,25 @@ public:
 
     void Add(const std::pair<const TKey, TValue> &item) override
     {
-        auto [it, inserted] = _dictionary.insert(item);
-        if (!inserted)
-        {
-            return;
-        }
+        _dictionary.insert(item);
     }
 
-    bool Remove(const std::pair<const TKey, TValue> &item) override
-    {
-        return _dictionary.erase(item.first) > 0;
-    }
+    bool Remove(const std::pair<const TKey, TValue> &item) override { return _dictionary.erase(item.first) > 0; }
 
     void Clear() override
     {
         _dictionary.clear();
     }
 
-    std::size_t Count() const override
-    {
-        return _dictionary.size();
-    }
+    std::size_t Count() const override { return _dictionary.size(); }
 
-    bool Contains(const std::pair<const TKey, TValue> &item) const override
-    {
-        return _dictionary.contains(item.first);
-    }
+    bool Contains(const std::pair<const TKey, TValue> &item) const override { return _dictionary.contains(item.first); }
 
-    std::size_t Capacity() const
-    {
-        return _dictionary.bucket_count();
-    }
+    std::size_t Capacity() const { return _dictionary.bucket_count(); }
 
-    void SetCapacity(const std::size_t capacity)
-    {
-        _dictionary.reserve(capacity);
-    }
+    void SetCapacity(const std::size_t capacity) { _dictionary.reserve(capacity); }
 
-    const TValue &operator[](const TKey &key) const
-    {
-        auto it = _dictionary.find(key);
-        if (it == _dictionary.end())
-        {
-            throw std::out_of_range("Dictionary::operator[]: Invalid key");
-        }
+    const TValue &operator[](const TKey &key) const { return _dictionary.at(key); }
 
-        return it->second;
-    }
-
-    TValue &operator[](const TKey &key)
-    {
-        auto it = _dictionary.find(key);
-        if (it == _dictionary.end())
-        {
-            throw std::out_of_range("Dictionary::operator[]: Invalid key");
-        }
-
-        return it->second;
-    }
+    TValue &operator[](const TKey &key) { return _dictionary.at(key); }
 };
