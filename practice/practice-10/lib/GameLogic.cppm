@@ -96,7 +96,7 @@ export namespace game_logic
         [[nodiscard]] GameResult get_game_result() const noexcept { return _game_result; }
 
         [[nodiscard]]
-        Cell get_cell(int x, int y) const
+        constexpr Cell get_cell(int x, int y) const
         {
             if (!is_valid_move(x, y))
             {
@@ -116,8 +116,7 @@ export namespace game_logic
                 return false;
             }
 
-            Cell &cell = _board[y * _board_size + x];
-            cell = _current_player;
+            _board[y * _board_size + x] = _current_player;
             update_game_state();
 
             return true;
