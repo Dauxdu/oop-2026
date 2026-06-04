@@ -11,6 +11,7 @@ target_sources(${PROJECT_NAME}
     PRIVATE FILE_SET CXX_MODULES FILES
     lib/Config.cppm
     lib/Assets.cppm
+    lib/Audio.cppm
     lib/GameLogic.cppm
     lib/Renderer.cppm
     lib/TicTacToe.cppm
