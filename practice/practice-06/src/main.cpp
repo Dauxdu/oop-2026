@@ -54,13 +54,16 @@ int main()
 		switch (choice)
 		{
 		case 1:
+		{
 			std::println("Введите строку:");
 			std::string s_1;
 			std::getline(std::cin, s_1);
 			s1.append(s_1);
 
 			break;
+		}
 		case 2:
+		{
 			std::println("Введите целочисленное значение:");
 			int s_1;
 
@@ -70,7 +73,9 @@ int main()
 			}
 
 			break;
+		}
 		case 3:
+		{
 			std::println("Введите float:");
 			float s_1;
 			if (std::cin >> s_1)
@@ -79,6 +84,7 @@ int main()
 			}
 
 			break;
+		}
 		default:
 			std::println("Неверный выбор!");
 
