@@ -1,19 +1,37 @@
+/**
+ * @file WordAnalyzer.cppm
+ * @brief Модуль статистического анализа слов.
+ */
 export module TextAnalyzer:WordAnalyzer;
 import std;
 
 export namespace ta::WordAnalyzer
 {
+    /**
+     * @brief Структура для хранения группы слов с одинаковой частотой.
+     */
     struct WordFrequency
     {
         std::vector<std::string> words;
         std::size_t frequency;
     };
 
+    /**
+     * @brief Подсчитывает количество уникальных слов.
+     * @param[in] words Вектор слов.
+     * @return Количество уникальных элементов.
+     */
     std::size_t count_unique_words(const std::vector<std::string> &words)
     {
         return std::unordered_set<std::string>(words.begin(), words.end()).size();
     }
 
+    /**
+     * @brief Фильтрует слова, удаляя незначимые (stop words).
+     * @param[in] words Вектор слов для фильтрации.
+     * @param[in] stop_words Набор незначимых слов.
+     * @return Вектор слов без stop words.
+     */
     std::vector<std::string> filter_words(const std::vector<std::string> &words, const std::unordered_set<std::string> &stop_words)
     {
         std::vector<std::string> result;
@@ -28,6 +46,13 @@ export namespace ta::WordAnalyzer
         return result;
     }
 
+    /**
+     * @brief Находит топ-N самых частых слов.
+     * @param[in] words Вектор проанализированных слов.
+     * @param[in] n Количество слов для возврата.
+     * @return Вектор структур WordFrequency, отсортированный по убыванию частоты.
+     * @throws std::invalid_argument Если n == 0.
+     */
     std::vector<WordFrequency> find_top_words(const std::vector<std::string> &words, std::size_t n)
     {
         if (n == 0)

@@ -1,3 +1,7 @@
+/**
+ * @file FileDataSource.cppm
+ * @brief Реализация источника данных на основе файловой системы.
+ */
 export module TextAnalyzer:FileDataSource;
 
 import std;
@@ -5,13 +9,21 @@ import :IDataSource;
 
 export namespace ta
 {
+    /**
+     * @brief Источник данных, читающий слова из текстового файла.
+     * @details Слова разделяются пробельными символами (стандартное поведение std::ifstream >>).
+     */
     class FileDataSource final : public IDataSource
     {
-
     private:
         std::filesystem::path _path;
 
     public:
+        /**
+         * @brief Конструктор источника данных.
+         * @param[in] path Путь к файлу.
+         * @throws std::invalid_argument Если путь пуст.
+         */
         explicit FileDataSource(std::filesystem::path path) : _path(std::move(path))
         {
             if (_path.empty())
@@ -22,6 +34,11 @@ export namespace ta
 
         FileDataSource() = delete;
 
+        /**
+         * @brief Читает слова из файла.
+         * @return Вектор прочитанных слов.
+         * @throws std::runtime_error Если файл не удалось открыть или произошла ошибка чтения.
+         */
         std::vector<std::string> read_words() const override
         {
             std::ifstream file(_path);

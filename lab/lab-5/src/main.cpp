@@ -1,8 +1,17 @@
+/**
+ * @file main.cpp
+ * @brief Точка входа в приложение анализа текстов.
+ */
 import std;
 import inx;
 import console;
 import TextAnalyzer;
 
+/**
+ * @brief Точка входа в программу.
+ * @details Запускает интерактивный цикл анализа файлов.
+ * @return 0 при успешном завершении.
+ */
 int main()
 {
     print_header(5);
