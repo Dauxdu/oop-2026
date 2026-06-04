@@ -35,16 +35,10 @@ private:
 
 public:
 	// C1
-	Fraction(int num) : _numerator(num), _denominator(1)
-	{
-		normalize();
-	}
+	Fraction(int num) : _numerator(num), _denominator(1) { normalize(); }
 
 	// C2
-	Fraction(int num, int den) : _numerator(num), _denominator(den)
-	{
-		normalize();
-	}
+	Fraction(int num, int den) : _numerator(num), _denominator(den) { normalize(); }
 
 	int get_numerator() const { return _numerator; }
 
