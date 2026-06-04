@@ -16,7 +16,8 @@ private:
 		// I3
 		if (_denominator < 0)
 		{
-			_denominator = std::abs(_denominator);
+			_numerator *= -1;
+			_denominator *= -1;
 		}
 
 		// I1
