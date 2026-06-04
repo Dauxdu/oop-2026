@@ -58,9 +58,14 @@ export namespace audio
         {
             const float clamped = std::clamp(volume, 0.f, 100.f);
             if (_click_sound)
+            {
                 _click_sound->setVolume(clamped);
+            }
+
             if (_win_sound)
+            {
                 _win_sound->setVolume(clamped);
+            }
         }
 
         void set_audio_levels(float master, float sfx) noexcept
@@ -73,13 +78,17 @@ export namespace audio
         void play_click() noexcept
         {
             if (!_muted && _click_sound)
+            {
                 _click_sound->play();
+            }
         }
 
         void play_win() noexcept
         {
             if (!_muted && _win_sound)
+            {
                 _win_sound->play();
+            }
         }
     };
 }
