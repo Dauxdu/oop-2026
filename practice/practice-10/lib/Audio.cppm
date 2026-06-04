@@ -23,20 +23,13 @@ export namespace audio
             {
                 _click_sound.emplace(_assets.get_sound(assets::SoundID::Click));
                 _click_sound->setVolume(sfx_volume);
-            }
-            catch (const std::exception &e)
-            {
-                std::println("Failed to load click sound: {}", e.what());
-            }
 
-            try
-            {
                 _win_sound.emplace(_assets.get_sound(assets::SoundID::Win));
                 _win_sound->setVolume(sfx_volume);
             }
             catch (const std::exception &e)
             {
-                std::println("Failed to load win sound: {}", e.what());
+                std::println("Failed to load sound: {}", e.what());
             }
         }
 
