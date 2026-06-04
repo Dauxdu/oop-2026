@@ -38,10 +38,9 @@ export namespace assets
         std::unordered_map<SoundID, sf::SoundBuffer> _sounds;
 
         template <typename TResource>
-        TResource load_resource(const std::filesystem::path &directory, const std::string &filename) const
+        TResource load_resource(const std::filesystem::path &filepath) const
         {
             TResource resource;
-            const auto filepath = directory / filename;
             if (!resource.loadFromFile(filepath))
             {
                 throw std::runtime_error("Failed to load resource: " + filepath.string());
@@ -57,15 +56,15 @@ export namespace assets
 
         explicit Manager(const std::filesystem::path &directory)
         {
-            _images.emplace(ImageID::Icon, load_resource<sf::Image>(directory, "image/icon.png"));
-            _textures.emplace(TextureID::Board, load_resource<sf::Texture>(directory, "texture/board.png"));
-            _textures.emplace(TextureID::X, load_resource<sf::Texture>(directory, "texture/x.png"));
-            _textures.emplace(TextureID::XWin, load_resource<sf::Texture>(directory, "texture/x_win.png"));
-            _textures.emplace(TextureID::O, load_resource<sf::Texture>(directory, "texture/o.png"));
-            _textures.emplace(TextureID::OWin, load_resource<sf::Texture>(directory, "texture/o_win.png"));
-            _textures.emplace(TextureID::Draw, load_resource<sf::Texture>(directory, "texture/draw.png"));
-            _sounds.emplace(SoundID::Win, load_resource<sf::SoundBuffer>(directory, "sfx/win.ogg"));
-            _sounds.emplace(SoundID::Click, load_resource<sf::SoundBuffer>(directory, "sfx/click.ogg"));
+            _images.emplace(ImageID::Icon, load_resource<sf::Image>(directory / "image/icon.png"));
+            _textures.emplace(TextureID::Board, load_resource<sf::Texture>(directory / "texture/board.png"));
+            _textures.emplace(TextureID::X, load_resource<sf::Texture>(directory / "texture/x.png"));
+            _textures.emplace(TextureID::XWin, load_resource<sf::Texture>(directory / "texture/x_win.png"));
+            _textures.emplace(TextureID::O, load_resource<sf::Texture>(directory / "texture/o.png"));
+            _textures.emplace(TextureID::OWin, load_resource<sf::Texture>(directory / "texture/o_win.png"));
+            _textures.emplace(TextureID::Draw, load_resource<sf::Texture>(directory / "texture/draw.png"));
+            _sounds.emplace(SoundID::Win, load_resource<sf::SoundBuffer>(directory / "sfx/win.ogg"));
+            _sounds.emplace(SoundID::Click, load_resource<sf::SoundBuffer>(directory / "sfx/click.ogg"));
         }
 
         [[nodiscard]]
