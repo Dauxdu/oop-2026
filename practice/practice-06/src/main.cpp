@@ -59,19 +59,16 @@ int main()
 			std::string s_1;
 			std::getline(std::cin, s_1);
 			s1.append(s_1);
-
 			break;
 		}
 		case 2:
 		{
 			std::println("Введите целочисленное значение:");
 			int s_1;
-
 			if (std::cin >> s_1)
 			{
 				s1.append(s_1);
 			}
-
 			break;
 		}
 		case 3:
@@ -82,12 +79,10 @@ int main()
 			{
 				s1.append(s_1);
 			}
-
 			break;
 		}
 		default:
 			std::println("Неверный выбор!");
-
 			break;
 		}
 	}
