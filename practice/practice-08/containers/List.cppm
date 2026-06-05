@@ -1,0 +1,100 @@
+﻿export module containers:List;
+
+import std;
+import interfaces;
+
+export template <typename TValue>
+class ListEnumerator final : public IEnumerator<TValue>
+{
+private:
+	bool _started = false;
+	typename std::vector<TValue>::const_iterator _iter;
+	typename std::vector<TValue>::const_iterator _end;
+
+public:
+	ListEnumerator(const std::vector<TValue> &vector) : _iter(vector.begin()), _end(vector.end()) {}
+
+	bool MoveNext() override
+	{
+		if (_started && _iter != _end)
+		{
+			++_iter;
+		}
+		_started = true;
+
+		return _iter != _end;
+	}
+
+	const TValue &Current() const override
+	{
+		if (!_started || _iter == _end)
+		{
+			throw std::logic_error("ListEnumerator::Current: Invalid iterator");
+		}
+
+		return *_iter;
+	}
+};
+
+export template <typename TValue>
+class List final : public ICollection<TValue>
+{
+private:
+	std::vector<TValue> _list;
+
+public:
+	std::unique_ptr<IEnumerator<TValue>> GetEnumerator() const override { return std::make_unique<ListEnumerator<TValue>>(_list); }
+
+	void Add(const TValue &item) override
+	{
+		_list.push_back(item);
+	}
+
+	bool Remove(const TValue &item) override { return std::erase(_list, item) > 0; }
+
+	void Clear() override
+	{
+		_list.clear();
+	}
+
+	std::size_t Count() const override { return _list.size(); }
+
+	bool Contains(const TValue &item) const override { return std::ranges::contains(_list, item); }
+
+	std::size_t Capacity() const { return _list.capacity(); }
+
+	void SetCapacity(std::size_t capacity)
+	{
+		_list.reserve(capacity);
+	}
+
+	void Insert(std::size_t index, const TValue &item)
+	{
+		if (index > _list.size())
+		{
+			throw std::out_of_range("List::Insert: index out of range");
+		}
+
+		_list.insert(_list.begin() + index, std::move(item));
+	}
+
+	void RemoveAt(std::size_t index)
+	{
+		if (index >= _list.size())
+		{
+			throw std::out_of_range("List::RemoveAt: index out of range");
+		}
+
+		_list.erase(_list.begin() + index);
+	}
+
+	TValue &operator[](std::size_t index)
+	{
+		return _list[index];
+	}
+
+	const TValue &operator[](std::size_t index) const
+	{
+		return _list[index];
+	}
+};

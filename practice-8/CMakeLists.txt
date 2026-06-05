@@ -1,5 +1,0 @@
-﻿add_subdirectory(containers)
-add_subdirectory(enumerators)
-add_subdirectory(examples)
-add_subdirectory(interfaces)
-add_subdirectory(src)

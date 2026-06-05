@@ -1,0 +1,132 @@
+export module GameLogic;
+
+import std;
+
+export namespace game_logic
+{
+    enum class Cell : std::uint8_t
+    {
+        Empty,
+        X,
+        O
+    };
+
+    enum class GameResult : std::uint8_t
+    {
+        None,
+        XWins,
+        OWins,
+        Draw
+    };
+
+    class Board final
+    {
+    private:
+        static constexpr int _board_size = 3;
+
+        Cell _current_player{Cell::X};
+        GameResult _game_result{GameResult::None};
+        std::array<Cell, _board_size * _board_size> _board{Cell::Empty};
+        static constexpr std::array win_lines{
+            std::array{0, 1, 2},
+            std::array{3, 4, 5},
+            std::array{6, 7, 8},
+
+            std::array{0, 3, 6},
+            std::array{1, 4, 7},
+            std::array{2, 5, 8},
+
+            std::array{0, 4, 8},
+            std::array{2, 4, 6},
+        };
+
+        [[nodiscard]]
+        constexpr bool is_board_full() const noexcept
+        {
+            return std::ranges::none_of(_board, [](Cell cell)
+                                        { return cell == Cell::Empty; });
+        }
+
+        [[nodiscard]]
+        constexpr bool is_valid_move(int x, int y) const noexcept
+        {
+            return x >= 0 && x < _board_size && y >= 0 && y < _board_size;
+        }
+
+        [[nodiscard]]
+        constexpr bool is_can_move(int x, int y) const noexcept
+        {
+            return !is_game_over() && is_valid_move(x, y) && _board[y * _board_size + x] == Cell::Empty;
+        }
+
+        [[nodiscard]]
+        constexpr bool is_player_win(Cell player) const noexcept
+        {
+            for (const auto &line_index : win_lines)
+            {
+                if (_board[line_index[0]] == player && _board[line_index[1]] == player && _board[line_index[2]] == player)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        void update_game_state() noexcept
+        {
+            if (is_player_win(_current_player))
+            {
+                _game_result = (_current_player == Cell::X) ? GameResult::XWins : GameResult::OWins;
+                return;
+            }
+
+            if (is_board_full())
+            {
+                _game_result = GameResult::Draw;
+                return;
+            }
+
+            _current_player = (_current_player == Cell::X) ? Cell::O : Cell::X;
+        }
+
+    public:
+        [[nodiscard]] constexpr int get_board_size() const noexcept { return _board_size; }
+
+        [[nodiscard]] GameResult get_game_result() const noexcept { return _game_result; }
+
+        [[nodiscard]]
+        constexpr Cell get_cell(int x, int y) const
+        {
+            if (!is_valid_move(x, y))
+            {
+                throw std::out_of_range(std::format("Invalid board coordinates ({}, {})", x, y));
+            }
+
+            return _board[y * _board_size + x];
+        }
+
+        [[nodiscard]] bool is_game_over() const noexcept { return _game_result != GameResult::None; }
+
+        [[nodiscard]]
+        bool is_make_move(int x, int y) noexcept
+        {
+            if (!is_can_move(x, y))
+            {
+                return false;
+            }
+
+            _board[y * _board_size + x] = _current_player;
+            update_game_state();
+
+            return true;
+        }
+
+        void reset() noexcept
+        {
+            _board.fill(Cell::Empty);
+            _current_player = Cell::X;
+            _game_result = GameResult::None;
+        }
+    };
+}
