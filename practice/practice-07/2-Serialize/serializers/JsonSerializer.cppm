@@ -30,7 +30,7 @@ private:
 
         if (auto *b = std::get_if<bool>(&value._v))
         {
-            result += *b ? "true" : "false";
+            return *b ? "true" : "false";
         }
 
         if (auto *d = std::get_if<double>(&value._v))
