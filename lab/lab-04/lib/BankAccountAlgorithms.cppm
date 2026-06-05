@@ -32,7 +32,6 @@ export std::optional<std::size_t> max_balance_index(const std::vector<AccountPtr
     }
 
     auto it = std::ranges::max_element(accounts, {}, &BankAccount::get_balance);
-
     return static_cast<std::size_t>(std::distance(accounts.begin(), it));
 }
 
@@ -49,6 +48,5 @@ export std::optional<std::size_t> min_balance_index(const std::vector<AccountPtr
     }
 
     auto it = std::ranges::min_element(accounts, {}, &BankAccount::get_balance);
-
     return static_cast<std::size_t>(std::distance(accounts.begin(), it));
 }

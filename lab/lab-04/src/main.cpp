@@ -98,8 +98,8 @@ void insert_account(std::vector<AccountPtr> &accounts)
 {
     const int max_index = accounts.size();
     const int index = accounts.empty() ? 0 : inx::input_numeric<int>(std::format("Введите индекс вставки (0-{}): ", max_index), 0, max_index);
-    AccountPtr account = create_account();
 
+    AccountPtr account = create_account();
     if (account)
     {
         accounts.insert(accounts.begin() + index, std::move(account));
@@ -228,7 +228,6 @@ int main()
     std::println("Привет, {}, это программа управления счетами.", get_system_username());
 
     std::vector<AccountPtr> accounts;
-
     while (true)
     {
         try

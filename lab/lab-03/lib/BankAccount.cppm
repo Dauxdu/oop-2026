@@ -34,20 +34,19 @@ public:
 
     BankAccount() = delete;
 
-    /// @brief Возвращает ФИО владельца.
-    [[nodiscard]] const std::string &get_owner() const { return _owner; }
+    /// @brief Получить владельца.
+    /// @return Константная ссылка на ФИО владельца.
+    const std::string &get_owner() const { return _owner; }
 
-    /// @brief Возвращает текущий баланс.
-    [[nodiscard]] double get_balance() const { return _balance; }
+    /// @brief Получить баланс.
+    /// @return Текущий баланс счёта.
+    double get_balance() const { return _balance; }
 
-    /// @brief Возвращает годовую процентную ставку (%).
-    [[nodiscard]] double get_interest_rate() const { return _interest_rate; }
+    /// @brief Процентная ставка.
+    /// @return Годовая ставка в процентах (0.0 по умолчанию).
+    double get_interest_rate() const { return _interest_rate; }
 
-    /**
-     * @brief Начисляет проценты за один месяц.
-     * @details Применяется формула: `баланс += баланс * (ставка / 100 / 12)`.
-     *          Операция выполняется только при `ставка > 0`.
-     */
+    /// @brief Начисляет проценты за один месяц.
     void apply_monthly_interest()
     {
         if (_interest_rate > 0.0)

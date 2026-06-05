@@ -27,17 +27,15 @@ public:
      */
     CreditAccount(std::string owner, double balance, double interest_rate) : BankAccount(std::move(owner), balance), _interest_rate(std::max(0.0, interest_rate)) {}
 
-    /**
-     * @brief Возвращает годовую процентную ставку.
-     * @return Ставка в процентах.
-     */
-    [[nodiscard]] double get_interest_rate() const override { return _interest_rate; }
+    /// @brief Годовая процентная ставка (%).
+    /// @return Годовая ставка в процентах (0.0 по умолчанию).
+    double get_interest_rate() const override { return _interest_rate; }
 
     /**
-     * @brief Возвращает тип счёта.
-     * @return Строковое представление типа ("Кредитный").
+     * @brief Тип счёта.
+     * @return Строковое представление типа счёта ("Кредитный").
      */
-    [[nodiscard]] std::string_view get_type() const override { return "Кредитный"; }
+    std::string_view get_type() const override { return "Кредитный"; }
 
     /**
      * @brief Начисляет проценты на отрицательный баланс (увеличивает долг).

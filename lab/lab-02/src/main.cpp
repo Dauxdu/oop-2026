@@ -54,7 +54,6 @@ void resize_vector(std::vector<int> &vec)
 /**
  * @brief Обновляет значение элемента вектора по пользовательскому индексу.
  * @param[in, out] vec Ссылка на вектор.
- *
  * @throws std::invalid_argument Если вектор пуст.
  */
 void update_vector(std::vector<int> &vec)

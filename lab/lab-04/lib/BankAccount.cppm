@@ -48,21 +48,21 @@ public:
 
     /// @brief Получить владельца.
     /// @return Константная ссылка на ФИО владельца.
-    [[nodiscard]] const std::string &get_owner() const { return _owner; }
+    const std::string &get_owner() const { return _owner; }
 
     /// @brief Получить баланс.
     /// @return Текущий баланс счёта.
-    [[nodiscard]] double get_balance() const { return _balance; }
+    double get_balance() const { return _balance; }
 
-    /// @brief Процентная ставка.
+    /// @brief Годовая процентная ставка (%).
     /// @return Годовая ставка в процентах (0.0 по умолчанию).
-    [[nodiscard]] virtual double get_interest_rate() const { return 0.0; }
+    virtual double get_interest_rate() const { return 0.0; }
 
     /// @brief Тип счёта.
     /// @return Строковое представление типа счёта.
-    [[nodiscard]] virtual std::string_view get_type() const = 0;
+    virtual std::string_view get_type() const = 0;
 
-    /// @brief Начислить проценты за месяц.
+    /// @brief Начисляет проценты за месяц.
     virtual void apply_monthly_interest() = 0;
 };
 

@@ -27,10 +27,10 @@ export namespace ta::WordAnalyzer
     }
 
     /**
-     * @brief Фильтрует слова, удаляя незначимые (stop words).
+     * @brief Фильтрует слова, удаляя незначимые.
      * @param[in] words Вектор слов для фильтрации.
      * @param[in] stop_words Набор незначимых слов.
-     * @return Вектор слов без stop words.
+     * @return Вектор слов без незначимых слов.
      */
     std::vector<std::string> filter_words(const std::vector<std::string> &words, const std::unordered_set<std::string> &stop_words)
     {

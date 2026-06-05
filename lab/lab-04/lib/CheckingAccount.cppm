@@ -23,13 +23,13 @@ public:
     CheckingAccount(std::string owner, double balance) : BankAccount(std::move(owner), balance) {}
 
     /**
-     * @brief Возвращает тип счёта.
-     * @return Строковое представление типа ("Расчётный").
+     * @brief Тип счёта.
+     * @return Строковое представление типа счёта ("Расчётный").
      */
-    [[nodiscard]] std::string_view get_type() const override { return "Расчётный"; }
+    std::string_view get_type() const override { return "Расчётный"; }
 
     /**
-     * @brief Начисление процентов.
+     * @brief Начисляет проценты за месяц.
      * @note Для расчётного счёта операция не выполняется.
      */
     void apply_monthly_interest() override {}

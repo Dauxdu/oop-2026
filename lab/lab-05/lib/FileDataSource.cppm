@@ -11,7 +11,7 @@ export namespace ta
 {
     /**
      * @brief Источник данных, читающий слова из текстового файла.
-     * @details Слова разделяются пробельными символами (стандартное поведение std::ifstream >>).
+     * @details Слова разделяются пробельными символами.
      */
     class FileDataSource final : public IDataSource
     {
