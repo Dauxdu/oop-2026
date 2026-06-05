@@ -1,11 +1,11 @@
 import std;
-import implementations;
-import universal_value;
+import UValue;
+import serializers;
 
 int main()
 {
     User user{"Вишня", 30};
-    Value value = user.to_value();
+    UValue value = user.to_value();
 
     JsonSerializer js;
     XmlSerializer xs("PersonData");
@@ -15,10 +15,10 @@ int main()
     std::println("XML: {}", xs.serialize(value));
 
     auto bin = bs.serialize(value);
-    std::println("BIN: ");
-    for (std::uint8_t c : bin)
+    std::print("BIN: ");
+    for (char c : bin)
     {
-        std::print("{:02x} ", static_cast<unsigned>(c));
+        std::print("{:02x} ", static_cast<unsigned char>(c));
     }
     std::println();
 

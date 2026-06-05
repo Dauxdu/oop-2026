@@ -1,17 +1,11 @@
-export module implementations:json_serializer;
+export module serializers:JsonSerializer;
 
 import std;
 import api;
-import universal_value;
+import UValue;
 
 export class JsonSerializer final : public Serializer
 {
-public:
-    std::string serialize(const Value &value) const override
-    {
-        return to_string(value);
-    }
-
 private:
     static std::string escape(std::string_view string)
     {
@@ -27,58 +21,67 @@ private:
         return result + "\"";
     }
 
-    static std::string to_string(const Value &value)
+    static std::string to_string(const UValue &value)
     {
-        if (std::holds_alternative<std::nullptr_t>(value.v))
+        if (std::holds_alternative<std::nullptr_t>(value._v))
         {
-            return "";
+            return "null";
         }
-        if (auto *b = std::get_if<bool>(&value.v))
+
+        if (auto *b = std::get_if<bool>(&value._v))
         {
-            if (*b)
-            {
-                return "true";
-            }
-            return "false";
+            result += *b ? "true" : "false";
         }
-        if (auto *d = std::get_if<double>(&value.v))
+
+        if (auto *d = std::get_if<double>(&value._v))
         {
             return std::to_string(*d);
         }
-        if (auto *s = std::get_if<std::string>(&value.v))
+
+        if (auto *s = std::get_if<std::string>(&value._v))
         {
             return escape(*s);
         }
-        if (auto *a = std::get_if<ArrayValue>(&value.v))
+
+        if (auto *a = std::get_if<ArrayValue>(&value._v))
         {
             std::string result = "[";
             bool first = true;
-            for (std::size_t i = 0; i < (*a).size(); ++i)
+            for (const auto &item : *a)
             {
                 if (!first)
                 {
                     result += ",";
                 }
+
                 first = false;
-                result += to_string((*a).at(i));
+                result += to_string(item);
             }
+
             return result + "]";
         }
-        if (auto *o = std::get_if<ObjectValue>(&value.v))
+
+        if (auto *o = std::get_if<ObjectValue>(&value._v))
         {
             std::string result = "{";
             bool first = true;
-            for (auto &[key, x] : *o)
+            for (auto &[key, item] : *o)
             {
                 if (!first)
                 {
                     result += ",";
                 }
+
                 first = false;
-                result += "\"" + key + "\":" + to_string(x);
+                result += std::format("\"{}\":{}", key, to_string(item));
             }
+
             return result + "}";
         }
+
         return "";
     }
+
+public:
+    std::string serialize(const UValue &value) const override { return to_string(value); }
 };

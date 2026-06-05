@@ -1,27 +1,19 @@
-export module implementations:binary_serializer;
+export module serializers:BinarySerializer;
 
 import std;
 import api;
-import universal_value;
+import UValue;
 
 export class BinarySerializer final : public Serializer
 {
-public:
-    std::string serialize(const Value &value) const override
-    {
-        std::string out;
-        to_bin(value, out);
-        return out;
-    }
-
 private:
-    static void to_bin(const Value &value, std::string &out)
+    static void to_bin(const UValue &value, std::string &out)
     {
-        if (std::holds_alternative<std::nullptr_t>(value.v))
+        if (std::holds_alternative<std::nullptr_t>(value._v))
         {
             out += '\0';
         }
-        else if (auto *b = std::get_if<bool>(&value.v))
+        else if (auto *b = std::get_if<bool>(&value._v))
         {
             out += '\1';
             if (*b)
@@ -30,19 +22,19 @@ private:
             }
             out += '\0';
         }
-        else if (auto *d = std::get_if<double>(&value.v))
+        else if (auto *d = std::get_if<double>(&value._v))
         {
             out += '\2';
             out.append((const char *)d, 8);
         }
-        else if (auto *s = std::get_if<std::string>(&value.v))
+        else if (auto *s = std::get_if<std::string>(&value._v))
         {
             std::uint32_t length = static_cast<std::uint32_t>((*s).size());
             out += '\3';
             out.append((const char *)&length, 4);
             out += *s;
         }
-        else if (auto *a = std::get_if<ArrayValue>(&value.v))
+        else if (auto *a = std::get_if<ArrayValue>(&value._v))
         {
             std::uint32_t length = static_cast<std::uint32_t>((*a).size());
             out += '\4';
@@ -52,7 +44,7 @@ private:
                 to_bin(x, out);
             }
         }
-        else if (auto *o = std::get_if<ObjectValue>(&value.v))
+        else if (auto *o = std::get_if<ObjectValue>(&value._v))
         {
             std::uint32_t length = static_cast<std::uint32_t>((*o).size());
             out += '\5';
@@ -65,5 +57,14 @@ private:
                 to_bin(x, out);
             }
         }
+    }
+
+public:
+    std::string serialize(const UValue &value) const override
+    {
+        std::string out;
+        to_bin(value, out);
+
+        return out;
     }
 };

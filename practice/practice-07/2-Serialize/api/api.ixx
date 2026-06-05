@@ -1,4 +1,4 @@
 export module api;
 
-export import :serializable;
-export import :serializer;
+export import :Serializer;
+export import :Serializable;
