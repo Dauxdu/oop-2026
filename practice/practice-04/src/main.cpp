@@ -76,10 +76,7 @@ int main()
 {
 	std::println("Демонстрация работы с классом Fraction\n");
 
-	int n1 = 0;
-	int d1 = 0;
-	int n2 = 0;
-	int d2 = 0;
+	int n1 = 0, d1 = 0, n2 = 0, d2 = 0;
 	std::print("Введите числитель и знаменатель первой дроби: ");
 	std::cin >> n1 >> d1;
 	Fraction f1{n1, d1};

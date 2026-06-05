@@ -15,7 +15,7 @@ void print_range_and_count()
     }
 
     std::print("Числа: ");
-    std::size_t count = 0;
+    int count = 0;
     for (int i = a; i <= b; ++i)
     {
         std::print("{} ", i);
@@ -29,13 +29,13 @@ void powers_of_number()
     std::println("10. Дано вещественное число a и целое число n > 0. Вывести целые степени a от 1 до n.");
 
     double a = 0;
-    std::size_t n = 0;
+    int n = 0;
     std::print("Введите a и n (n > 0): ");
 
     std::cin >> a >> n;
 
     double current_power = a;
-    for (std::size_t i = 1; i <= n; ++i)
+    for (int i = 1; i <= n; ++i)
     {
         std::println("{}^{} = {}", a, i, current_power);
         current_power *= a;
