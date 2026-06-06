@@ -1,4 +1,4 @@
-project(practice-7.2 LANGUAGES CXX)
+project(practice-07.2 LANGUAGES CXX)
 
 add_library(UValue STATIC)
 target_sources(UValue

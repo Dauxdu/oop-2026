@@ -1,4 +1,4 @@
-project(practice-2.4 LANGUAGES CXX)
+project(practice-02.4 LANGUAGES CXX)
 
 add_executable(${PROJECT_NAME})
 

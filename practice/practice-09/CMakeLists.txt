@@ -1,4 +1,4 @@
-﻿project(practice-9 LANGUAGES CXX)
+﻿project(practice-09 LANGUAGES CXX)
 
 find_package(httplib CONFIG REQUIRED)
 

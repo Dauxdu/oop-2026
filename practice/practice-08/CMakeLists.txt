@@ -1,4 +1,4 @@
-﻿project(practice-8 LANGUAGES CXX)
+﻿project(practice-08 LANGUAGES CXX)
 
 add_library(interfaces STATIC)
 target_sources(interfaces

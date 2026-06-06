@@ -1,4 +1,4 @@
-project(practice-6 LANGUAGES CXX)
+project(practice-06 LANGUAGES CXX)
 
 add_library(${PROJECT_NAME}_lib STATIC)
 target_sources(${PROJECT_NAME}_lib
