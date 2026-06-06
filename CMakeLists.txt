@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 4.2.0)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_MODULE_STD ON)
 
+# set(VCPKG_MANIFEST_MODE OFF)
+
 # https://github.com/Kitware/CMake/blob/master/Help/dev/experimental.rst
 if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.3.0")
     set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD 451f2fe2-a8a2-47c3-bc32-94786d8fc91b)
