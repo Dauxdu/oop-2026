@@ -22,17 +22,18 @@ int main(int argc, char *argv[])
 
     if (auto result = cli.Get("/"))
     {
-        std::println("HTTP Status: {}\n", result->status);
+        std::println("HTTP Status: {}", result->status);
 
         for (const auto &[key, value] : result->headers)
         {
             std::println("{}: {}", key, value);
-            return 0;
         }
+
+        return 0;
     }
     else
     {
-        std::println("Ошибка: {}", httplib::to_string(result.error()));
+        std::println("Ошибка сети: {}", httplib::to_string(result.error()));
         return 1;
     }
 }
