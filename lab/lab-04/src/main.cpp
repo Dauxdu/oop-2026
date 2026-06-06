@@ -159,10 +159,10 @@ void print_max_balance(const std::vector<AccountPtr> &accounts)
     auto index = max_balance_index(accounts);
     if (index)
     {
-        const auto &account = accounts[*index];
+        const auto &account = accounts[index];
         std::println("\n-----------------------------------");
         std::println("Счёт с максимальным балансом:");
-        std::println("Индекс: {}", *index);
+        std::println("Индекс: {}", index);
         std::println("Владелец: {}", account->get_owner());
         std::println("Тип: {}", account->get_type());
         std::println("Баланс: {:.2f}", account->get_balance());
@@ -183,10 +183,10 @@ void print_min_balance(const std::vector<AccountPtr> &accounts)
     auto index = min_balance_index(accounts);
     if (index)
     {
-        const auto &account = accounts[*index];
+        const auto &account = accounts[index];
         std::println("\n-----------------------------------");
         std::println("Счёт с минимальным балансом:");
-        std::println("Индекс: {}", *index);
+        std::println("Индекс: {}", index);
         std::println("Владелец: {}", account->get_owner());
         std::println("Тип: {}", account->get_type());
         std::println("Баланс: {:.2f}", account->get_balance());

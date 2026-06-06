@@ -13,12 +13,15 @@ import :BankAccount;
  */
 export void apply_interest(std::vector<BankAccount> &accounts)
 {
-    std::ranges::for_each(accounts, &BankAccount::apply_monthly_interest);
+    for (auto &account : accounts)
+    {
+        account.apply_monthly_interest();
+    }
 }
 
 /**
  * @brief Находит индекс счёта с максимальным балансом.
- * @param accounts Вектор счетов для поиска.
+ * @param[in] accounts Вектор счетов для поиска.
  * @throws std::invalid_argument Если коллекция пуста.
  * @return Индекс элемента с наибольшим балансом.
  */

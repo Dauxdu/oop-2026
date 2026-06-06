@@ -22,13 +22,14 @@ export void apply_interest(std::vector<AccountPtr> &accounts)
 /**
  * @brief Находит индекс счёта с максимальным балансом.
  * @param[in] accounts Вектор указателей на счета.
- * @return Индекс счёта с максимальным балансом или std::nullopt, если вектор пуст.
+ * @throws std::invalid_argument Если коллекция пуста.
+ * @return Индекс элемента с наибольшим балансом.
  */
-export std::optional<std::size_t> max_balance_index(const std::vector<AccountPtr> &accounts)
+export std::size_t max_balance_index(const std::vector<AccountPtr> &accounts)
 {
     if (accounts.empty())
     {
-        return std::nullopt;
+        throw std::invalid_argument("Список счетов пуст");
     }
 
     auto it = std::ranges::max_element(accounts, {}, &BankAccount::get_balance);
@@ -38,13 +39,14 @@ export std::optional<std::size_t> max_balance_index(const std::vector<AccountPtr
 /**
  * @brief Находит индекс счёта с минимальным балансом.
  * @param[in] accounts Вектор указателей на счета.
- * @return Индекс счёта с минимальным балансом или std::nullopt, если вектор пуст.
+ * @throws std::invalid_argument Если коллекция пуста.
+ * @return Индекс элемента с наименьшим балансом.
  */
-export std::optional<std::size_t> min_balance_index(const std::vector<AccountPtr> &accounts)
+export std::size_t min_balance_index(const std::vector<AccountPtr> &accounts)
 {
     if (accounts.empty())
     {
-        return std::nullopt;
+        throw std::invalid_argument("Список счетов пуст");
     }
 
     auto it = std::ranges::min_element(accounts, {}, &BankAccount::get_balance);
