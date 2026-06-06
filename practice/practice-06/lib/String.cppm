@@ -4,41 +4,39 @@ import std;
 export class String
 {
 private:
-    char *_s = nullptr;
+    char *_str = nullptr;
     std::size_t _size = 0;
 
-    void assign(const char *s)
+    void assign(const char *str)
     {
-        if (!s)
+        if (!str)
         {
-            s = {};
+            str = "";
         }
 
-        std::size_t new_size = std::strlen(s);
+        _size = std::strlen(str);
+        char *new_str = new char[_size + 1];
+        std::strcpy(new_str, str);
 
-        char *new_s = new char[new_size + 1];
-        std::strcpy(new_s, s);
-
-        delete[] _s;
-        _s = new_s;
-        _size = new_size;
+        delete[] _str;
+        _str = new_str;
     }
 
 public:
-    ~String() { delete[] _s; }
-    String() {}
-    String(const char *s) { assign(s); }
-    String(const String &other) { assign(other._s); }
+    ~String() { delete[] _str; }
+    String() { assign(""); }
+    String(const char *str) { assign(str); }
+    String(const String &other) { assign(other._str); }
 
-    String(String &&other) : _s(other._s), _size(other._size)
+    String(String &&other) : _str(other._str), _size(other._size)
     {
-        other._s = nullptr;
+        other._str = nullptr;
         other._size = 0;
     }
 
     String &operator=(String other)
     {
-        std::swap(_s, other._s);
+        std::swap(_str, other._str);
         std::swap(_size, other._size);
 
         return *this;
@@ -47,10 +45,10 @@ public:
     template <typename Self>
     auto &&operator[](this Self &&self, std::size_t index)
     {
-        return std::forward<Self>(self)._s[index];
+        return std::forward<Self>(self)._str[index];
     }
 
     std::size_t size() const { return _size; }
 
-    const char *str() const { return _s ? _s : ""; }
+    const char *str() const { return _str ? _str : ""; }
 };

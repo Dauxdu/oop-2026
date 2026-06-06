@@ -11,7 +11,7 @@ public:
 
     void reserve(std::size_t bytes) { _buffer.reserve(bytes); }
 
-    StringBuilder &append(std::string_view str)
+    StringBuilder &append(const std::string &str)
     {
         _buffer.append(str);
         return *this;

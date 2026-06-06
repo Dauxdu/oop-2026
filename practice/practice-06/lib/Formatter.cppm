@@ -1,4 +1,5 @@
 export module Formatter;
+
 import std;
 import String;
 
@@ -18,9 +19,9 @@ export namespace std
             return it;
         }
 
-        auto format(const String &p, format_context &ctx) const
+        auto format(const String &str, format_context &ctx) const
         {
-            std::string_view sv = p.str();
+            std::string_view sv = str.str();
             return std::copy(sv.begin(), sv.end(), ctx.out());
         }
     };
