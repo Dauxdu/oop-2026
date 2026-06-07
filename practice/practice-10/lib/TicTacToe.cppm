@@ -30,7 +30,7 @@ export namespace tictactoe
         Game(Game &&) = delete;
         Game &operator=(Game &&) = delete;
 
-        explicit Game(const std::filesystem::path &asset_dir, const config::Manager &cfg) : _assets{asset_dir}, _renderer{_assets}, _audio{_assets, cfg.audio().sfx_volume}
+        explicit Game(const std::filesystem::path &asset_dir, const config::Manager &cfg) : _assets{asset_dir}, _renderer{_assets}, _audio{_assets}
         {
             _audio.set_muted(cfg.audio().mute);
             _audio.set_audio_levels(cfg.audio().master_volume, cfg.audio().sfx_volume);

@@ -17,31 +17,16 @@ export namespace audio
         std::optional<sf::Sound> _win_sound;
         bool _muted{false};
 
-        void init_sounds(const float sfx_volume) noexcept
-        {
-            try
-            {
-                _click_sound.emplace(_assets.get_sound(assets::SoundID::Click));
-                _click_sound->setVolume(sfx_volume);
-
-                _win_sound.emplace(_assets.get_sound(assets::SoundID::Win));
-                _win_sound->setVolume(sfx_volume);
-            }
-            catch (const std::exception &e)
-            {
-                std::println("Failed to load sound: {}", e.what());
-            }
-        }
-
     public:
         Manager(const Manager &) = delete;
         Manager &operator=(const Manager &) = delete;
         Manager(Manager &&) = delete;
         Manager &operator=(Manager &&) = delete;
 
-        explicit Manager(const assets::Manager &assets, const float sfx_volume) : _assets{assets}
+        explicit Manager(const assets::Manager &assets) : _assets{assets}
         {
-            init_sounds(sfx_volume);
+            _click_sound.emplace(_assets.get_sound(assets::SoundID::Click));
+            _win_sound.emplace(_assets.get_sound(assets::SoundID::Win));
         }
 
         void set_muted(bool muted) noexcept { _muted = muted; }
@@ -50,15 +35,9 @@ export namespace audio
         void set_sfx_volume(const float volume) noexcept
         {
             const float clamped = std::clamp(volume, 0.f, 100.f);
-            if (_click_sound)
-            {
-                _click_sound->setVolume(clamped);
-            }
 
-            if (_win_sound)
-            {
-                _win_sound->setVolume(clamped);
-            }
+            _click_sound->setVolume(clamped);
+            _win_sound->setVolume(clamped);
         }
 
         void set_audio_levels(const float master, const float sfx) noexcept
@@ -70,7 +49,7 @@ export namespace audio
 
         void play_click() noexcept
         {
-            if (!_muted && _click_sound)
+            if (!_muted)
             {
                 _click_sound->play();
             }
@@ -78,7 +57,7 @@ export namespace audio
 
         void play_win() noexcept
         {
-            if (!_muted && _win_sound)
+            if (!_muted)
             {
                 _win_sound->play();
             }
