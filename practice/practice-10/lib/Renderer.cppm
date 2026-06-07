@@ -26,8 +26,7 @@ export namespace renderer
             assets::TextureID::OWin,
             assets::TextureID::Draw};
 
-        [[nodiscard]]
-        static sf::FloatRect get_viewport(sf::Vector2u window_size) noexcept
+        [[nodiscard]] static sf::FloatRect get_viewport(sf::Vector2u window_size) noexcept
         {
             const float window_aspect = static_cast<float>(window_size.x) / static_cast<float>(window_size.y);
             if (window_aspect >= 1.0f)
@@ -41,8 +40,7 @@ export namespace renderer
             }
         }
 
-        [[nodiscard]]
-        static constexpr sf::View create_game_view(sf::Vector2u window_size) noexcept
+        [[nodiscard]] static constexpr sf::View create_game_view(sf::Vector2u window_size) noexcept
         {
             sf::View view{{1.5f, 1.5f}, {3.f, 3.f}};
             view.setViewport(get_viewport(window_size));
@@ -64,11 +62,6 @@ export namespace renderer
         }
 
     public:
-        Renderer(const Renderer &) = delete;
-        Renderer &operator=(const Renderer &) = delete;
-        Renderer(Renderer &&) = delete;
-        Renderer &operator=(Renderer &&) = delete;
-
         explicit Renderer(const assets::Manager &assets) : _assets{assets} {}
 
         void render(sf::RenderTarget &target, const game_logic::Board &board) const
@@ -101,8 +94,7 @@ export namespace renderer
             }
         }
 
-        [[nodiscard]]
-        sf::Vector2i to_board_coords(sf::Vector2i mouse_pixel, const sf::RenderTarget &target) const noexcept
+        [[nodiscard]] sf::Vector2i to_board_coords(sf::Vector2i mouse_pixel, const sf::RenderTarget &target) const noexcept
         {
             const auto logical = target.mapPixelToCoords(mouse_pixel, create_game_view(target.getSize()));
             return {static_cast<int>(std::floor(logical.x)), static_cast<int>(std::floor(logical.y))};

@@ -13,7 +13,7 @@ export namespace config
         unsigned int width{800};
         unsigned int height{800};
         unsigned int fps{60};
-        bool vsync{true};
+        bool vsync{false};
     };
 
     struct Audio
@@ -31,11 +31,6 @@ export namespace config
         Audio _audio;
 
     public:
-        Manager(const Manager &) = delete;
-        Manager &operator=(const Manager &) = delete;
-        Manager(Manager &&) = delete;
-        Manager &operator=(Manager &&) = delete;
-
         explicit Manager(const std::string &filename = "config.json")
         {
             try
