@@ -30,7 +30,6 @@ export namespace audio
         }
 
         void set_muted(bool muted) noexcept { _muted = muted; }
-        void toggle_mute() noexcept { _muted = !_muted; }
 
         void set_sfx_volume(const float volume) noexcept
         {
@@ -46,6 +45,8 @@ export namespace audio
             const float sfx_clamped = std::clamp(sfx, 0.f, 100.f);
             set_sfx_volume((master_clamped * sfx_clamped) / 100.f);
         }
+
+        void toggle_mute() noexcept { _muted = !_muted; }
 
         void play_click() noexcept
         {

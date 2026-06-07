@@ -42,7 +42,7 @@ export namespace tictactoe
 
         void set_background_color(sf::Color color) noexcept { _background_color = color; }
 
-        void draw(sf::RenderWindow &window) const noexcept
+        void draw(sf::RenderWindow &window) const
         {
             window.clear(_background_color);
             _renderer.render(window, _board);
@@ -90,7 +90,11 @@ export namespace tictactoe
 
                     if (_board.is_game_over())
                     {
-                        _audio.play_win();
+                        const auto result = _board.get_game_result();
+                        if (result == game_logic::GameResult::XWins || result == game_logic::GameResult::OWins)
+                        {
+                            _audio.play_win();
+                        }
                     }
                 }
             }

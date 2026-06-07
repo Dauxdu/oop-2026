@@ -19,7 +19,6 @@ export namespace config
     struct Audio
     {
         float master_volume{100.f};
-        float music_volume{100.f};
         float sfx_volume{100.f};
         bool mute{false};
     };
@@ -56,7 +55,6 @@ export namespace config
                 {
                     const auto &a = json["audio"];
                     _audio.master_volume = a.value("master_volume", _audio.master_volume);
-                    _audio.music_volume = a.value("music_volume", _audio.music_volume);
                     _audio.sfx_volume = a.value("sfx_volume", _audio.sfx_volume);
                     _audio.mute = a.value("mute", _audio.mute);
                 }
