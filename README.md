@@ -199,7 +199,3 @@ set(VCPKG_MANIFEST_MODE OFF)
 - Просмотр установленных пакетов: `vcpkg list`
 - Поиск доступных портов: `vcpkg search <имя>`
 - Информация о пакете: `vcpkg info <порт>`
-
-```
-
-```
