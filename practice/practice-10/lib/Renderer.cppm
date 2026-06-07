@@ -14,13 +14,12 @@ export namespace renderer
     {
     private:
         const assets::Manager &_assets;
-
-        std::array<assets::TextureID, 3> _cell_textures{
+        static constexpr std::array<assets::TextureID, 3> _cell_textures{
             assets::TextureID::Board,
             assets::TextureID::X,
             assets::TextureID::O};
 
-        std::array<assets::TextureID, 4> _result_textures{
+        static constexpr std::array<assets::TextureID, 4> _result_textures{
             assets::TextureID::Board,
             assets::TextureID::XWin,
             assets::TextureID::OWin,
