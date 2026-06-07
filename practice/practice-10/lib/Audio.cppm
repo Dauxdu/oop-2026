@@ -25,7 +25,7 @@ export namespace audio
 
         explicit Manager(const assets::Manager &assets) : _assets{assets} {}
 
-        void set_muted(bool muted) noexcept { _muted = muted; }
+        void set_muted(const bool muted) noexcept { _muted = muted; }
 
         void set_sfx_volume(const float volume) noexcept
         {
@@ -45,7 +45,7 @@ export namespace audio
 
         void toggle_mute() noexcept { _muted = !_muted; }
 
-        void play(assets::SoundID id) noexcept
+        void play(const assets::SoundID id) noexcept
         {
             if (!_muted)
             {

@@ -69,17 +69,17 @@ export namespace assets
             _sounds[SoundID::Draw] = load_resource<sf::SoundBuffer>(directory / "sfx/draw.ogg");
         }
 
-        [[nodiscard]] const sf::Image &get_image(ImageID id) const
+        [[nodiscard]] const sf::Image &get_image(const ImageID id) const
         {
             return _images.at(id);
         }
 
-        [[nodiscard]] const sf::Texture &get_texture(TextureID id) const
+        [[nodiscard]] const sf::Texture &get_texture(const TextureID id) const
         {
             return _textures.at(id);
         }
 
-        [[nodiscard]] const sf::SoundBuffer &get_sound(SoundID id) const
+        [[nodiscard]] const sf::SoundBuffer &get_sound(const SoundID id) const
         {
             return _sounds.at(id);
         }

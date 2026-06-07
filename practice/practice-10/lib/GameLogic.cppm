@@ -42,8 +42,15 @@ export namespace game_logic
 
         [[nodiscard]] constexpr bool is_board_full() const noexcept
         {
-            return std::ranges::none_of(_board, [](Cell cell)
-                                        { return cell == Cell::Empty; });
+            for (Cell cell : _board)
+            {
+                if (cell == Cell::Empty)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         [[nodiscard]] constexpr bool is_valid_move(const int x, const int y) const noexcept
