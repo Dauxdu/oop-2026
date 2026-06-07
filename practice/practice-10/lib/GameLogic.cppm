@@ -40,27 +40,23 @@ export namespace game_logic
             std::array{2, 4, 6},
         };
 
-        [[nodiscard]]
-        constexpr bool is_board_full() const noexcept
+        [[nodiscard]] constexpr bool is_board_full() const noexcept
         {
             return std::ranges::none_of(_board, [](Cell cell)
                                         { return cell == Cell::Empty; });
         }
 
-        [[nodiscard]]
-        constexpr bool is_valid_move(int x, int y) const noexcept
+        [[nodiscard]] constexpr bool is_valid_move(const int x, const int y) const noexcept
         {
             return x >= 0 && x < _board_size && y >= 0 && y < _board_size;
         }
 
-        [[nodiscard]]
-        constexpr bool is_can_move(int x, int y) const noexcept
+        [[nodiscard]] constexpr bool is_can_move(const int x, const int y) const noexcept
         {
             return !is_game_over() && is_valid_move(x, y) && _board[y * _board_size + x] == Cell::Empty;
         }
 
-        [[nodiscard]]
-        constexpr bool is_player_win(Cell player) const noexcept
+        [[nodiscard]] constexpr bool is_player_win(const Cell player) const noexcept
         {
             for (const auto &line_index : win_lines)
             {
@@ -95,8 +91,7 @@ export namespace game_logic
 
         [[nodiscard]] GameResult get_game_result() const noexcept { return _game_result; }
 
-        [[nodiscard]]
-        constexpr Cell get_cell(int x, int y) const
+        [[nodiscard]] Cell get_cell(const int x, const int y) const
         {
             if (!is_valid_move(x, y))
             {
@@ -108,8 +103,7 @@ export namespace game_logic
 
         [[nodiscard]] bool is_game_over() const noexcept { return _game_result != GameResult::None; }
 
-        [[nodiscard]]
-        bool is_make_move(int x, int y) noexcept
+        [[nodiscard]] bool is_make_move(const int x, const int y) noexcept
         {
             if (!is_can_move(x, y))
             {

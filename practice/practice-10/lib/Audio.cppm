@@ -17,7 +17,7 @@ export namespace audio
         std::optional<sf::Sound> _win_sound;
         bool _muted{false};
 
-        void init_sounds(float sfx_volume) noexcept
+        void init_sounds(const float sfx_volume) noexcept
         {
             try
             {
@@ -39,7 +39,7 @@ export namespace audio
         Manager(Manager &&) = delete;
         Manager &operator=(Manager &&) = delete;
 
-        explicit Manager(const assets::Manager &assets, float sfx_volume) : _assets{assets}
+        explicit Manager(const assets::Manager &assets, const float sfx_volume) : _assets{assets}
         {
             init_sounds(sfx_volume);
         }
@@ -47,7 +47,7 @@ export namespace audio
         void set_muted(bool muted) noexcept { _muted = muted; }
         void toggle_mute() noexcept { _muted = !_muted; }
 
-        void set_sfx_volume(float volume) noexcept
+        void set_sfx_volume(const float volume) noexcept
         {
             const float clamped = std::clamp(volume, 0.f, 100.f);
             if (_click_sound)
@@ -61,7 +61,7 @@ export namespace audio
             }
         }
 
-        void set_audio_levels(float master, float sfx) noexcept
+        void set_audio_levels(const float master, const float sfx) noexcept
         {
             const float master_clamped = std::clamp(master, 0.f, 100.f);
             const float sfx_clamped = std::clamp(sfx, 0.f, 100.f);
