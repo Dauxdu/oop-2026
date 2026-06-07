@@ -16,7 +16,6 @@ fetchcontent_declare(cpp_utils
 )
 fetchcontent_makeavailable(cpp_utils)
 
-
 find_package(GTest QUIET)
 if(NOT GTEST_FOUND)
     include(FetchContent)
