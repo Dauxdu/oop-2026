@@ -13,8 +13,8 @@ export namespace audio
     {
     private:
         const assets::Manager &_assets;
-        std::optional<sf::Sound> _click_sound;
-        std::optional<sf::Sound> _win_sound;
+        std::unordered_map<assets::SoundID, sf::Sound> _sounds;
+        float _sfx_volume{100.f};
         bool _muted{false};
 
     public:
@@ -23,20 +23,17 @@ export namespace audio
         Manager(Manager &&) = delete;
         Manager &operator=(Manager &&) = delete;
 
-        explicit Manager(const assets::Manager &assets) : _assets{assets}
-        {
-            _click_sound.emplace(_assets.get_sound(assets::SoundID::Click));
-            _win_sound.emplace(_assets.get_sound(assets::SoundID::Win));
-        }
+        explicit Manager(const assets::Manager &assets) : _assets{assets} {}
 
         void set_muted(bool muted) noexcept { _muted = muted; }
 
         void set_sfx_volume(const float volume) noexcept
         {
-            const float clamped = std::clamp(volume, 0.f, 100.f);
-
-            _click_sound->setVolume(clamped);
-            _win_sound->setVolume(clamped);
+            _sfx_volume = std::clamp(volume, 0.f, 100.f);
+            for (auto &[id, sound] : _sounds)
+            {
+                sound.setVolume(_sfx_volume);
+            }
         }
 
         void set_audio_levels(const float master, const float sfx) noexcept
@@ -48,19 +45,18 @@ export namespace audio
 
         void toggle_mute() noexcept { _muted = !_muted; }
 
-        void play_click() noexcept
+        void play(assets::SoundID id) noexcept
         {
             if (!_muted)
             {
-                _click_sound->play();
-            }
-        }
+                auto [it, inserted] = _sounds.try_emplace(id, _assets.get_sound(id));
 
-        void play_win() noexcept
-        {
-            if (!_muted)
-            {
-                _win_sound->play();
+                if (inserted)
+                {
+                    it->second.setVolume(_sfx_volume);
+                }
+
+                it->second.play();
             }
         }
     };

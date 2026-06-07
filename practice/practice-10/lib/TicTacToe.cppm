@@ -86,15 +86,18 @@ export namespace tictactoe
 
                 if (_board.is_make_move(coords.x, coords.y))
                 {
-                    _audio.play_click();
+                    _audio.play(assets::SoundID::Click);
 
                     if (_board.is_game_over())
                     {
                         const auto result = _board.get_game_result();
                         if (result == game_logic::GameResult::XWins || result == game_logic::GameResult::OWins)
                         {
-                            _audio.play_win();
+                            _audio.play(assets::SoundID::Win);
+                            return;
                         }
+
+                        _audio.play(assets::SoundID::Draw);
                     }
                 }
             }
