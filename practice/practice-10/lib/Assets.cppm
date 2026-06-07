@@ -27,15 +27,16 @@ export namespace assets
     enum class SoundID
     {
         Win,
-        Click
+        Click,
+        Draw
     };
 
     class Manager final
     {
     private:
-        std::array<sf::Image, 1> _images;
-        std::array<sf::Texture, 6> _textures;
-        std::array<sf::SoundBuffer, 2> _sounds;
+        std::unordered_map<ImageID, sf::Image> _images;
+        std::unordered_map<TextureID, sf::Texture> _textures;
+        std::unordered_map<SoundID, sf::SoundBuffer> _sounds;
 
         template <typename TResource>
         TResource load_resource(const std::filesystem::path &filepath) const
@@ -56,30 +57,31 @@ export namespace assets
 
         explicit Manager(const std::filesystem::path &directory)
         {
-            _images[static_cast<std::size_t>(ImageID::Icon)] = load_resource<sf::Image>(directory / "image/icon.png");
-            _textures[static_cast<std::size_t>(TextureID::Board)] = load_resource<sf::Texture>(directory / "texture/board.png");
-            _textures[static_cast<std::size_t>(TextureID::X)] = load_resource<sf::Texture>(directory / "texture/x.png");
-            _textures[static_cast<std::size_t>(TextureID::O)] = load_resource<sf::Texture>(directory / "texture/o.png");
-            _textures[static_cast<std::size_t>(TextureID::XWin)] = load_resource<sf::Texture>(directory / "texture/x_win.png");
-            _textures[static_cast<std::size_t>(TextureID::OWin)] = load_resource<sf::Texture>(directory / "texture/o_win.png");
-            _textures[static_cast<std::size_t>(TextureID::Draw)] = load_resource<sf::Texture>(directory / "texture/draw.png");
-            _sounds[static_cast<std::size_t>(SoundID::Win)] = load_resource<sf::SoundBuffer>(directory / "sfx/win.ogg");
-            _sounds[static_cast<std::size_t>(SoundID::Click)] = load_resource<sf::SoundBuffer>(directory / "sfx/click.ogg");
+            _images[ImageID::Icon] = load_resource<sf::Image>(directory / "image/icon.png");
+            _textures[TextureID::Board] = load_resource<sf::Texture>(directory / "texture/board.png");
+            _textures[TextureID::X] = load_resource<sf::Texture>(directory / "texture/x.png");
+            _textures[TextureID::O] = load_resource<sf::Texture>(directory / "texture/o.png");
+            _textures[TextureID::XWin] = load_resource<sf::Texture>(directory / "texture/x_win.png");
+            _textures[TextureID::OWin] = load_resource<sf::Texture>(directory / "texture/o_win.png");
+            _textures[TextureID::Draw] = load_resource<sf::Texture>(directory / "texture/draw.png");
+            _sounds[SoundID::Win] = load_resource<sf::SoundBuffer>(directory / "sfx/win.ogg");
+            _sounds[SoundID::Click] = load_resource<sf::SoundBuffer>(directory / "sfx/click.ogg");
+            _sounds[SoundID::Draw] = load_resource<sf::SoundBuffer>(directory / "sfx/draw.ogg");
         }
 
-        [[nodiscard]] const sf::Image &get_image(const ImageID id) const
+        [[nodiscard]] const sf::Image &get_image(ImageID id) const
         {
-            return _images[static_cast<std::size_t>(id)];
+            return _images.at(id);
         }
 
-        [[nodiscard]] const sf::Texture &get_texture(const TextureID id) const
+        [[nodiscard]] const sf::Texture &get_texture(TextureID id) const
         {
-            return _textures[static_cast<std::size_t>(id)];
+            return _textures.at(id);
         }
 
-        [[nodiscard]] const sf::SoundBuffer &get_sound(const SoundID id) const
+        [[nodiscard]] const sf::SoundBuffer &get_sound(SoundID id) const
         {
-            return _sounds[static_cast<std::size_t>(id)];
+            return _sounds.at(id);
         }
     };
 }
