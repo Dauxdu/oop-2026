@@ -15,11 +15,8 @@ int main()
         sf::RenderWindow window{sf::VideoMode{{cfg.window().width, cfg.window().height}}, "Tic Tac Toe"};
         window.setIcon(game.get_icon());
 
-        if (cfg.window().vsync)
-        {
-            window.setVerticalSyncEnabled(true);
-        }
-        else
+        window.setVerticalSyncEnabled(cfg.window().vsync);
+        if (!cfg.window().vsync)
         {
             window.setFramerateLimit(cfg.window().fps);
         }
