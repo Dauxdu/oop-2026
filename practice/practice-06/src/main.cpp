@@ -1,6 +1,5 @@
 ﻿import std;
 import String;
-import Formatter;
 import StringBuilder;
 
 int main()
@@ -16,7 +15,7 @@ int main()
 	std::println("  String  → size: {}, str: '{}'", s_str.size(), s_str.str());
 	std::println("  Copy    → size: {}, value: {}", s_copy.size(), s_copy);
 
-	std::println("Оператор []");
+	std::println("Operator []");
 
 	std::println("  Original string → '{}'", s_str);
 	s_str[1] = 'a';
