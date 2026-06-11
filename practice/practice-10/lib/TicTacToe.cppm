@@ -25,11 +25,6 @@ export namespace tictactoe
         sf::Color _background_color{30, 30, 46};
 
     public:
-        Game(const Game &) = delete;
-        Game &operator=(const Game &) = delete;
-        Game(Game &&) = delete;
-        Game &operator=(Game &&) = delete;
-
         explicit Game(const std::filesystem::path &asset_dir, const config::Manager &cfg) : _assets{asset_dir}, _renderer{_assets}, _audio{_assets}
         {
             _audio.set_muted(cfg.audio().mute);

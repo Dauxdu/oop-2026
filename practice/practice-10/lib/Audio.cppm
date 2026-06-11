@@ -18,11 +18,6 @@ export namespace audio
         bool _muted{false};
 
     public:
-        Manager(const Manager &) = delete;
-        Manager &operator=(const Manager &) = delete;
-        Manager(Manager &&) = delete;
-        Manager &operator=(Manager &&) = delete;
-
         explicit Manager(const assets::Manager &assets) : _assets{assets} {}
 
         void set_muted(const bool muted) noexcept { _muted = muted; }

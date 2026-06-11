@@ -50,11 +50,6 @@ export namespace assets
         }
 
     public:
-        Manager(const Manager &) = delete;
-        Manager &operator=(const Manager &) = delete;
-        Manager(Manager &&) = delete;
-        Manager &operator=(Manager &&) = delete;
-
         explicit Manager(const std::filesystem::path &directory)
         {
             _images[ImageID::Icon] = load_resource<sf::Image>(directory / "image/icon.png");
