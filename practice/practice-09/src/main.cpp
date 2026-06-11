@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     if (argc != 2)
     {
-        std::println("Использование: {} <URL>", argv[0]);
+        std::println("Usage: {} <URL>", argv[0]);
         return 1;
     }
 
@@ -31,9 +31,7 @@ int main(int argc, char *argv[])
 
         return 0;
     }
-    else
-    {
-        std::println("Ошибка сети: {}", httplib::to_string(result.error()));
-        return 1;
-    }
+
+    std::println("Error: {}", httplib::to_string(result.error()));
+    return 1;
 }
