@@ -23,7 +23,7 @@ int main()
 
         std::println("[WINDOW] Created window with size {}x{}", window.getSize().x, window.getSize().y);
 
-        std::println("[APP] Audio: mute={}, master={}, sfx={}", cfg.audio().mute ? "on" : "off", cfg.audio().master_volume, cfg.audio().sfx_volume);
+        std::println("[APP] Audio: mute={}, master={}, sfx={}", cfg.audio().mute, cfg.audio().master_volume, cfg.audio().sfx_volume);
 
         while (window.isOpen())
         {
