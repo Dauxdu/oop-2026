@@ -24,9 +24,9 @@ int main()
   int count = inx::input_numeric<int>("Введите количество элементов: ", 1);
   std::print("Введите {} элементов: \n", count);
 
-  int sum{};
-  int element{};
-  for (int i{}; i < count; ++i)
+  int sum{0};
+  int element{0};
+  for (int i{0}; i < count; ++i)
   {
     element = inx::input_numeric<int>(std::format("Введите элемент #{}: ", i + 1));
     sum += element;

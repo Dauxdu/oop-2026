@@ -19,19 +19,20 @@ int main(int argc, char *argv[])
 
     httplib::Client cli(url);
     cli.set_follow_location(true);
+    httplib::Result result = cli.Get("/");
 
-    if (auto result = cli.Get("/"))
+    if (!result)
     {
-        std::println("HTTP Status: {}", result->status);
-
-        for (const auto &[key, value] : result->headers)
-        {
-            std::println("{}: {}", key, value);
-        }
-
-        return 0;
+        std::println("Error: {}", httplib::to_string(result.error()));
+        return 1;
     }
 
-    std::println("Error: {}", httplib::to_string(result.error()));
-    return 1;
+    std::println("HTTP Status: {}", result->status);
+
+    for (const auto &[key, value] : result->headers)
+    {
+        std::println("{}: {}", key, value);
+    }
+
+    return 0;
 }

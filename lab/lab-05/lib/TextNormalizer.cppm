@@ -28,7 +28,7 @@ export namespace ta::TextNormalizer
      */
     std::string_view extract_alpha_part(std::string_view word)
     {
-        std::size_t first = 0;
+        std::size_t first{0};
         while (first < word.size() && !std::isalpha(word[first]))
         {
             ++first;
@@ -69,7 +69,7 @@ export namespace ta::TextNormalizer
             }
         }
 
-        for (std::size_t i = 1; i < word.size(); ++i)
+        for (std::size_t i{1}; i < word.size(); ++i)
         {
             if (word[i] == '-' && word[i - 1] == '-')
             {

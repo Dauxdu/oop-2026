@@ -16,7 +16,7 @@ import :BankAccount;
 export class CreditAccount final : public BankAccount
 {
 private:
-    double _interest_rate{};
+    double _interest_rate{0};
 
 public:
     /**

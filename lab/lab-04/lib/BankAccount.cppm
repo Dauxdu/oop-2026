@@ -14,7 +14,7 @@ export class BankAccount
 {
 private:
     std::string _owner;
-    double _balance{};
+    double _balance{0};
 
 protected:
     /**
