@@ -2,7 +2,7 @@ export module counters:ICounter;
 
 import std;
 
-class ICounter
+export class ICounter
 {
 public:
     virtual ~ICounter() = default;
